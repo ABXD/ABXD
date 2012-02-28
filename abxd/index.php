@@ -40,17 +40,33 @@ if(!ctype_alnum($page))
 
 ob_start();
 $layout_crumbs = "";
+
 try {
-	if(array_key_exists($page, $pluginpages))
-	{
-		$self = $plugins[$pluginpages[$page]];
-		require("./plugins/".$plugins[$pluginpages[$page]]['dir']."/page_".$page.".php");
-		unset($self);
+	try {
+		if(array_key_exists($page, $pluginpages))
+		{
+			$self = $plugins[$pluginpages[$page]];
+			if (!@include("./plugins/".$plugins[$pluginpages[$page]]['dir']."/page_".$page.".php")) {
+				throw new Exception(404);
+			}
+			unset($self);
+		}
+		else {
+			if (!@include('pages/'.$page.'.php')) {
+				throw new Exception(404);
+			}
+		}
 	}
-	else
-		require('pages/'.$page.'.php');
+	catch(Exception $e) {
+		if ($e->getMessage() != 404) {
+			throw $e;
+		}
+		require('pages/404.php');
+	}
 }
-catch(KillException $e) {}
+catch(KillException $e) {
+	// Nothing. Just ignore this exception.
+}
 
 if($ajaxPage)
 {

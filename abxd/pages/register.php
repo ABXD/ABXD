@@ -122,8 +122,6 @@ if(!isset($_POST['action']))
 }
 elseif($_POST['action'] == __("Register"))
 {
-	//<MM> Didn't I already say that storing stuff already-escaped is not a good practice?
-	//$name = htmlspecialchars($_POST['name']);
 	$name = $_POST['name'];
 	$cname = trim(str_replace(" ","", strtolower($name)));
 
@@ -201,11 +199,9 @@ elseif($_POST['action'] == __("Register"))
 
 		
 		die(header("Location: ."));
-		//Redirect(__("You are now registered and logged in."), "./", __("the main page"));
 	} else
 	{
 		die(header("Location: ".actionLink("login")));
-		//Redirect(__("You are now registered!"), "login.php", __("the login page"));
 	}
 }
 

@@ -53,7 +53,6 @@ if(NumRows($rCategories))
 else
 	Kill(__("Unknown category ID."));
 
-//$thread['title'] .= " ".ParseThreadTags($thread['title']);
 $tags = ParseThreadTags($thread['title']);
 $thread['title'] = strip_tags($thread['title']);
 $title = $thread['title'];
@@ -132,8 +131,6 @@ else if($thread['user'] == $loguserid)
 
 if($isBot)
 	$links = "";
-
-//$links = substr($links, 0, strlen($links) - 2);
 
 $OnlineUsersFid = $fid;
 write(

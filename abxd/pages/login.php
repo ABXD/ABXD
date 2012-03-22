@@ -7,7 +7,6 @@ if($_POST['action'] == "logout")
 	setcookie("logdata", 0);
 
 	die(header("Location: ."));
-	//Redirect(__("You are now logged out."), "./", __("the main page"));
 }
 elseif($_POST['action'] == __("Log in"))
 {
@@ -47,7 +46,6 @@ elseif($_POST['action'] == __("Log in"))
 		Report("[b]".$escapedName."[/] logged in.", 1);
 
 		die(header("Location: ."));
-		//Redirect(__("You are now logged in."), "./", __("the main page"));
 	}
 }
 

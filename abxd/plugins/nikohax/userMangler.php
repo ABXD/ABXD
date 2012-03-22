@@ -149,14 +149,6 @@ else if($id == 1)
 }
 else if($id == 13)
 {
-/*
-	$t = "";
-	for($a = 0; $a < 7; $a++)
-		$t .= chr(rand(65, 90));
-	$t[1] = "A";
-	$t[4] = "A";
-	$user['title'] = "I AM A ".$t;
-*/
 	$user['title'] = "Schr&ouml;dinger's cat is ".(rand(0, 100) < 50 ? "alive" : "dead");
 }
 ?>

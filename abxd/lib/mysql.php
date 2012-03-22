@@ -27,7 +27,6 @@ function Query($query)
 {
 	global $queries, $loguser;
 	if ($loguser['powerlevel'] < 3) CheckQuery($query);
-	//write("#{0} - {1}<br/>", $queries, $query);
 	$res = mysql_query($query) or die(mysql_error()."<br />Query was: <code>".$query."</code><br />This could have been caused by a database layout change in a recent git revision. Try running the installer again to fix it. <form action=\"install/doinstall.php\" method=\"POST\"><br />
 	<input type=\"hidden\" name=\"action\" value=\"Install\" />
 	<input type=\"hidden\" name=\"existingSettings\" value=\"true\" />

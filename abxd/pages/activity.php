@@ -54,12 +54,6 @@ for($i = 0; $i < $days; $i++)
 	imageline($img, $i, $m, $i, 0, $c['bg'.$num]);
 }
 
-for($i = 0; $i <= 5; $i++)
-{
-//	imageline($img, 0, $m - $i * 100 + 50, $days,$m- $i * 100 + 50, $c['mk2']);
-//	imageline($img, 0, $m - $i * 100, $days, $m - $i * 100, $c['mk1']);
-}
-
 for($i = 0; $i < $days; $i++)
 {
 	imageline($img, $i, $m, $i, $m - $p[$i], $c['bar']);

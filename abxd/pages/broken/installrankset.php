@@ -206,9 +206,6 @@ else
 if($setid < 1) $setid = 1;
 Query("INSERT INTO `ranksets` (`id`, `name`) VALUES (".$setid.", '".$setname."')");
 
-//Query("INSERT INTO `ranksets` (`name`) VALUES ('".$setname."')");
-//$setid = mysql_insert_id();
-
 $q = "INSERT INTO `ranks` (`rset`, `num`, `text`) VALUES\n";
 $copies = 0;
 $totalpics = 0;

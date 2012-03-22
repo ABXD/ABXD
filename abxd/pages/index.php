@@ -12,11 +12,8 @@ else if(isset($_GET['uid']) && (int)$_GET['uid'] > 0)
 else if(isset($_GET['pid']) && (int)$_GET['pid'] > 0)
 	die(header("Location: thread.php?pid=".(int)$_GET['pid']."#".(int)$_GET['pid']));
 
-//include("lib/common.php");
-
 $numThreads = FetchResult("select count(*) from threads");
 $numPosts = FetchResult("select count(*) from posts");
-//$stats = Plural($numThreads, "thread")." and ".Plural($numPosts,"post")." total";
 $stats = Format(__("{0} and {1} total"), Plural($numThreads, __("thread")), Plural($numPosts, __("post")));
 
 $newToday = FetchResult("select count(*) from posts where date > ".(time() - 86400));

@@ -473,7 +473,6 @@ if($_POST['action'] == __("Edit profile"))
 						case "birthday":
 							if($_POST[$field])
 							{
-								//$val = strtotime($_POST[$field].", 12:00 PM");
 								$val = @stringtotimestamp($_POST[$field]);
 								if($val > time())
 									$val = 0;
@@ -542,8 +541,6 @@ if($_POST['action'] == __("Edit profile"))
 		if($loguserid == $userid)
 		{
 			$loguser = Fetch(Query("select * from users where id=".$loguserid));
-//			if(!$editUserMode)
-//				CheckAutobiographer();
 		}
 		
 		if(isset($_POST['powerlevel']) && $_POST['powerlevel'] != $user['powerlevel'])
@@ -555,7 +552,6 @@ if($_POST['action'] == __("Edit profile"))
 		Report("[b]".$loguser['name']."[/] edited ".$his." profile. -> [g]#HERE#?uid=".$userid, 1);
 
 		die(header("Location: ".actionLink("profile", $userid)));
-		//Redirect(__("Profile updated."), "profile.php?id=".$userid, ($userid == $loguserid ? __("your profile") : __("that user's profile")));
 	}
 	else
 		$failed = true;
@@ -720,8 +716,6 @@ function HandleDisplayname($field, $item)
 	}
 	else
 	{
-		//<MM> Didn't I already say that storing stuff already-escaped is not a good practice?
-		//$_POST[$field] = htmlspecialchars($_POST[$field]);
 		$dispCheck = FetchResult("select count(*) from users where id != ".$user['id']." and (name = '".justEscape($_POST[$field])."' or displayname = '".justEscape($_POST[$field])."')", 0, 0);
 		if($dispCheck)
 		{

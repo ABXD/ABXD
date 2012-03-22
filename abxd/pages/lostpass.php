@@ -26,7 +26,6 @@ else if($_POST['action'] == __("Send reset email"))
 		Kill(__("Could not find a user with that name and email address."), __("Invalid user name or email"));
 	else
 		$user = Fetch($user);
-	//print_r($user);
 	if($user['lostkeytimer'] > time() - (60*60)) //wait an hour between attempts
 		Kill(__("To prevent abuse, this function can only be used once an hour."), __("Slow down!"));
 

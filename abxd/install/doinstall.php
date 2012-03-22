@@ -225,7 +225,6 @@ The following info was supplied:<br />Server: ".$sqlserv."<br />Username: ".$sql
 	Query("update `uploader` set `date` = `id` where `date` = 0;");
 	Query("update `usercomments` set `date` = `id` where `date` = 0;");
 
-	//Import("installTables.sql");
 	if($_POST['addbase'])
 	{
 		print "Creating starting fora&hellip;<br />";

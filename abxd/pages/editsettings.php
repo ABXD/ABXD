@@ -11,8 +11,6 @@ if($loguser['powerlevel'] < 3)
 	Kill(__("You must be an administrator to edit the board settings."));
 	
 $key = hash('sha256', "{$loguserid},{$loguser['pss']},{$salt}");
-//if (isset($_POST['action']) && $key != $_POST['key'])
-//	Kill(__("No."));
 
 if($_POST['action'] == __("Edit"))
 {
@@ -70,11 +68,9 @@ if($_POST['action'] == __("Edit"))
 	fclose($hax);
 
 	die(header("Location: ."));
-	//Redirect(__("Edited!"),"./", __("the main page"));
 }
 
 $forcetheme = $hacks['forcetheme'];
-//$themenames = $hacks['themenames'];
 
 //HAX
 $themes_ = $themes;

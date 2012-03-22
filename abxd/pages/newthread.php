@@ -141,12 +141,9 @@ if($_POST['action'] == __("Post"))
 		
 		Query("update threads set lastpostid = ".$pid." where id = ".$tid);
 		
-//		CheckYearling(1);
 		Report("New ".($_POST['poll'] ? "poll" : "thread")." by [b]".$loguser['name']."[/]: [b]".$_POST['title']."[/] (".$forum['title'].") -> [g]#HERE#?tid=".$tid, $isHidden);
 
 		die(header("Location: ".actionLink("thread", $tid)));
-		//Redirect(__("Posted!"), "thread.php?id=".$tid, __("the thread"));
-		exit();
 	}
 	else
 	{

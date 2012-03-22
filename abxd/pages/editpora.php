@@ -20,7 +20,6 @@ if($_POST['action'] == __("Edit"))
 	Report("[b]".$loguser['name']."[/] edited the PoRA.", 1);
 	
 	die(header("Location: ."));
-	//Redirect(__("Edited!"), "./", __("the main page"));
 }
 
 write(

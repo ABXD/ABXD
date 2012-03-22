@@ -32,9 +32,6 @@ function ParseThreadTags(&$title)
 function CheckTableBreaks($text)
 {
 	$text = strtolower(CleanUpPost($text));
-//	$openers = substr_count($text, "<table") + substr_count($text, "<div") + substr_count($text, "[quote");
-//	$closers = substr_count($text, "</table>") + substr_count($text, "</div>") + substr_count($text, "[/quote]");
-//	return ($openers != $closers);
 	$tabO = substr_count($text, "<table");
 	$tabC = substr_count($text, "</table>");
 	$divO = substr_count($text, "<div");
@@ -52,14 +49,6 @@ function CheckTableBreaks($text)
 
 function filterPollColors($input)
 {
-/*
-	$valid = "#0123456789ABCDEFabcdef";
-	$output = "";
-	for($i = 0; $i < strlen($input); $i++)
-		if(strpos($valid, $input[$i]) !== FALSE)
-			$output .= $input[$i];
-	return $output;
-*/
 	return preg_replace("@[^#0123456789abcdef]@si", "", $input);
 }
 
@@ -105,8 +94,6 @@ function LoadSmilies($byOrder = FALSE)
 		$smilies = array();
 		while($smiley = Fetch($rSmilies))
 		{
-			//foreach ($smiliesR as $old => $new)
-			//	$smiley['code'] = str_replace($old, $new, $smiley['code']);
 			$smilies[] = $smiley;
 		}
 	}
@@ -162,13 +149,6 @@ function GetRank($poster)
 			return $ret;
 		$ret = $text;
 	}
-
-	/*
-	$qRank = "select text from ranks where rset=".$poster['rankset']." and num<=".$poster['posts']." order by num desc limit 1";
-	$rRank = Query($qRank);
-	$rank = Fetch($rRank);
-	return $rank['text'];
-	*/
 }
 
 function GetToNextRank($poster)
@@ -187,29 +167,7 @@ function GetToNextRank($poster)
 		if($num > $poster['posts'])
 			return $ret;
 	}	
-	
-	/*
-	if($poster['rankset'] == 0)
-		return 0;
-	$qRank = "select num from ranks where rset=".$poster['rankset']." and num > ".$poster['posts']." limit 1";
-	$rRank = Query($qRank);
-	if(NumRows($rRank))
-	{
-		$rank = Fetch($rRank);
-		return $rank['num'] - $poster['posts'];
-	}
-	return 0;
-	*/
 }
-
-/*
-function MakeSpoiler($match)
-{
-	global $spoilers;
-	$spoilers++;
-	return "<div class=\"spoiler\"><button onclick=\"document.getElementById('spoiler".$spoilers."').className='';\">Spoiler</button><div class=\"spoiled\" id=\"spoiler".$spoilers."\">";
-}
-*/
 
 function GeshiCallback($matches)
 {
@@ -348,11 +306,7 @@ function CleanUpPost($postText, $poster = "", $noSmilies = false, $noBr = false)
 	$s = preg_replace_callback("'\[user=([0-9]+)\]'si", "MakeUserLink", $s);
 	$s = preg_replace_callback("'\[thread=([0-9]+)\]'si", "MakeThreadLink", $s);
 	$s = preg_replace_callback("'\[forum=([0-9]+)\]'si", "MakeForumLink", $s);
-	//$s = preg_replace_callback("'@(\w+)'si", "MakeUserAtLink", $s);
 	$s = preg_replace_callback("'@\"([\w ]+)\"'si", "MakeUserAtLink", $s);
-
-	//$s = str_replace("Xkeeper","XKitten", $s); //I couldn't help myself -- Kawa
-	//$s = preg_replace("'([c|C])lassic'si","\\1lbuttic", $s); //Same here -- Kawa
 
 	//De-tabled [code] tag, based on BH's...
     $list  = array("<"   ,"\\\"" ,"\\\\" ,"\\'","\r"  ,"["    ,":"    ,")"    ,"_"    );
@@ -370,9 +324,6 @@ function CleanUpPost($postText, $poster = "", $noSmilies = false, $noBr = false)
 	$s = preg_replace("'<i>(.*?)\</i>'si","<em>\\1</em>", $s);
 	$s = preg_replace("'<u>(.*?)\</u>'si","<span class=\"underline\">\\1</span>", $s);
 	$s = preg_replace("'<s>(.*?)\</s>'si","<del>\\1</del>", $s);
-
-	//Do we need this?
-	//$s = preg_replace("'\[c=([0123456789ABCDEFabcdef]+)\](.*?)\[/c\]'si","<span style=\"color: #\\1\">\\2</span>", $s);
 
 	if($noBr == FALSE)
 		$s = str_replace("\n","<br />", $s);
@@ -687,13 +638,9 @@ function MakePost($post, $type, $params=array())
 	
 	if($post['postheader'] && !$isBlocked)
 		$postText = str_replace('$theme', $theme, $post['postheader']).$postText;
-		//$postHeader = str_replace('$theme', $theme, ApplyTags(CleanUpPost($post['postheader'], "", $noSmilies, true), $tags));
-
-	//$postText = ApplyTags(CleanUpPost($post['text'],$post['name'], $noSmilies, $noBr), $tags);
 
 	if($post['signature'] && !$isBlocked)
 	{
-		//$postFooter = ApplyTags(CleanUpPost($post['signature'], "", $noSmilies, true), $tags);
 		if(!$post['signsep'])
 			$postText .= "<br />_________________________<br />";
 		else

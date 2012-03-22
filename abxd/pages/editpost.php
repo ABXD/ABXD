@@ -65,8 +65,6 @@ if((int)$_GET['delete'] == 1)
 	$rPosts = Query($qPosts);
 	
 	die(header("Location: ".actionLink("thread", $tid)));
-	//Redirect(__("Deleted!"), "thread.php?id=".$tid, __("the thread"));
-	exit();
 } elseif((int)$_GET['delete'] == 2)
 {
 	if ($_GET['key'] != $key) Kill(__("No."));
@@ -76,8 +74,6 @@ if((int)$_GET['delete'] == 1)
 	$rPosts = Query($qPosts);
 	
 	die(header("Location: ".actionLink("thread", $tid)));
-	//Redirect(__("Restored!"), "thread.php?id=".$tid, __("the thread"));
-	exit();
 }
 
 if ($post['deleted'])
@@ -151,14 +147,11 @@ if($_POST['action'] == __("Edit"))
 			$rThreads = Query($qThreads);
 			$rPosts = Query($qPosts);
 		}
-		
-//		CheckEditor();
 
 		if($forum['minpower'] < 1)
 			Report("Post edited by [b]".$loguser['name']."[/] in [b]".$thread['title']."[/] (".$forum['title'].") -> [g]#HERE#?pid=".$pid);
 
 			die(header("Location: ".actionLink("thread", 0, "pid=$pid#$pid")));
-			//Redirect(__("Edited!"), "thread.php?pid=".$pid."#".$pid, __("the thread"));
 		exit();
 	}
 	else

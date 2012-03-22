@@ -62,7 +62,6 @@ function MakeTable($match)
 
 	$content = preg_replace_callback("'\[tr\](.*?)\[/tr\]'si", "MakeTableRow", $content);
 	$content = stripbr($content);
-	//$content = preg_replace('/(<table[^>]*>[\\S\\D]*<\/table>|\\[table[^\\]]*\\][\\S\\D]*\\[\/table\\])/e', "stripbr('\\0')", $content);
 
 	return format("<table class=\"outline\"><tr class=\"header0\"><th colspan=\"{1}\">{2}</th></tr>{0}</table>", $content, $cells, $head);
 }

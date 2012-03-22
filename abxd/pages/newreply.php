@@ -165,9 +165,6 @@ if($_POST['action'] == __("Post"))
 		$qUsers = "update users set posts=".($postingAsUser['posts']+1).", lastposttime=".time()." where id=".$postingAs." limit 1";
 		$rUsers = Query($qUsers);
 
-		//$pid = FetchResult("SELECT id+1 FROM posts WHERE (SELECT COUNT(*) FROM posts p2 WHERE p2.id=posts.id+1)=0 ORDER BY id ASC LIMIT 1");
-		//if($pid < 1) $pid = 1;
-
 		$qPosts = "insert into posts (thread, user, date, ip, num, options, mood) values (".$tid.",".$postingAs.",".time().",'".$_SERVER['REMOTE_ADDR']."',".($postingAsUser['posts']+1).", ".$options.", ".(int)$_POST['mood'].")";
 		$rPosts = Query($qPosts);
 		$pid = mysql_insert_id();
@@ -181,11 +178,9 @@ if($_POST['action'] == __("Post"))
 		$qThreads = "update threads set lastposter=".$postingAs.", lastpostdate=".time().", replies=".($thread['replies']+1).", lastpostid=".$pid.$mod." where id=".$tid." limit 1";
 		$rThreads = Query($qThreads);
 
-//		CheckYearling(1);
 		Report("New reply by [b]".$postingAsUser['name']."[/] in [b]".$thread['title']."[/] (".$forum['title'].") -> [g]#HERE#?pid=".$pid, $isHidden);
 
 		die(header("Location: ".actionLink("thread", 0, "pid=".$pid."#".$pid)));
-		//Redirect(__("Posted!"), "thread.php?pid=".$pid."#".$pid, __("the thread"));
 		exit();
 	}
 	else

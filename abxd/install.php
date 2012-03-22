@@ -44,10 +44,8 @@ include("lib/settings.php");
 $overallTidy = 0;
 unset($misc['porabox']);
 $title = "Installation";
-//ob_start("DoFooter");
 $timeStart = usectime();
 include("lib/feedback.php");
-//include("lib/header.php");
 include("lib/write.php");
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -111,7 +109,6 @@ if(isset($_GET['delete']))
 	unlink("install.php") or Kill("Could not delete installation script.");
 
 	die(header("Location: ."));
-	//Redirect("Installation file removed.","./","the main page");
 }
 
 write(
@@ -372,7 +369,6 @@ else if($_POST['action'] == "Install")
 	fclose($hax);
 
 	print "Creating/updating tables&hellip;<br />";
-	//Query("DROP TABLE IF EXISTS `smilies`");
 	Upgrade();
 	
 	print "Adding bare neccesities&hellip;<br />"; 
@@ -436,7 +432,6 @@ else if($_POST['action'] == "Install")
 	Query("update `uploader` set `date` = `id` where `date` = 0;");
 	Query("update `usercomments` set `date` = `id` where `date` = 0;");
 
-	//Import("installTables.sql");
 	if($_POST['addbase'])
 	{
 		print "Creating starting fora&hellip;<br />";
@@ -450,7 +445,6 @@ else if($_POST['action'] == "Install")
 	print "<li>Check out the <a href=\"admin.php\">administrator's toolkit</a>.</li>";
 	print "<li><a href=\"install.php?delete=1\">Delete</a> the installation script.</li>";
 	print "</ul>";
-	//print "The installation script, being a security hazard if left alone, has been removed and replaced by the actual board index.";
 
 	print "</div>";
 }
@@ -515,14 +509,10 @@ function Upgrade()
 			if(isset($tableSchema['special']))
 				$create .= ",\n\t".$tableSchema['special'];
 			$create .= "\n) ENGINE=MyISAM;";
-			//print "<pre>".$create."</pre>";
 			Query($create);
 		}
 		else
 		{
-			//print " checking&hellip;";
-			//$tableStatus = mysql_fetch_assoc($tableStatus);
-			//print "<pre>"; print_r($tableStatus); print "</pre>";
 			$primaryKey = "";
 			$changes = 0;
 			$foundFields = array();
@@ -534,7 +524,6 @@ function Upgrade()
 				$type = $field['Type'];
 				if($field['Null'] == "NO")
 					$type .= " NOT NULL";
-				//if($field['Default'] != "")
 				if($field['Extra'] == "auto_increment")
 					$type .= " AUTO_INCREMENT";
 				else

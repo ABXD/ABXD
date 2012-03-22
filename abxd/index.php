@@ -5,10 +5,6 @@ require('lib/common.php');
 //TODO: Put this in a proper place.
 function getBirthdaysText()
 {
-	// Mega-Mario: could be optimized to
-	// $rBirthdays = Query("select birthday, id, name, displayname, powerlevel, sex from users where birthday>0 and from_unixtime(birthday, '%c-%e')='".date('n-j')."' order by name");
-	// but then I don't know about birthday timezones and all
-	// and especially why we're using gmdate()
 	$rBirthdays = Query("select birthday, id, name, displayname, powerlevel, sex from users where birthday > 0 order by name");
 	$birthdays = array();
 	while($user = Fetch($rBirthdays))

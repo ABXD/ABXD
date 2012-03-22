@@ -62,7 +62,6 @@ elseif($_GET['action'] == "delete")
 	$rMod = Query($qMod);
 	
 	die(header("Location: ".actionLink("managemods")));
-	//Redirect(__("Removed!"), "managemods.php", __("the mod manager"));
 }
 elseif($_GET['action'] == "add")
 {
@@ -110,7 +109,6 @@ elseif($_GET['action'] == "add")
 		$rMod = Query($qMod);
 
 		die(header("Location: ".actionLink("managemods")));
-		//Redirect(__("Added!"), "managemods.php", __("the mod manager"));
 	}
 }
 

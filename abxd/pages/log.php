@@ -19,9 +19,6 @@ while($item = Fetch($logR))
 	$blar = str_replace("[/]", "", $blar);
 	$blar = str_replace("-&gt;", "&rarr;", $blar);
 
-	//TODO FIX this shit.
-//	$blar = preg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\">\\0</a>", $blar);
-
 	$blar = str_replace($here, $there, $blar);
 
 	$cellClass = ($cellClass + 1) % 2;

@@ -85,7 +85,6 @@ if($_GET['action'] == "set")
 				Report("[b]".$loguser['name']."[/] switched avatars to [b]\"".$avalib[$fid]['content'][$_GET['img']]."\"[/] -> [g]#HERE#?uid=".$loguserid, 1);
 				
 				die(header("Location: profile.php?id".$loguserid));
-				//Redirect(format(__("Your avatar has been set to \"{0}\"."), $avalib[$fid]['content'][$_GET['img']]),"profile.php?id=".$loguserid, __("your profile"));
 			}
 }
 

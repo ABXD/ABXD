@@ -52,7 +52,6 @@ if($canMod)
 		Report("[b]".$loguser['name']."[/] closed thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 	
 		die(header("Location: ".actionLink("thread", $tid)));
-		//Redirect(__("Thread closed."), "forum.php?id=".$thread['forum'], __("the forum"));
 	}
 	elseif($_GET['action']=="open")
 	{
@@ -61,7 +60,6 @@ if($canMod)
 		Report("[b]".$loguser['name']."[/] opened thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 			
 		die(header("Location: ".actionLink("thread", $tid)));
-		//Redirect(__("Thread opened."), "forum.php?id=".$thread['forum'], __("the forum"));
 	}
 	elseif($_GET['action']=="stick")
 	{
@@ -70,7 +68,6 @@ if($canMod)
 		Report("[b]".$loguser['name']."[/] stickied thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 			
 		die(header("Location: ".actionLink("thread", $tid)));
-		//Redirect(__("Thread stickied."), "forum.php?id=".$thread['forum'], __("the forum"));
 	}
 	elseif($_GET['action']=="unstick")
 	{
@@ -79,7 +76,6 @@ if($canMod)
 		Report("[b]".$loguser['name']."[/] unstuck thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 			
 		die(header("Location: ".actionLink("thread", $tid)));
-		//Redirect(__("Thread unsticked."), "forum.php?id=".$thread['forum'], __("the forum"));
 	}
 	elseif($_POST['action']==__("Move"))
 	{
@@ -104,7 +100,6 @@ if($canMod)
 		Report("[b]".$loguser['name']."[/] moved thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 			
 		die(header("Location: ".actionLink("thread", $tid)));
-		//Redirect(__("Thread moved."), "forum.php?id=".$moveto, __("the new forum"));
 	}
 	elseif($_GET['action']=="delete")
 	{
@@ -158,7 +153,6 @@ if($canMod)
 		Report("[b]".$loguser['name']."[/] deleted thread [b]".$thread['title']."[/]", $isHidden);
 			
 		die(header("Location: ".actionLink("forum", $thread['forum'])));
-		//Redirect(__("Thread deleted."), "forum.php?id=".$thread['forum'], __("the forum"));
 	}
 	elseif($_GET['action'] == "trash")
 	{
@@ -184,7 +178,6 @@ if($canMod)
 			Report("[b]".$loguser['name']."[/] thrashed thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 
 			die(header("Location: ".actionLink("forum", $thread['forum'])));
-			//Redirect(__("Thread trashed."), "forum.php?id=".$thread['forum'], __("the forum"));
 		}
 		else
 			Kill(__("Could not identify trash forum."));
@@ -213,7 +206,6 @@ if($canMod)
 			Report("[b]".$loguser['name']."[/] edited thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 
 			die(header("Location: ".actionLink("thread", $tid)));
-			//Redirect(__("Edited!"), "thread.php?id=".$tid, __("the thread"));
 			exit();
 		}
 		else

@@ -75,9 +75,6 @@ function Upgrade()
 		}
 		else
 		{
-			//print " checking&hellip;";
-			//$tableStatus = mysql_fetch_assoc($tableStatus);
-			//print "<pre>"; print_r($tableStatus); print "</pre>";
 			$primaryKey = "";
 			$changes = 0;
 			$foundFields = array();

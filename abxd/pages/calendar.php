@@ -4,9 +4,6 @@ $title = __("Calendar");
 
 AssertForbidden("viewCalendar");
 
-//$calinfo = cal_info(0);
-//$months = $calinfo['months'];
-
 $now = getdate(time());
 $year = $now['year'];
 $month = $now['mon'];

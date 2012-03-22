@@ -172,7 +172,6 @@
 			
 		print "Last edited by ".$lastEditor."\n";
 	}
-	//$f = file('spritesql.txt'); foreach ($f as $q) mysql_query(str_replace('#NEWLINE#', "\n", $q));
 
 	if (get_magic_quotes_gpc()) {
 		foreach ($_GET as $k => $v) $_GET[$k] = stripslashes($v);
@@ -199,8 +198,6 @@
 		$ajaxPage = TRUE;
 	
 	$title = "Sprite Database";
-
-//	Kill("The Sprite DB is down for maintenance. I'm currently changing many things which will allow cool stuff like changing the field order. ~Dirbaio");
 
     if($action != 'list' && $action != 'spriteplaintext' && ($wantGuest || $loguser['powerlevel'] < 0))
     {

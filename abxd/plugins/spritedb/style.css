@@ -8,7 +8,6 @@
 	height: 16px;
 }
 
-/*div.unusedp { background: #d6c6ff; border-right: 1px solid #000; }*/
 .unknownp { background: #612;}
 .knownp { background: #840;}
 .completep { background: #041;}

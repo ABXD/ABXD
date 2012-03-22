@@ -312,11 +312,6 @@ a:hover
 {
 	color: white !important;
 	border-bottom: 1px solid white;
-	/*
-	transform: scale(1.1);
-	-o-transform: scale(1.1);
-	-moz-transform: scale(1.1);
-	-webkit-transform: scale(1.1);*/
 }
 
 div#header .cell0 a:hover, div#rss a, .smilies img:hover, .avaLib img:hover, .footer a:hover, table.post img:hover, tr.cell0 td img, .cell1 td img, .cell2 td img

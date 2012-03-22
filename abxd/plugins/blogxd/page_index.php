@@ -120,9 +120,6 @@ while($thread = Fetch($rThreads))
 		$forumList .= "<tr class='cell0'><td>$comments</td><td style=\"border-left: 0px none;\">$newreply</td></tr>";
 		$forumList .="</table>";
 	}
-/*",	$cellClass, $NewIcon, $ThreadIcon, $poll, $thread['id'], , $pl, $tags,
-, $thread['replies'], $thread['views'],
-, UserLink($last), $lastLink, $subtitle);*/
 }
 
 Write($forumList);

@@ -75,19 +75,12 @@ if(!function_exists("__"))
 				$v = trim($f[$i]);
 				if($v == "")
 					continue;
-				//$v = htmlentities($v, ENT_COMPAT, "UTF-8", false);
 				$languagePack[$k] = $v;
 			}
 		}
 
 		function importPluginLanguagePacks($file)
 		{
-			/*
-			global $plugins;
-			foreach($plugins as $plugin)
-				if(file_exists("./plugins/".$plugin."/".$file))
-					importLanguagePack("./plugins/".$plugin."/".$file);
-			*/
 			$pluginsDir = @opendir("plugins");
 			if($pluginsDir !== FALSE)
 			while(($plugin = readdir($pluginsDir)) !== FALSE)

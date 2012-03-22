@@ -384,22 +384,6 @@ function WriteForumEditContents($fid)
 	</form>	
 	
 	', $title, $description, $catselect, $minpower, $minpowerthread, $minpowerreply, $fid, $forder, $key, $func, $button, $boxtitle, $delbutton);
-	
-	/*
-					<br>
-					<button onclick="deleteForum(\'trash\'); return false;">
-						Trash all threads
-					</button><br>
-					<button onclick="deleteForum(\'move\'); return false;">
-						Move all threads to:
-					</button><br>
-					<button onclick="deleteForum(\'leave\'); return false;">
-						Leave threads in the DB
-
-					</button> (NOT recommended)<br><br>
-					<button onclick="hideDeleteForum(); return false;">
-						
-					</button> */
 }
 // $fid == -1 means that a new forum should be made :)
 function WriteCategoryEditContents($cid)
@@ -511,24 +495,6 @@ function WriteCategoryEditContents($cid)
 		</table>
 	</div>
 	</form>';
-	
-//	', $title, $description, $catselect, $minpower, $minpowerthread, $minpowerreply, $fid, $forder, $key, $func, $button, $boxtitle, $delbutton);
-	
-	/*
-					<br>
-					<button onclick="deleteForum(\'trash\'); return false;">
-						Trash all threads
-					</button><br>
-					<button onclick="deleteForum(\'move\'); return false;">
-						Move all threads to:
-					</button><br>
-					<button onclick="deleteForum(\'leave\'); return false;">
-						Leave threads in the DB
-
-					</button> (NOT recommended)<br><br>
-					<button onclick="hideDeleteForum(); return false;">
-						
-					</button> */
 }
 
 

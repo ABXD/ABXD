@@ -16,7 +16,6 @@ if(isset($_POST['action']) && $_POST['action'] == "Install")
 	Report("[b]".$loguser['name']."[/] edited [b]".$user['name']."[/]'s layout with the layout maker. -> [g]#HERE#?uid=".$userid, 1);
 	
 	die(header("Location: profile.php?id=".$loguserid));
-	//Redirect(__("Layout changed."), "profile.php?id=".$loguserid, __("your profile"));
 }
 
 if(!isset($_GET['base']) || strpos($_GET['base'], ".") !== FALSE)

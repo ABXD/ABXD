@@ -2,19 +2,6 @@
 
 /* AcmlmBoard XD - TRaSH theme */
 
-/*
-.PoRT, .pollbarContainer, .pollbar, table.post, .post_about, .post_topbar, .post_content, .PoRT .errort, .PoRT .errorc, table.post td.side, table.post td.userlink, table.post td.meta, table.post td.post, table.outline, table.outline tr:first-child th:first-child, table.outline tr:first-child th:last-child, div#tabs button
-{
-	border-radius: 0px;
-}
-
-*/
-
-.outline, .PoRT
-{
-	/*	box-shadow: none; */
-}
-
 table.outline
 {
 	border: 0px none;

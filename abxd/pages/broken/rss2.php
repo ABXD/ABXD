@@ -70,14 +70,12 @@ print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	<atom:link href="<?php print $boardurl; ?>/rss2.php<?php print $extraUrl; ?>" rel="self" type="application/rss+xml" />
 
 <?php
-	//$qPosts = "select * from posts order by date desc limit 0, ".($maxPosts * 2);
 	$qPosts = "select ";
 	$qPosts .=
 	"posts.id, posts.thread, posts.date, posts.num, posts.deleted, posts.options, posts_text.text, posts_text.revision, users.id as uid, users.name, users.displayname, threads.forum";
 	$qPosts .= 
 	" from posts left join posts_text on posts_text.pid = posts.id and posts_text.revision = posts.currentrevision left join users on users.id = posts.user left join threads on threads.id = posts.thread";
 	$qPosts .= " where deleted=0 ".$extraWhere." order by date desc limit 0, ".($maxPosts * 2);
-	//print $qPosts;
 	$rPosts = mysql_query($qPosts) or die(mysql_error()." --- ".$qPosts);
 	while($post = Fetch($rPosts))
 	{
@@ -98,15 +96,6 @@ print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 			if($thread['forum'] != (int)$_GET['forum'])
 				continue;
 		}
-
-		//$qPoster = "select * from users where id=".$post['user'];
-		//$rPoster = Query($qPoster);
-		//$poster = Fetch($rPoster);
-
-		//$qText = "select text,revision from posts_text where pid=".$post['id']." order by revision desc limit 1";
-		//$rText = Query($qText);
-		//$text = Fetch($rText);
-		//$post = array_merge($post, $text);
 		
 		$forum['title'] = htmlentities($forum['title']);
 		$thread['title'] = htmlentities($thread['title']);
@@ -117,10 +106,6 @@ print "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
 		print "\n<item>\n";
 		
-		//if($thread['replies'] < 1)
-		//	print "<title>New thread by ".$poster['name']." (".$forum['title'].": ".$thread['title'].")</title>\n";
-		//else
-		//	print "<title>New reply by ".$poster['name']." (".$forum['title'].": ".$thread['title'].")</title>\n";
 		$reply = ($post['revision'] > 0) ? "Post edited" : "New post";
 
 		print "<title>".$reply." by ".$poster['name']." (".$forum['title'].": ".$thread['title'].")</title>\n";

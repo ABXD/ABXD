@@ -63,18 +63,12 @@ foreach($knownBrowsers as $code => $name)
 {
 	if (strpos($ua, $code) !== FALSE)
 	{
-		//$version = substr($ua, strpos($ua, $code) + strlen($code), 6);
-		//$version = preg_replace('/[^0-9,.]/','',$version);
-		
 		$versionStart = strpos($ua, $code) + strlen($code);
 		if ($code != "dwb") $version = GetVersion($ua, $versionStart);
 
 		//Opera Mini wasn't detected properly because of the Opera 10 hack.
 		if (strpos($ua, "Opera/9.80") !== FALSE && $code != "Opera Mini" || $code == "Safari" && strpos($ua, "Version/") !== FALSE)
 			$version = substr($ua, strpos($ua, "Version/") + 8);
-
-		//$isFirefox = ($code == "Firefox");
-		//$isIE6 = (strpos($ua, "MSIE 6.") !== FALSE);
 
 		$lastKnownBrowser = $name." ".$version;
 		break;

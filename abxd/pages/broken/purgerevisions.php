@@ -20,11 +20,4 @@ while($revision = Fetch($allrevisedposts))
 Query("update posts set currentrevision = 0 where currentrevision > 0");
 Query("update posts_text set revision = 0 where revision > 0");
 
-//$remover = "update posts_text set revision = 0 where revision > 0";
-//print "<b>Query:</b> ".$remover."\n";
-//Query($remover);
-//$remover = "update posts set currentrevision = 0";
-//print "<b>Query:</b> ".$remover."\n";
-//Query($remover);
-
 ?>

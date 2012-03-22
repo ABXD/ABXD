@@ -112,23 +112,4 @@ function CheckEditor()
 	}
 }
 
-/*
-function CheckCommentator()
-{
-	global $loguserid;
-	if($loguserid == 0)
-		return;
-	if(($user['badges'] & COMMENTATOR) == 0)
-	{
-		$numComments = FetchResult("select count(*) from usercomments where cid=".$loguserid, 0, 0);
-		print $numComments;
-		if($numComments >= 20)
-		{
-			$newBadges = $user['badges'] + COMMENTATOR;
-			Query("update users set badges = ".$newBadges." where id=".$loguserid);
-		}
-	}
-}
-*/
-
 ?>

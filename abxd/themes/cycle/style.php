@@ -93,44 +93,6 @@ h3
 	background: hsl([huesat], 48%);
 }
 
-/*
-button, input[type=submit]
-{
-	border: 1px solid hsl([huesat], 20%);
-	background-color: hsl([huesat], 30%);
-	border-radius: 4px;
-	box-shadow:
-		inset -1px -10px 5px hsl([huesat], 20%),
-		inset 1px 6px 12px hsl([huesat], 50%),
-		1px 1px 1px hsl([huesat], 10%);
-	color: white;
-	text-shadow: 1px 1px 1px black;
-}
-
-input[type=text], input[type=password], textarea, select
-{
-	border: 1px solid hsl([huesat], 20%);
-	background-color: hsl([huesat], 10%);
-	border-radius: 4px;
-	box-shadow: inset 1px 6px 12px black;
-	color: white;
-	padding-left: 0.5em;
-}
-
-input[type=checkbox], input[type=radio]
-{
-	border: 1px solid hsl([huesat], 20%);
-	background-color: hsl([huesat], 10%);
-	box-shadow: 1px 1px 2px black;
-	color: white;
-}
-
-input[type=radio]
-{
-	border-radius: 8px;
-}
-*/
-
 button, input[type=submit]
 {
 	border: 1px solid hsl([huesat], 20%);

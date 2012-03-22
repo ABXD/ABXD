@@ -58,8 +58,6 @@ if(NumRows($entry))
 	header("Content-Length: ".$fsize);
 
 	readfile($path);
-	
-	//header('Content-Disposition: attachment; filename="downloaded.pdf"');
 }
 else
 {

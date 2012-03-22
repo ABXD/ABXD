@@ -214,7 +214,6 @@ function IP2C($ip)
 
 function FilterURL($url)
 {
-	//$url = str_replace(array("%20","_"), " ", $url);
 	$url = str_replace('_', ' ', urldecode($url));
 	$url = htmlspecialchars($url);
 	$url = preg_replace("@&?(key|token)=[0-9a-f]{64}@i", '', $url);

@@ -100,7 +100,6 @@ if($draftEditor)
 		Query("delete from pmsgs_text where pid = ".$pmid);
 
 		die(header("Location: ".actionLink("private")));
-		//Redirect(__("PM draft discarded."), "private.php", __("your PM box"));
 		exit();
 	}
 
@@ -164,7 +163,6 @@ if($draftEditor)
 			{
 				if($_POST['action'] == __("Update Draft"))
 				{
-					//$post = justEscape($post);
 					$post = $pm['text'];
 					$post = preg_replace("'/me '","[b]* ".$loguser['name']."[/b] ", $post); //to prevent identity confusion
 						$post = "<!-- ###MULTIREP:".$_POST['to']." ### -->".$post;
@@ -175,9 +173,7 @@ if($draftEditor)
 					$qPM = "update pmsgs set userto = ".$firstTo." where id = ".$pmid;
 					$rPM = Query($qPM);
 
-				die(header("Location: ".actionLink("private", "", "show=2")));
-					//Redirect(__("PM draft updated!"), "private.php?show=2", __("your PM box"));
-					exit();
+                	die(header("Location: ".actionLink("private", "", "show=2")));
 				}
 				else
 				{
@@ -204,7 +200,6 @@ if($draftEditor)
 					}
 
 				die(header("Location: ".actionLink("private", "", "show=1")));
-					//Redirect(__("PM sent!"),"private.php?show=1", __("your PM outbox"));
 					exit();
 				}
 			}
@@ -215,8 +210,6 @@ if($draftEditor)
 			Alert(__("Enter a title and try again."), __("Your PM is untitled."));
 	}
 
-	//if($_POST['text']) $prefill = htmlspecialchars($_POST['text']);
-	//if($_POST['title']) $trefill = htmlspecialchars($_POST['title']);
 	$prefill = $pm['text'];
 	$trefill = $pmtitle;
 

@@ -11,7 +11,6 @@ if($loguser['powerlevel'] == -2)
 	}
 	else
 		usleep(10000000 + (rand(0, 20000) * 1000));
-		//sleep(rand(0, 20));
 }
 
 if(strrpos($_SERVER['SCRIPT_NAME'], "memberlist.php") !== FALSE)

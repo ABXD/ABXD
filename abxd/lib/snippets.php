@@ -227,7 +227,6 @@ function RecalculateKarma($uid)
 			$karma -= $karmaWeights[$k['powerlevel']];
 	}
 	Query("update users set karma=".$karma." where id=".$uid);
-//	CheckHeart($uid, $karma);
 	return $karma;
 }
 
@@ -236,7 +235,7 @@ function cdate($format, $date = 0)
 {
 	global $loguser;
 	if($date == 0)
-		$date = time(); //gmmktime(); //removed for E_STRICT
+		$date = time();
 	$hours = (int)($loguser['timezone']/3600);
 	$minutes = floor(abs($loguser['timezone']/60)%60);
 	$plusOrMinus = $hours < 0 ? "" : "+";

@@ -1,18 +1,3 @@
-//This was causing errors
-
-/*if(Object.defineProperty && Object.getOwnPropertyDescriptor && !Object.getOwnPropertyDescriptor(Element.prototype, "textContent").get)
-	(function()
-	{
-		var innerText = Object.getOwnPropertyDescriptor(Element.prototype, "innerText");
-		Object.defineProperty(Element.prototype, "textContent",
-		{
-			get : function() { return innerText.get.call(this); },
-			set : function(x) { return innerText.set.call(this, x); },
-			enumerable : true
-		});
-	})();*/
-
-
 /* Spoiler buttons for posts
    -------------------------
    Used to be a simple one-way trick.

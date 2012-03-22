@@ -9,18 +9,18 @@ $id = (int)$_GET['id'];
 $hideTricks = " <a href=\"javascript:void(0)\" onclick=\"hideTricks(".$id.")\">".__("Back")."</a>";
 if($action == "q")	//Quote
 {
-	$qQuote = "	select 
+	$qQuote = "	select
 					p.id, p.deleted, pt.text,
 					f.minpower,
 					u.name poster
 				from posts p
-					left join posts_text pt on pt.pid = p.id and pt.revision = p.currentrevision 
+					left join posts_text pt on pt.pid = p.id and pt.revision = p.currentrevision
 					left join threads t on t.id=p.thread
 					left join forums f on f.id=t.forum
 					left join users u on u.id=p.user
 				where p.id=".$id;
 	$rQuote = Query($qQuote);
-	
+
 	if(!NumRows($rQuote))
 		die(__("Unknown post ID."));
 
@@ -30,7 +30,7 @@ if($action == "q")	//Quote
 	//Do we need to translate this line? It's not even displayed in its true form ._.
 	if($quote['minpower'] > $loguser['powerlevel'])
 		$quote['text'] = str_rot13("Pools closed due to not enough power. Prosecutors will be violated.");
-		
+
 	if ($quote['deleted'])
 		$quote['text'] = __("Post is deleted");
 
@@ -40,15 +40,15 @@ if($action == "q")	//Quote
 }
 else if ($action == 'rp') // retrieve post
 {
-	$qPost = "	SELECT 
-					p.id, p.date, p.num, p.deleted, p.options, p.mood, p.ip, p.thread, 
-					pt.text, pt.text, pt.revision, 
-					f.id fid, 
+	$qPost = "	SELECT
+					p.id, p.date, p.num, p.deleted, p.options, p.mood, p.ip, p.thread,
+					pt.text, pt.text, pt.revision,
+					f.id fid,
 					u.id as uid, u.name, u.displayname, u.rankset, u.powerlevel, u.title, u.sex, u.picture, u.posts, u.postheader, u.signature, u.signsep, u.lastposttime, u.lastactivity, u.regdate,
 					(u.globalblock OR !ISNULL(bl.user)) layoutblocked
-				FROM 
+				FROM
 					posts p
-					LEFT JOIN posts_text pt ON pt.pid = p.id AND pt.revision = p.currentrevision 
+					LEFT JOIN posts_text pt ON pt.pid = p.id AND pt.revision = p.currentrevision
 					LEFT JOIN users u ON u.id = p.user
 					LEFT JOIN blockedlayouts bl ON bl.user=u.id AND bl.blockee=".$loguserid."
 					LEFT JOIN threads t ON t.id=p.thread
@@ -58,10 +58,10 @@ else if ($action == 'rp') // retrieve post
 	if (!NumRows($rPost))
 		die(__("Unknown post ID."));
 	$post = Fetch($rPost);
-		
+
 	if (!CanMod($loguserid, $post['fid']))
 		die(__("No."));
-		
+
 	die(MakePost($post, isset($_GET['o']) ? POST_DELETED_SNOOP : POST_NORMAL, array('tid'=>$post['thread'], 'fid'=>$post['fid'])));
 }
 else if($action == "ou")	//Online Users
@@ -84,15 +84,15 @@ else if($action == "tf")	//Theme File
 		$layout_logopic = themeResourceLink("logo.gif");
 	else
 		$layout_logopic = resourceLink("img/logo.png");
-		
+
 	die($themeFile."|".$layout_logopic);
 }
 else if($action == "ni")	//New Indicators
 {
 	$pl = $loguser['powerlevel'];
-	
+
 	//TODO: This is copypasted from pages/index.php. Maybe make a function? ~Dirbaio
-	$rFora = Query("	SELECT f.*, 
+	$rFora = Query("	SELECT f.*,
 						c.name cname,
 						".($loguserid ? "(NOT ISNULL(i.fid))" : "0")." ignored,
 						(SELECT COUNT(*) FROM threads t".($loguserid ? " LEFT JOIN threadsread tr ON tr.thread=t.id AND tr.id=".$loguserid : "")."
@@ -114,47 +114,6 @@ else if($action == "ni")	//New Indicators
 		print $newstuff;
 	}
 	die();
-/*	$threadsRead = array();
-	$rThreadsRead = Query("select id, lastpostdate, forum from threads");
-	while($trd = Fetch($rThreadsRead))
-		$threadsRead[$trd['id']] = $trd;
-
-	$ignored = array();
-	if($loguserid)
-	{
-		$rIgnores = Query("select fid from ignoredforums where uid=".$loguserid);
-		while($ignore = Fetch($rIgnores))
-			$ignored[$ignore['fid']] = TRUE;
-	}
-
-	$postreads = Query("select * from threadsread where id=".$loguserid);
-	while($read1 = Fetch($postreads))
-		$postread[$read1['thread']]=$read1['date'];
-
-	$rCategories = Query("select name,minpower from categories");
-	$category[] = "dummy";
-	while($cat = Fetch($rCategories))
-		$category[] = array("name" => $cat['name'], "minpower" => $cat['minpower']);
-
-	$news = array();
-
-	$rFora = Query("select f.* from forums f left join categories c on c.id=f.catid order by c.corder, c.id, f.forder");
-	while($forum = Fetch($rFora))
-	{
-		if($category[$forum['catid']]['minpower'] > $pl)
-			continue;
-		if($forum['hidden'])
-			continue;
-
-		$newstuff = 0;
-		if(!$ignored[$forum['id']])
-			foreach($threadsRead as $trd)
-				if($trd['forum'] == $forum['id'] && $trd['lastpostdate'] > $postread[$trd['id']])
-					$newstuff++;
-		$news[] = $newstuff;		
-	}
-
-	die(join(",", $news));*/
 }
 elseif($action == "srl")	//Show Revision List
 {
@@ -164,7 +123,6 @@ elseif($action == "srl")	//Show Revision List
 		$post = Fetch($rPost);
 	else
 		die(format(__("Unknown post ID #{0}."), $id)." ".$hideTricks);
-		//die("Unknown post ID #".$id.". ".$hideTricks);
 
 	$qThread = "select forum from threads where id=".$post['thread'];
 	$rThread = Query($qThread);
@@ -179,7 +137,7 @@ elseif($action == "srl")	//Show Revision List
 	for($i = 0; $i <= $post['currentrevision']; $i++)
 		$reply .= " <a href=\"javascript:void(0)\" onclick=\"showRevision(".$id.",".$i.")\">".$i."</a>";
 	$reply .= $hideTricks;
-	die($reply);	
+	die($reply);
 }
 elseif($action == "sr")	//Show Revision
 {
@@ -187,7 +145,7 @@ elseif($action == "sr")	//Show Revision
 	$qPost = "select ";
 	$qPost .=
 		"posts.id, posts.date, posts.num, posts.deleted, posts.options, posts.mood, posts.ip, posts_text.text, posts_text.text, posts_text.revision, users.id as uid, users.name, users.displayname, users.rankset, users.powerlevel, users.title, users.sex, users.picture, users.posts, users.postheader, users.signature, users.signsep, users.globalblock, users.lastposttime, users.lastactivity, users.regdate, posts.thread";
-	$qPost .= 
+	$qPost .=
 		" from posts left join posts_text on posts_text.pid = posts.id and posts_text.revision = ".(int)$_GET['rev']." left join users on users.id = posts.user";
 	$qPost .= " where posts_text.pid=".$id;
 
@@ -245,7 +203,7 @@ elseif($action == "sr")	//Show Revision
 
 	$reply = $postHeader.$postText.$separator.$postFooter;
 
-	die($reply);	
+	die($reply);
 }
 elseif($action == "em")	//Email
 {

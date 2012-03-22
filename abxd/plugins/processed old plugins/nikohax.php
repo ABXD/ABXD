@@ -168,6 +168,4 @@ function test($tag)
 ");
 }
 
-//register("writers", "test", 1);
-
 ?>

@@ -13,7 +13,6 @@ $description = "The latest replies on the board, mIRC style";
 $maxPosts = 5;
 $postCount = 0;
 
-//header('Content-Type: text/xml; charset=utf8', true);
 include("lib/mysql.php");
 include("lib/snippets.php");
 include("lib/post.php");

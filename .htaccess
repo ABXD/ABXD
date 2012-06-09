@@ -1,0 +1,2 @@
+# 404 Error handling
+ErrorDocument 404 /?page=404

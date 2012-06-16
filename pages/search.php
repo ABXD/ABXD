@@ -85,7 +85,7 @@ if(isset($_GET['q']))
 	}
 	$final = "";
 
-	$search = Query("SELECT `threads`.`title`, `threads`.`user`, `name`, `displayname`, `sex`, `powerlevel` FROM `threads` LEFT JOIN `users` ON `users`.`id`=`threads`.`user` WHERE MATCH(`threads`.`title`) AGAINST('".$bool."' IN BOOLEAN MODE) ORDER BY `threads`.`lastpostdate` DESC LIMIT 0,100");
+	$search = Query("SELECT `{$dbpref}threads`.`title`, `{$dbpref}threads`.`user`, `name`, `displayname`, `sex`, `powerlevel` FROM `{$dbpref}threads` LEFT JOIN `{$dbpref}users` ON `{$dbpref}users`.`id`=`{$dbpref}threads`.`user` WHERE MATCH(`{$dbpref}threads`.`title`) AGAINST('".$bool."' IN BOOLEAN MODE) ORDER BY `{$dbpref}threads`.`lastpostdate` DESC LIMIT 0,100");
 
 	if(NumRows($search))
 	{
@@ -126,7 +126,7 @@ if(isset($_GET['q']))
 		}
 	}
 
-	$search = Query("SELECT `text`, `pid`, `threads`.`title`, `thread`, `posts`.`user`, `name`, `displayname`, `sex`, `powerlevel` FROM `posts_text` LEFT JOIN `posts` ON `posts_text`.`pid`=`posts`.`id` LEFT JOIN `threads` ON `threads`.`id`=`posts`.`thread` LEFT JOIN `users` ON `users`.`id`=`posts`.`user` WHERE `posts_text`.`revision`=`posts`.`currentrevision` AND MATCH(`text`) AGAINST('".$bool."' IN BOOLEAN MODE) ORDER BY `posts`.`date` DESC LIMIT 0,100");
+	$search = Query("SELECT `text`, `pid`, `{$dbpref}threads`.`title`, `thread`, `{$dbpref}posts`.`user`, `name`, `displayname`, `sex`, `powerlevel` FROM `{$dbpref}posts_text` LEFT JOIN `{$dbpref}posts` ON `{$dbpref}posts_text`.`pid`=`posts`.`id` LEFT JOIN `{$dbpref}threads` ON `{$dbpref}threads`.`id`=`{$dbpref}posts`.`thread` LEFT JOIN `{$dbpref}users` ON `{$dbpref}users`.`id`=`{$dbpref}posts`.`user` WHERE `{$dbpref}posts_text`.`revision`=`posts`.`currentrevision` AND MATCH(`text`) AGAINST('".$bool."' IN BOOLEAN MODE) ORDER BY `{$dbpref}posts`.`date` DESC LIMIT 0,100");
 
 	if(NumRows($search))
 	{

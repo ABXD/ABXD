@@ -5,7 +5,7 @@ if(Settings::get("mailResetSender") == "")
 
 if(isset($_GET['key']) && isset($_GET['id']))
 {
-	$user = Query("select pss from users where id = '".(int)$_GET['id']."'");
+	$user = Query("select pss from {$dbpref}users where id = '".(int)$_GET['id']."'");
 	if(NumRows($user) == 0)
 		Kill(__("This old key cannot be used."), __("Invalid key"));
 
@@ -13,7 +13,7 @@ if(isset($_GET['key']) && isset($_GET['id']))
 	
 	$sha = hash("sha256", $_GET['key'].$salt.$user["pss"], FALSE);
 	
-	$user = Query("select id, name, password, pss from users where id = '".(int)$_GET['id']."' and lostkey = '".justEscape($sha)."' and lostkeytimer > ".(time() - (60*60)));
+	$user = Query("select id, name, password, pss from {$dbpref}users where id = '".(int)$_GET['id']."' and lostkey = '".justEscape($sha)."' and lostkeytimer > ".(time() - (60*60)));
 
 	if(NumRows($user) == 0)
 		Kill(__("This old key cannot be used."), __("Invalid key"));
@@ -24,13 +24,13 @@ if(isset($_GET['key']) && isset($_GET['id']))
 	$newPass = randomString(8);
 	$sha = hash("sha256", $newPass.$salt.$newsalt, FALSE);
 
-	Query("update users set lostkey = '', password = '".$sha."', pss = '$newsalt' where id = ".(int)$_GET['id']);
+	Query("update {$dbpref}users set lostkey = '', password = '".$sha."', pss = '$newsalt' where id = ".(int)$_GET['id']);
 	Kill(format(__("Your password has been reset to <strong>{0}</strong>. You can use this password to log in to the board. We suggest you change it as soon as possible."), $newPass), __("Password reset"));
 	
 }
 else if($_POST['action'] == __("Send reset email"))
 {
-	$user = Query("select id, name, password, email, lostkeytimer, pss from users where name = '".justEscape($_POST['name'])."' and email = '".justEscape($_POST['mail'])."'");
+	$user = Query("select id, name, password, email, lostkeytimer, pss from {$dbpref}users where name = '".justEscape($_POST['name'])."' and email = '".justEscape($_POST['mail'])."'");
 	if(NumRows($user) != 0)
 	{
                 //Do not disclose info about user e-mail. 
@@ -52,7 +52,7 @@ else if($_POST['action'] == __("Send reset email"))
 	
 		mail($to, $subject, wordwrap($message, 70), $headers);
 
-		Query("update users set lostkey = '".justEscape($hashedResetKey)."', lostkeytimer = ".time()." where id = ".$user['id']);
+		Query("update {$dbpref}users set lostkey = '".justEscape($hashedResetKey)."', lostkeytimer = ".time()." where id = ".$user['id']);
 	}
 	Kill(__("Check your email in a moment and follow the link found therein."), __("Reset email sent"));
 }

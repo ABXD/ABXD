@@ -6,7 +6,7 @@ if(isset($_GET['id']))
 elseif(isset($_GET['pid']))
 {
 	$pid = (int)$_GET['pid'];
-	$qPost = "select * from posts where id=".$pid;
+	$qPost = "select * from {$dbpref}posts where id=".$pid;
 	$rPost = Query($qPost);
 	if(NumRows($rPost))
 		$post = Fetch($rPost);
@@ -18,7 +18,7 @@ else
 	die(__("Thread ID unspecified."));
 AssertForbidden("viewThread", $tid);
 
-$qThread = "select * from threads where id=".$tid;
+$qThread = "select * from {$dbpref}threads where id=".$tid;
 $rThread = Query($qThread);
 if(NumRows($rThread))
 	$thread = Fetch($rThread);
@@ -31,7 +31,7 @@ AssertForbidden("viewForum", $fid);
 $pl = $loguser['powerlevel'];
 if($pl < 0) $pl = 0;
 
-$qFora = "select * from forums where id=".$fid;
+$qFora = "select * from {$dbpref}forums where id=".$fid;
 $rFora = Query($qFora);
 if(NumRows($rFora))
 {
@@ -42,7 +42,7 @@ if(NumRows($rFora))
 else
 	die(__("Unknown forum ID."));
 
-$qCategories = "select * from categories where id=".$forum['catid'];
+$qCategories = "select * from {$dbpref}categories where id=".$forum['catid'];
 $rCategories = Query($qCategories);
 if(NumRows($rCategories))
 	$category = Fetch($rCategories);
@@ -70,13 +70,13 @@ write("
 
 if($thread['poll'])
 {
-	$qPoll = "select * from poll where id=".$thread['poll'];
+	$qPoll = "select * from {$dbpref}poll where id=".$thread['poll'];
 	$rPoll = Query($qPoll);
 	if(NumRows($rPoll))
 	{
 		$poll = Fetch($rPoll);
 
-		$qCheck = "select * from pollvotes where poll=".$thread['poll']." and user=".$loguserid;
+		$qCheck = "select * from {$dbpref}pollvotes where poll=".$thread['poll']." and user=".$loguserid;
 		$rCheck = Query($qCheck);
 		if(NumRows($rCheck))
 		{
@@ -84,10 +84,10 @@ if($thread['poll'])
 				$pc[$check['choice']] = "&#x2714; ";
 		}
 
-		$qVotes = "select count(*) from pollvotes where poll=".$thread['poll'];
+		$qVotes = "select count(*) from {$dbpref}pollvotes where poll=".$thread['poll'];
 		$totalVotes = FetchResult($qVotes);
 
-		$qOptions = "select * from poll_choices where poll=".$thread['poll'];
+		$qOptions = "select * from {$dbpref}poll_choices where poll=".$thread['poll'];
 		$rOptions = Query($qOptions);
 		$pops = 0;
 		$options = array();
@@ -99,7 +99,7 @@ if($thread['poll'])
 		{
 			$option['choice'] = htmlspecialchars($option['choice']);
 
-			$qVotes = "select * from pollvotes where poll=".$thread['poll']." and choice=".$pops;
+			$qVotes = "select * from {$dbpref}pollvotes where poll=".$thread['poll']." and choice=".$pops;
 			$rVotes = Query($qVotes);
 			$votes = NumRows($rVotes);
 			while($vote = Fetch($rVotes))
@@ -149,9 +149,9 @@ if($thread['poll'])
 
 $qPosts = "select ";
 $qPosts .=
-	"posts.id, posts.date, posts.deleted, posts.options, posts.num, posts_text.text, posts_text.revision, users.name, users.displayname, users.rankset, users.posts";
+	"{$dbpref}posts.id, {$dbpref}posts.date, {$dbpref}posts.deleted, {$dbpref}posts.options, {$dbpref}posts.num, {$dbpref}posts_text.text, {$dbpref}posts_text.revision, {$dbpref}users.name, {$dbpref}users.displayname, {$dbpref}users.rankset, {$dbpref}users.posts";
 $qPosts .= 
-	" from posts left join posts_text on posts_text.pid = posts.id and posts_text.revision = posts.currentrevision left join users on users.id = posts.user";
+	" from {$dbpref}posts left join {$dbpref}posts_text on {$dbpref}posts_text.pid = {$dbpref}posts.id and {$dbpref}posts_text.revision = {$dbpref}posts.currentrevision left join {$dbpref}users on {$dbpref}users.id = {$dbpref}posts.user";
 $qPosts .= " where thread=".$tid." order by date asc";
 $rPosts = Query($qPosts);
 

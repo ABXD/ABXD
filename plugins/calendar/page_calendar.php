@@ -20,7 +20,7 @@ $i = 1 - $d['wday'];
 $d = getdate(mktime(0, 0, 0, $month + 1, 0, $year));
 $max = $d['mday'];
 
-$users = Query("select birthday, id, name, displayname, sex, powerlevel from users where birthday != 0 order by name");
+$users = Query("select birthday, id, name, displayname, sex, powerlevel from  {$dbpref}users where birthday != 0 order by name");
 $cells = array();
 while($user = Fetch($users))
 {

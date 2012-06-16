@@ -3,12 +3,12 @@
 $title = __("Ranks");
 AssertForbidden("viewRanks");
 
-$setCount = FetchResult("select count(*) from ranksets");
+$setCount = FetchResult("select count(*) from {$dbpref}ranksets");
 if($setCount == 0)
 	Kill(__("No ranksets have been defined."));
 
 $users = array();
-$rUsers = Query("select id, name, displayname, powerlevel, sex, posts from users order by id asc");
+$rUsers = Query("select id, name, displayname, powerlevel, sex, posts from {$dbpref}users order by id asc");
 while($user = Fetch($rUsers))
 	$users[$user['id']] = $user;
 
@@ -19,11 +19,11 @@ if(isset($_POST['rankset']))
 	$rankset = (int)$_POST['rankset'];
 
 $ranks = array();
-$rRanks = Query("select num, text from ranks where rset=".$rankset." order by num asc");
+$rRanks = Query("select num, text from {$dbpref}ranks where rset=".$rankset." order by num asc");
 while($rank = Fetch($rRanks))
 	$ranks[] = $rank;
 
-$rSets = Query("select * from ranksets order by id asc");
+$rSets = Query("select * from {$dbpref}ranksets order by id asc");
 $selected[$rankset] = " selected = \"selected\"";
 $ranksets = "";
 while($set = Fetch($rSets))

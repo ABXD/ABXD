@@ -2,7 +2,7 @@
 $pl = $loguser['powerlevel'];
 if($pl < 0) $pl = 0;
 
-$qFora = "select * from forums where id = ".$selfsettings["forum"];
+$qFora = "select * from {$dbpref}forums where id = ".$selfsettings["forum"];
 $rFora = Query($qFora);
 if(NumRows($rFora))
 {
@@ -32,10 +32,10 @@ $rThreads = Query("	SELECT
 						$userSelectSU,
 						$userSelectLU
 					FROM 
-						threads t
-						".($loguserid ? "LEFT JOIN threadsread tr ON tr.thread=t.id AND tr.id=".$loguserid : '')."
-						LEFT JOIN users su ON su.id=t.user
-						LEFT JOIN users lu ON lu.id=t.lastposter
+						{$dbpref}threads t
+						".($loguserid ? "LEFT JOIN {$dbpref}threadsread tr ON tr.thread=t.id AND tr.id=".$loguserid : '')."
+						LEFT JOIN {$dbpref}users su ON su.id=t.user
+						LEFT JOIN {$dbpref}users lu ON lu.id=t.lastposter
 					WHERE forum=".$fid." 
 					ORDER BY sticky DESC, lastpostdate DESC LIMIT ".$from.", ".$tpp);
 
@@ -83,9 +83,9 @@ while($thread = Fetch($rThreads))
 	
 	$qPosts = "select ";
 	$qPosts .=
-	"posts.thread, posts.id, posts.date, posts.num, posts.deleted, posts.options, posts.mood, posts.ip, posts_text.text, posts_text.text, posts_text.revision, users.id as uid, users.name, users.displayname, users.rankset, users.powerlevel, users.title, users.sex, users.picture, users.posts, users.postheader, users.signature, users.signsep, users.globalblock, users.lastposttime, users.lastactivity, users.regdate";
+	"{$dbpref}posts.thread, {$dbpref}posts.id, {$dbpref}posts.date, {$dbpref}posts.num, {$dbpref}posts.deleted, {$dbpref}posts.options, {$dbpref}posts.mood, {$dbpref}posts.ip, {$dbpref}posts_text.text, {$dbpref}posts_text.text, {$dbpref}posts_text.revision, {$dbpref}users.id as uid, {$dbpref}users.name, {$dbpref}users.displayname, {$dbpref}users.rankset, {$dbpref}users.powerlevel, {$dbpref}users.title, {$dbpref}users.sex, {$dbpref}users.picture, {$dbpref}users.posts, {$dbpref}users.postheader, {$dbpref}users.signature, {$dbpref}users.signsep, {$dbpref}users.globalblock, {$dbpref}users.lastposttime, {$dbpref}users.lastactivity, {$dbpref}users.regdate";
 	$qPosts .= 
-	" from posts left join posts_text on posts_text.pid = posts.id and posts_text.revision = posts.currentrevision left join users on users.id = posts.user";
+	" from {$dbpref}posts left join {$dbpref}posts_text on {$dbpref}posts_text.pid = {$dbpref}posts.id and {$dbpref}posts_text.revision = {$dbpref}posts.currentrevision left join {$dbpref}users on {$dbpref}users.id = {$dbpref}posts.user";
 	$qPosts .= " where thread=".$thread['id']." order by date asc limit 1";
 	$rPosts = Query($qPosts);
 	$post = Fetch($rPosts);

@@ -14,18 +14,18 @@ else if(isset($_GET['pid']) && (int)$_GET['pid'] > 0)
 $links = actionLinkTagItem(__("Mark all forums read"), "index", 0, "action=markallread");
 MakeCrumbs(array(), $links);
 
-$numThreads = FetchResult("select count(*) from threads");
-$numPosts = FetchResult("select count(*) from posts");
+$numThreads = FetchResult("select count(*) from {$dbpref}threads");
+$numPosts = FetchResult("select count(*) from {$dbpref}posts");
 $stats = Format(__("{0} and {1} total"), Plural($numThreads, __("thread")), Plural($numPosts, __("post")));
 
-$newToday = FetchResult("select count(*) from posts where date > ".(time() - 86400));
-$newLastHour = FetchResult("select count(*) from posts where date > ".(time() - 3600));
+$newToday = FetchResult("select count(*) from {$dbpref}posts where date > ".(time() - 86400));
+$newLastHour = FetchResult("select count(*) from {$dbpref}posts where date > ".(time() - 3600));
 $stats .= "<br />".format(__("{0} today, {1} last hour"), Plural($newToday, __("new post")), $newLastHour);
 
-$numUsers = FetchResult("select count(*) from users");
-$numActive = FetchResult("select count(*) from users where lastposttime > ".(time() - 2592000)); //30 days
+$numUsers = FetchResult("select count(*) from {$dbpref}users");
+$numActive = FetchResult("select count(*) from {$dbpref}users where lastposttime > ".(time() - 2592000)); //30 days
 $percent = $numUsers ? ceil((100 / $numUsers) * $numActive) : 0;
-$rLastUser = Query("select id,name,displayname,powerlevel,sex from users order by regdate desc limit 1");
+$rLastUser = Query("select id,name,displayname,powerlevel,sex from {$dbpref}users order by regdate desc limit 1");
 $lastUser = Fetch($rLastUser);
 $last = format(__("{0}, {1} active ({2}%)"), Plural($numUsers, __("registered user")), $numActive, $percent)."<br />".format(__("Newest: {0}"), UserLink($lastUser));
 
@@ -34,7 +34,7 @@ if($pl < 0) $pl = 0;
 
 if($loguserid && $_GET['action'] == "markallread")
 {
-	Query("REPLACE INTO threadsread (id,thread,date) SELECT ".$loguserid.", threads.id, ".time()." FROM threads");
+	Query("REPLACE INTO {$dbpref}threadsread (id,thread,date) SELECT ".$loguserid.", {$dbpref}threads.id, ".time()." FROM {$dbpref}threads");
 }
 
 printRefreshCode();
@@ -57,17 +57,17 @@ $lastCatID = -1;
 $rFora = Query("	SELECT f.*, 
 						c.name cname,
 						".($loguserid ? "(NOT ISNULL(i.fid))" : "0")." ignored,
-						(SELECT COUNT(*) FROM threads t".($loguserid ? " LEFT JOIN threadsread tr ON tr.thread=t.id AND tr.id=".$loguserid : "")."
+						(SELECT COUNT(*) FROM {$dbpref}threads t".($loguserid ? " LEFT JOIN {$dbpref}threadsread tr ON tr.thread=t.id AND tr.id=".$loguserid : "")."
 							WHERE t.forum=f.id AND t.lastpostdate>".($loguserid ? "IFNULL(tr.date,0)" : time()-900).") numnew,
 						lu.id luid, lu.name luname, lu.displayname ludisplayname, lu.powerlevel lupowerlevel, lu.sex lusex
-					FROM forums f
-						LEFT JOIN categories c ON c.id=f.catid
-						".($loguserid ? "LEFT JOIN ignoredforums i ON i.fid=f.id AND i.uid=".$loguserid : "")."
-						LEFT JOIN users lu ON lu.id=f.lastpostuser
+					FROM {$dbpref}forums f
+						LEFT JOIN {$dbpref}categories c ON c.id=f.catid
+						".($loguserid ? "LEFT JOIN {$dbpref}ignoredforums i ON i.fid=f.id AND i.uid=".$loguserid : "")."
+						LEFT JOIN {$dbpref}users lu ON lu.id=f.lastpostuser
 					WHERE f.minpower<=".$pl.(($pl < 1) ? " AND f.hidden=0" : '')."
 					ORDER BY c.corder, c.id, f.forder, f.id");
 
-$rMods = Query("SELECT m.forum, u.id, u.name, u.displayname, u.powerlevel, u.sex FROM forummods m LEFT JOIN users u ON m.user=u.id");
+$rMods = Query("SELECT m.forum, u.id, u.name, u.displayname, u.powerlevel, u.sex FROM {$dbpref}forummods m LEFT JOIN {$dbpref}users u ON m.user=u.id");
 $mods = array();
 while($mod = Fetch($rMods))
 	$mods[$mod['forum']][] = $mod;

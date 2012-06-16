@@ -13,18 +13,18 @@ MakeCrumbs(array(__("Admin") => actionLink("admin"), __("IP ban manager") => act
 
 if($_POST['action'] == __("Add"))
 {
-	$qIPBan = "insert into ipbans (ip, reason, date) values ('".justEscape($_POST['ip'])."', '".justEscape($_POST['reason'])."', ".((int)$_POST['days'] > 0 ? time() + ((int)$_POST['days'] * 86400) : 0).")";
+	$qIPBan = "insert into {$dbpref}ipbans (ip, reason, date) values ('".justEscape($_POST['ip'])."', '".justEscape($_POST['reason'])."', ".((int)$_POST['days'] > 0 ? time() + ((int)$_POST['days'] * 86400) : 0).")";
 	$rIPBan = Query($qIPBan);
 	Alert(__("Added."), __("Notice"));
 }
 elseif($_GET['action'] == "delete")
 {
-	$qIPBan = "delete from ipbans where ip='".justEscape($_GET['ip'])."' limit 1";
+	$qIPBan = "delete from {$dbpref}ipbans where ip='".justEscape($_GET['ip'])."' limit 1";
 	$rIPBan = Query($qIPBan);
 	Alert(__("Removed."), __("Notice"));
 }
 
-$qIPBan = "select * from ipbans order by date desc";
+$qIPBan = "select * from {$dbpref}ipbans order by date desc";
 $rIPBan = Query($qIPBan);
 
 $banList = "";

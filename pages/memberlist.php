@@ -64,9 +64,9 @@ if($query != "") {
 if(!(isset($pow) && $pow == 5))
 	$where.= " and powerlevel < 5";
 
-$numUsers = FetchResult("select count(*) from users where ".$where, 0, 0);
+$numUsers = FetchResult("select count(*) from {$dbpref}users where ".$where, 0, 0);
 
-$qUsers = "select * from users where ".$where." order by ".$order.", name asc limit ".$from.", ".$tpp;
+$qUsers = "select * from {$dbpref}users where ".$where." order by ".$order.", name asc limit ".$from.", ".$tpp;
 $rUsers = Query($qUsers);
 
 function PageLinks2($url, $epp, $from, $total)

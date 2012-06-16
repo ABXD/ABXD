@@ -13,7 +13,7 @@ elseif($_POST['action'] == __("Log in"))
 	$okay = true;
 	$original = $_POST['pass'];
 	$escapedName = justEscape($_POST['name']);
-	$qUser = "select * from users where name='".$escapedName."'";
+	$qUser = "select * from {$dbpref}users where name='".$escapedName."'";
 	$rUser = Query($qUser);
 	if(NumRows($rUser))
 	{

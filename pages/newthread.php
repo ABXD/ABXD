@@ -20,7 +20,7 @@ $fid = (int)$_GET['id'];
 if($loguser['powerlevel'] < 0)
 	Kill(__("You're banned."));
 
-$qFora = "select * from forums where id=".$fid;
+$qFora = "select * from {$dbpref}forums where id=".$fid;
 $rFora = Query($qFora);
 if(NumRows($rFora))
 	$forum = Fetch($rFora);
@@ -94,7 +94,7 @@ if($_POST['action'] == __("Post"))
 		if($_POST['poll'])
 		{
 			$doubleVote = ($_POST['multivote']) ? 1 : 0;
-			$qPoll = "insert into poll (question, doublevote) values ('".justEscape($_POST['pollQuestion'])."', ".$doubleVote.")";
+			$qPoll = "insert into {$dbpref}poll (question, doublevote) values ('".justEscape($_POST['pollQuestion'])."', ".$doubleVote.")";
 			$rPoll = Query($qPoll);
 			$pod = InsertId();
 			for($pops = 0; $pops < $_POST['pollOptions']; $pops++)
@@ -102,9 +102,9 @@ if($_POST['action'] == __("Post"))
 				if($_POST['pollOption'.$pops])
 				{
 					$pollColor = filterPollColors($_POST['pollColor'.$pops]);
-					$newID = FetchResult("SELECT id+1 FROM poll_choices WHERE (SELECT COUNT(*) FROM poll_choices p2 WHERE p2.id=poll_choices.id+1)=0 ORDER BY id ASC LIMIT 1");
+					$newID = FetchResult("SELECT id+1 FROM {$dbpref}poll_choices WHERE (SELECT COUNT(*) FROM {$dbpref}poll_choices p2 WHERE p2.id={$dbpref}poll_choices.id+1)=0 ORDER BY id ASC LIMIT 1");
 					if($newID < 1) $newID = 1;
-					$qPollOption = "insert into poll_choices (id, poll, choice, color) values (".$newID.", ".$pod.", '".justEscape($_POST['pollOption'.$pops])."', '".$pollColor."')";
+					$qPollOption = "insert into {$dbpref}poll_choices (id, poll, choice, color) values (".$newID.", ".$pod.", '".justEscape($_POST['pollOption'.$pops])."', '".$pollColor."')";
 					$rPollOption = Query($qPollOption);
 				}
 			}
@@ -113,27 +113,27 @@ if($_POST['action'] == __("Post"))
 			$pod = 0;
 		//Yeah, that was me ^^; -- Kawa
 
-		$newID = FetchResult("SELECT id+1 FROM threads WHERE (SELECT COUNT(*) FROM threads t2 WHERE t2.id=threads.id+1)=0 ORDER BY id ASC LIMIT 1");
+		$newID = FetchResult("SELECT id+1 FROM {$dbpref}threads WHERE (SELECT COUNT(*) FROM {$dbpref}threads t2 WHERE t2.id={$dbpref}threads.id+1)=0 ORDER BY id ASC LIMIT 1");
 		if($newID < 1) $newID = 1;
 
-		$qThreads = "insert into threads (id, forum, user, title, icon, lastpostdate, lastposter, closed, sticky, poll) values (".$newID.",".$fid.",".$loguserid.",'".justEscape($_POST['title'])."','".$iconurl."',".time().",".$loguserid.", ".$mod.", ".$pod.")";
+		$qThreads = "insert into {$dbpref}threads (id, forum, user, title, icon, lastpostdate, lastposter, closed, sticky, poll) values (".$newID.",".$fid.",".$loguserid.",'".justEscape($_POST['title'])."','".$iconurl."',".time().",".$loguserid.", ".$mod.", ".$pod.")";
 		$rThreads = Query($qThreads);
 		$tid = InsertId();
 
-		$qUsers = "update users set posts=".($loguser['posts']+1).", lastposttime=".time()." where id=".$loguserid." limit 1";
+		$qUsers = "update {$dbpref}users set posts=".($loguser['posts']+1).", lastposttime=".time()." where id=".$loguserid." limit 1";
 		$rUsers = Query($qUsers);
 
-		$qPosts = "insert into posts (thread, user, date, ip, num, options, mood) values (".$tid.",".$loguserid.",".time().",'".$_SERVER['REMOTE_ADDR']."',".($loguser['posts']+1).", ".$options.", ".(int)$_POST['mood'].")";
+		$qPosts = "insert into {$dbpref}posts (thread, user, date, ip, num, options, mood) values (".$tid.",".$loguserid.",".time().",'".$_SERVER['REMOTE_ADDR']."',".($loguser['posts']+1).", ".$options.", ".(int)$_POST['mood'].")";
 		$rPosts = Query($qPosts);
 		$pid = InsertId();
 
-		$qPostsText = "insert into posts_text (pid,text) values (".$pid.",'".$post."')";
+		$qPostsText = "insert into {$dbpref}posts_text (pid,text) values (".$pid.",'".$post."')";
 		$rPostsText = Query($qPostsText);
 
-		$qFora = "update forums set numthreads=".($forum['numthreads']+1).", numposts=".($forum['numposts']+1).", lastpostdate=".time().", lastpostuser=".$loguserid.", lastpostid=".$pid." where id=".$fid." limit 1";
+		$qFora = "update {$dbpref}forums set numthreads=".($forum['numthreads']+1).", numposts=".($forum['numposts']+1).", lastpostdate=".time().", lastpostuser=".$loguserid.", lastpostid=".$pid." where id=".$fid." limit 1";
 		$rFora = Query($qFora);
 		
-		Query("update threads set lastpostid = ".$pid." where id = ".$tid);
+		Query("update {$dbpref}threads set lastpostid = ".$pid." where id = ".$tid);
 		
 		Report("New ".($_POST['poll'] ? "poll" : "thread")." by [b]".$loguser['name']."[/]: [b]".$_POST['title']."[/] (".$forum['title'].") -> [g]#HERE#?tid=".$tid, $isHidden);
 
@@ -390,7 +390,7 @@ if($_POST['poll'])
 if($_POST['mood'])
 	$moodSelects[(int)$_POST['mood']] = "selected=\"selected\" ";
 $moodOptions = "<option ".$moodSelects[0]."value=\"0\">".__("[Default avatar]")."</option>\n";
-$rMoods = Query("select mid, name from moodavatars where uid=".$loguserid." order by mid asc");
+$rMoods = Query("select mid, name from {$dbpref}moodavatars where uid=".$loguserid." order by mid asc");
 while($mood = Fetch($rMoods))
 	$moodOptions .= format(
 "

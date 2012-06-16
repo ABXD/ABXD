@@ -12,20 +12,20 @@ if(isset($_POST['action']))
 	$mid = (int)$_POST['mid'];
 	if($_POST['action'] == __("Rename"))
 	{
-		Query("update moodavatars set name='".justEscape($_POST['name'])."' where mid=".$mid." and uid=".$loguserid);
+		Query("update {$dbpref}moodavatars set name='".justEscape($_POST['name'])."' where mid=".$mid." and uid=".$loguserid);
 		Alert(__("Avatar renamed."), __("Okay"));
 	}
 	else if($_POST['action'] == __("Delete"))
 	{
-		Query("delete from moodavatars where uid=".$loguserid." and mid=".$mid);
-		Query("update posts set mood=0 where user=".$loguserid." and mood=".$mid);
+		Query("delete from {$dbpref}moodavatars where uid=".$loguserid." and mid=".$mid);
+		Query("update {$dbpref}posts set mood=0 where user=".$loguserid." and mood=".$mid);
 		if(file_exists("img/avatars/".$loguserid."_".$mid))
 			unlink("img/avatars/".$loguserid."_".$mid);
 		Alert(__("Avatar deleted."), __("Okay"));
 	}
 	else if($_POST['action'] == __("Add"))
 	{
-		$highest = FetchResult("select mid from moodavatars where uid=".$loguserid." order by mid desc limit 1");
+		$highest = FetchResult("select mid from {$dbpref}moodavatars where uid=".$loguserid." order by mid desc limit 1");
 		if($highest < 1)
 			$highest = 1;
 		$mid = $highest + 1;
@@ -62,7 +62,7 @@ if(isset($_POST['action']))
 				if($_POST['name'] == "")
 					$_POST['name'] = "#".$mid;
 
-				Query("insert into moodavatars (uid, mid, name) values (".$loguserid.", ".$mid.", '".justEscape($_POST['name'])."')"); 
+				Query("insert into {$dbpref}moodavatars (uid, mid, name) values (".$loguserid.", ".$mid.", '".justEscape($_POST['name'])."')"); 
 
 				if($loguser['powerlevel'])	//Are we at least a local mod?
 					copy($tmpfile,$file);	//Then ignore the 100x100 rule.
@@ -100,7 +100,7 @@ if(isset($_POST['action']))
 }
 
 $moodRows = "";
-$rMoods = Query("select mid, name from moodavatars where uid=".$loguserid." order by mid asc");
+$rMoods = Query("select mid, name from {$dbpref}moodavatars where uid=".$loguserid." order by mid asc");
 while($mood = Fetch($rMoods))
 {
 	$cellClass = ($cellClass+1) % 2;

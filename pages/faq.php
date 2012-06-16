@@ -5,7 +5,7 @@
 $title = "FAQ";
 makeThemeArrays();
 
-$admin = UserLink(Fetch(Query("select name, id, powerlevel, sex from users where id = 1")));
+$admin = UserLink(Fetch(Query("select name, id, powerlevel, sex from {$dbpref}users where id = 1")));
 
 $sexes = array(0=>__("Male"),1=>__("Female"),2=>__("N/A"));
 $powerlevels = array(0=>__("Normal user"),1=>__("Local moderator"),2=>__("Full moderator"),3=>__("Administrator"),4=>__("Root"));

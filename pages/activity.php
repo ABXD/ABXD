@@ -7,13 +7,13 @@ if(!isset($_GET['u']))
 
 $u = (int)$_GET['u'];
 
-$user = Fetch(Query("select regdate from users where id = ".$u));
+$user = Fetch(Query("select regdate from {$dbpref}users where id = ".$u));
 
 $vd = date("m-d-y", $user['regdate']);
 $dd = mktime(0, 0, 0, substr($vd, 0, 2), substr($vd, 3, 2), substr($vd, 6, 2));
 $dd2 = mktime(0, 0, 0, substr($vd, 0, 2), substr($vd, 3, 2) + 1, substr($vd, 6, 2));
 
-$nn = Query("select from_unixtime(date, '%Y%m%d') ymd, floor(date / 86400) d, count(*) c, max(num) m from posts where user = ".$u." group by ymd order by ymd");
+$nn = Query("select from_unixtime(date, '%Y%m%d') ymd, floor(date / 86400) d, count(*) c, max(num) m from {$dbpref}posts where user = ".$u." group by ymd order by ymd");
 
 while($n = Fetch($nn))
 {
@@ -23,7 +23,7 @@ while($n = Fetch($nn))
 
 for($i = 0; $dd + $i * 86400 < time(); $i++)
 {
-	$ps = Query("select count(*),max(num) from posts where user = $u and date >= ".$dd." + ".$i." * 86400 and date < ".$dd2." + ".$i." * 86400");
+	$ps = Query("select count(*),max(num) from {$dbpref}posts where user = $u and date >= ".$dd." + ".$i." * 86400 and date < ".$dd2." + ".$i." * 86400");
 	$p[$i] = Result($ps, 0, 0);
 	$t[$i] = Result($ps, 0, 1);
 }

@@ -14,7 +14,7 @@ if(isset($_POST['action']) && $_POST['action'] == "Install")
 	
 	$head = "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$path."\" />\n".$_POST['header'];
 	$foot = $_POST['footer'];
-	Query("UPDATE users SET postheader = '".justEscape($head)."', signature = '".justEscape($foot)."' WHERE id = ".$loguserid);
+	Query("UPDATE {$dbpref}users SET postheader = '".justEscape($head)."', signature = '".justEscape($foot)."' WHERE id = ".$loguserid);
 	Report("[b]".$loguser['name']."[/] edited his layout with the layout maker. -> [g]#HERE#?uid=".$userid, 1);
 	
 	die(header("Location: ".actionLink("profile", $loguserid)));

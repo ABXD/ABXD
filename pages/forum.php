@@ -9,7 +9,7 @@ $fid = (int)$_GET['id'];
 
 if($loguserid && $_GET['action'] == "markasread")
 {
-	Query("REPLACE INTO threadsread (id,thread,date) SELECT ".$loguserid.", threads.id, ".time()." FROM threads WHERE threads.forum=$fid");
+	Query("REPLACE INTO {$dbpref}threadsread (id,thread,date) SELECT ".$loguserid.", {$dbpref}threads.id, ".time()." FROM {$dbpref}threads WHERE {$dbpref}threads.forum=$fid");
 }
 
 AssertForbidden("viewForum", $fid);
@@ -17,7 +17,7 @@ AssertForbidden("viewForum", $fid);
 $pl = $loguser['powerlevel'];
 if($pl < 0) $pl = 0;
 
-$qFora = "select * from forums where id=".$fid;
+$qFora = "select * from {$dbpref}forums where id=".$fid;
 $rFora = Query($qFora);
 if(NumRows($rFora))
 {
@@ -29,7 +29,7 @@ if(NumRows($rFora))
 
 $title = $forum['title'];
 
-$qCat = "select * from categories where id=".$forum['catid'];
+$qCat = "select * from {$dbpref}categories where id=".$forum['catid'];
 $rCat = Query($qCat);
 if(NumRows($rCat))
 {
@@ -38,12 +38,12 @@ if(NumRows($rCat))
 	Kill(__("Unknown category ID."));
 
 
-$isIgnored = FetchResult("select count(*) from ignoredforums where uid=".$loguserid." and fid=".$fid, 0, 0) == 1;
+$isIgnored = FetchResult("select count(*) from {$dbpref}ignoredforums where uid=".$loguserid." and fid=".$fid, 0, 0) == 1;
 if(isset($_GET['ignore']))
 {
 	if(!$isIgnored)
 	{
-		Query("insert into ignoredforums values (".$loguserid.", ".$fid.")");
+		Query("insert into {$dbpref}ignoredforums values (".$loguserid.", ".$fid.")");
 		Alert(__("Forum ignored. You will no longer see any \"New\" markers for this forum."));
 	}
 }
@@ -51,14 +51,14 @@ else if(isset($_GET['unignore']))
 {
 	if($isIgnored)
 	{
-		Query("delete from ignoredforums where uid=".$loguserid." and fid=".$fid);
+		Query("delete from {$dbpref}ignoredforums where uid=".$loguserid." and fid=".$fid);
 		Alert(__("Forum unignored."));
 	}
 }
 
 $links .= actionLinkTagItem(__("Mark forum read"), "forum", 0, "action=markasread&id=$fid");
 
-$isIgnored = FetchResult("select count(*) from ignoredforums where uid=".$loguserid." and fid=".$fid, 0, 0) == 1;
+$isIgnored = FetchResult("select count(*) from {$dbpref}ignoredforums where uid=".$loguserid." and fid=".$fid, 0, 0) == 1;
 if($loguserid && $forum['minpowerthread'] <= $loguser['powerlevel'])
 {
 	if($isIgnored)
@@ -89,10 +89,10 @@ $rThreads = Query("	SELECT
 						su.id suid, su.name suname, su.displayname sudisplayname, su.powerlevel supowerlevel, su.sex susex,
 						lu.id luid, lu.name luname, lu.displayname ludisplayname, lu.powerlevel lupowerlevel, lu.sex lusex
 					FROM 
-						threads t
-						".($loguserid ? "LEFT JOIN threadsread tr ON tr.thread=t.id AND tr.id=".$loguserid : '')."
-						LEFT JOIN users su ON su.id=t.user
-						LEFT JOIN users lu ON lu.id=t.lastposter
+						{$dbpref}threads t
+						".($loguserid ? "LEFT JOIN {$dbpref}threadsread tr ON tr.thread=t.id AND tr.id=".$loguserid : '')."
+						LEFT JOIN {$dbpref}users su ON su.id=t.user
+						LEFT JOIN {$dbpref}users lu ON lu.id=t.lastposter
 					WHERE forum=".$fid." 
 					ORDER BY sticky DESC, lastpostdate DESC LIMIT ".$from.", ".$tpp);
 
@@ -149,7 +149,7 @@ printRefreshCode();
 
 function ForumJump()
 {
-	global $fid, $loguser;
+	global $fid, $loguser, $dbpref;
 	
 	$pl = $loguser['powerlevel'];
 	if($pl < 0) $pl = 0;
@@ -159,8 +159,8 @@ function ForumJump()
 							f.id, f.title, f.catid,
 							c.name cname
 						FROM 
-							forums f
-							LEFT JOIN categories c ON c.id=f.catid
+							{$dbpref}forums f
+							LEFT JOIN {$dbpref}categories c ON c.id=f.catid
 						WHERE f.minpower<=".$pl.(($pl < 1) ? " AND f.hidden=0" : '')."
 						ORDER BY c.corder, c.id, f.forder");
 	

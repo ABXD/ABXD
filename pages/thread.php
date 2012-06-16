@@ -9,7 +9,7 @@ if(isset($_GET['id']))
 elseif(isset($_GET['pid']))
 {
 	$pid = (int)$_GET['pid'];
-	$qPost = "select * from posts where id=".$pid;
+	$qPost = "select * from {$dbpref}posts where id=".$pid;
 	$rPost = Query($qPost);
 	if(NumRows($rPost))
 		$post = Fetch($rPost);
@@ -20,7 +20,7 @@ elseif(isset($_GET['pid']))
 	Kill(__("Thread ID unspecified."));
 AssertForbidden("viewThread", $tid);
 
-$qThread = "select * from threads where id=".$tid;
+$qThread = "select * from {$dbpref}threads where id=".$tid;
 $rThread = Query($qThread);
 if(NumRows($rThread))
 	$thread = Fetch($rThread);
@@ -33,7 +33,7 @@ AssertForbidden("viewForum", $fid);
 $pl = $loguser['powerlevel'];
 if($pl < 0) $pl = 0;
 
-$qFora = "select * from forums where id=".$fid;
+$qFora = "select * from {$dbpref}forums where id=".$fid;
 $rFora = Query($qFora);
 if(NumRows($rFora))
 {
@@ -44,7 +44,7 @@ if(NumRows($rFora))
 else
 	Kill(__("Unknown forum ID."));
 
-$qCategories = "select * from categories where id=".$forum['catid'];
+$qCategories = "select * from {$dbpref}categories where id=".$forum['catid'];
 $rCategories = Query($qCategories);
 if(NumRows($rCategories))
 {
@@ -57,7 +57,7 @@ $tags = ParseThreadTags($thread['title']);
 $thread['title'] = strip_tags($thread['title']);
 $title = $thread['title'];
 
-$qViewCounter = "update threads set views=".($thread['views']+1)." where id=".$tid." limit 1";
+$qViewCounter = "update {$dbpref}threads set views=".($thread['views']+1)." where id=".$tid." limit 1";
 $rViewCounter = Query($qViewCounter);
 
 if(isset($_GET['vote']))
@@ -75,22 +75,22 @@ if(isset($_GET['vote']))
 		if ($token != $_GET['token'])
 			Kill(__("Invalid token."));
 		
-		$doublevote = FetchResult("select doublevote from poll where id=".$thread['poll']);
+		$doublevote = FetchResult("select doublevote from {$dbpref}poll where id=".$thread['poll']);
 		if($doublevote)
 		{
 			//Multivote.
-			$existing = FetchResult("select count(*) from pollvotes where poll=".$thread['poll']." and choice=".$vote." and user=".$loguserid);
+			$existing = FetchResult("select count(*) from {$dbpref}pollvotes where poll=".$thread['poll']." and choice=".$vote." and user=".$loguserid);
 			if ($existing)
-				Query("delete from pollvotes where poll=".$thread['poll']." and choice=".$vote." and user=".$loguserid);
+				Query("delete from {$dbpref}pollvotes where poll=".$thread['poll']." and choice=".$vote." and user=".$loguserid);
 			else
-				Query("insert into pollvotes (poll, choice, user) values (".$thread['poll'].", ".$vote.", ".$loguserid.")");
+				Query("insert into {$dbpref}pollvotes (poll, choice, user) values (".$thread['poll'].", ".$vote.", ".$loguserid.")");
 		}
 		else
 		{
 			//Single vote only?
 			//Remove any old votes by this user on this poll, then add a new one.
-			Query("delete from pollvotes where poll=".$thread['poll']." and user=".$loguserid);
-			Query("insert into pollvotes (poll, choice, user) values (".$thread['poll'].", ".$vote.", ".$loguserid.")");
+			Query("delete from {$dbpref}pollvotes where poll=".$thread['poll']." and user=".$loguserid);
+			Query("insert into {$dbpref}pollvotes (poll, choice, user) values (".$thread['poll'].", ".$vote.", ".$loguserid.")");
 		}
 	}
 	else
@@ -145,13 +145,13 @@ MakeCrumbs(array($forum['title']=>actionLink("forum", $fid), $titleandtags => ac
 
 if($thread['poll'])
 {
-	$qPoll = "select * from poll where id=".$thread['poll'];
+	$qPoll = "select * from {$dbpref}poll where id=".$thread['poll'];
 	$rPoll = Query($qPoll);
 	if(NumRows($rPoll))
 	{
 		$poll = Fetch($rPoll);
 
-		$qCheck = "select * from pollvotes where poll=".$thread['poll']." and user=".$loguserid;
+		$qCheck = "select * from {$dbpref}pollvotes where poll=".$thread['poll']." and user=".$loguserid;
 		$rCheck = Query($qCheck);
 		if(NumRows($rCheck))
 		{
@@ -159,10 +159,10 @@ if($thread['poll'])
 				$pc[$check['choice']] = "&#x2714; "; //use &#x2605; for a star
 		}
 
-		$qVotes = "select count(*) from pollvotes where poll=".$thread['poll'];
+		$qVotes = "select count(*) from {$dbpref}pollvotes where poll=".$thread['poll'];
 		$totalVotes = FetchResult($qVotes);
 
-		$qOptions = "select * from poll_choices where poll=".$thread['poll'];
+		$qOptions = "select * from {$dbpref}poll_choices where poll=".$thread['poll'];
 		$rOptions = Query($qOptions);
 		$pops = 0;
 		$options = array();
@@ -181,7 +181,7 @@ if($thread['poll'])
 				
 			$option['choice'] = htmlspecialchars($option['choice']);
 
-			$qVotes = "select * from pollvotes where poll=".$thread['poll']." and choice=".$pops;
+			$qVotes = "select * from {$dbpref}pollvotes where poll=".$thread['poll']." and choice=".$pops;
 			$rVotes = Query($qVotes);
 			$votes = NumRows($rVotes);
 			while($vote = Fetch($rVotes))
@@ -198,7 +198,7 @@ if($thread['poll'])
 				$label = format("{0} {1}", $pc[$pops], $option['choice']);
 			
 			$bar = "&nbsp;0";
-			if($totalVotes >= 0)
+			if($totalVotes > 0)
 			{
 				$width = 99 * ($votes / $totalVotes) + 0.1;
 				$alt = format("{0}&nbsp;of&nbsp;{1},&nbsp;{2}%", $votes, $totalVotes, $width);
@@ -248,13 +248,13 @@ if($thread['poll'])
 	}
 }
 
-$qRead = "delete from threadsread where id=".$loguserid." and thread=".$tid;
+$qRead = "delete from {$dbpref}threadsread where id=".$loguserid." and thread=".$tid;
 $rRead = Query($qRead);
-$qRead = "insert into threadsread (id,thread,date) values (".$loguserid.", ".$tid.", ".time().")";
+$qRead = "insert into {$dbpref}threadsread (id,thread,date) values (".$loguserid.", ".$tid.", ".time().")";
 $rRead = Query($qRead);
 
 $activity = array();
-$rActivity = Query("select user, count(*) num from posts where date > ".(time() - 86400)." group by user");
+$rActivity = Query("select user, count(*) num from {$dbpref}posts where date > ".(time() - 86400)." group by user");
 while($act = Fetch($rActivity))
 	$activity[$act['user']] = $act['num'];
 
@@ -265,8 +265,7 @@ if(isset($_GET['from']))
 	$from = $_GET['from'];
 else
 	if(isset($pid))
-		//$from = (floor(FetchResult("select count(*) from posts where thread=".$tid." and id < ".$pid) / $ppp)) * $ppp;
-		$from = (floor(FetchResult("SELECT COUNT(*) FROM posts WHERE thread=".$tid." AND date<=".$post['date']." AND id!=".$pid) / $ppp)) * $ppp;
+		$from = (floor(FetchResult("SELECT COUNT(*) FROM {$dbpref}posts WHERE thread=".$tid." AND date<=".$post['date']." AND id!=".$pid) / $ppp)) * $ppp;
 	else
 		$from = 0;
 
@@ -277,11 +276,11 @@ $qPosts = "	SELECT
 				(u.globalblock OR !ISNULL(bl.user)) layoutblocked,
 				u2.name AS ru_name, u2.displayname AS ru_dn, u2.powerlevel AS ru_power, u2.sex AS ru_sex
 			FROM 
-				posts p 
-				LEFT JOIN posts_text pt ON pt.pid = p.id AND pt.revision = p.currentrevision 
-				LEFT JOIN users u ON u.id = p.user
-				LEFT JOIN blockedlayouts bl ON bl.user=u.id AND bl.blockee=".$loguserid."
-				LEFT JOIN users u2 ON u2.id = pt.user
+				{$dbpref}posts p 
+				LEFT JOIN {$dbpref}posts_text pt ON pt.pid = p.id AND pt.revision = p.currentrevision 
+				LEFT JOIN {$dbpref}users u ON u.id = p.user
+				LEFT JOIN {$dbpref}blockedlayouts bl ON bl.user=u.id AND bl.blockee=".$loguserid."
+				LEFT JOIN {$dbpref}users u2 ON u2.id = pt.user
 			WHERE thread=".$tid." 
 			ORDER BY date ASC LIMIT ".$from.", ".$ppp;
 
@@ -308,7 +307,7 @@ if(NumRows($rPosts))
 
 if($loguserid && $loguser['powerlevel'] >= $forum['minpowerreply'] && (!$thread['closed'] || $loguser['powerlevel'] > 0) && !isset($replyWarning))
 {
-	$ninja = FetchResult("select id from posts where thread=".$tid." order by date desc limit 0, 1",0,0);
+	$ninja = FetchResult("select id from {$dbpref}posts where thread=".$tid." order by date desc limit 0, 1",0,0);
 	
 	//Quick reply goes here		
 	if(CanMod($loguserid, $fid))
@@ -324,7 +323,7 @@ if($loguserid && $loguser['powerlevel'] >= $forum['minpowerreply'] && (!$thread[
 			$mod .= "<label><input type=\"checkbox\" name=\"unstick\">&nbsp;".__("Unstick", 1)."</label>\n";
 	}
 	$moodOptions = "<option ".$moodSelects[0]."value=\"0\">".__("[Default avatar]")."</option>\n";
-	$rMoods = Query("select mid, name from moodavatars where uid=".$loguserid." order by mid asc");
+	$rMoods = Query("select mid, name from {$dbpref}moodavatars where uid=".$loguserid." order by mid asc");
 	while($mood = Fetch($rMoods))
 		$moodOptions .= format(
 "

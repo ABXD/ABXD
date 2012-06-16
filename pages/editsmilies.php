@@ -15,7 +15,7 @@ if (isset($_POST['action']) && $key != $_POST['key'])
 
 if($_POST['action'] == "Apply")
 {
-	$qSmilies = "select * from smilies";
+	$qSmilies = "select * from {$dbpref}smilies";
 	$rSmilies = Query($qSmilies);
 	$numSmilies = NumRows($rSmilies);
 
@@ -26,11 +26,11 @@ if($_POST['action'] == "Apply")
 			if($_POST['code_'.$i] == "")
 			{
 				$act = "deleted";
-				$qSmiley = "delete from smilies where code='".$_POST['oldcode_'.$i]."'";
+				$qSmiley = "delete from {$dbpref}smilies where code='".$_POST['oldcode_'.$i]."'";
 			} else
 			{
 				$act = "edited to \"".$_POST['image_'.$i]."\"";
-				$qSmiley = "update smilies set code='".$_POST['code_'.$i]."', image='".$_POST['image_'.$i]."' where code='".$_POST['oldcode_'.$i]."'";
+				$qSmiley = "update {$dbpref}smilies set code='".$_POST['code_'.$i]."', image='".$_POST['image_'.$i]."' where code='".$_POST['oldcode_'.$i]."'";
 			}
 			$rSmiley = Query($qSmiley);
 			$log .= "Smiley \"".$_POST['oldcode_'.$i]."\" ".$act.".<br />";
@@ -39,7 +39,7 @@ if($_POST['action'] == "Apply")
 
 	if($_POST['code_add'] && $_POST['image_add'])
 	{
-		$qSmiley = "insert into smilies (code,image) value ('".$_POST['code_add']."', '".$_POST['image_add']."')";
+		$qSmiley = "insert into {$dbpref}smilies (code,image) value ('".$_POST['code_add']."', '".$_POST['image_add']."')";
 		$rSmiley = Query($qSmiley);
 		$log .= "Smiley \"".$_POST['code_add']."\" added.<br />";
 	}
@@ -48,7 +48,7 @@ if($_POST['action'] == "Apply")
 }
 
 $smileyList = "";
-$qSmilies = "select * from smilies";
+$qSmilies = "select * from {$dbpref}smilies";
 $rSmilies = Query($qSmilies);
 while($smiley = Fetch($rSmilies))
 {

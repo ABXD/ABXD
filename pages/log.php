@@ -10,7 +10,7 @@ $full = GetFullURL();
 $here = substr($full, 0, strrpos($full, "/"))."/";
 $there = "./"; //"/";
 
-$logR = Query("select * from reports order by time desc");
+$logR = Query("select * from {$dbpref}reports order by time desc");
 while($item = Fetch($logR))
 {
 	//print $item['text'];

@@ -42,7 +42,6 @@
 
 */
 
-
 class Settings
 {
 	public static $pluginsettings;
@@ -50,8 +49,10 @@ class Settings
 
 	public static function load()
 	{
+		global $dbpref;
+	
 		self::$pluginsettings = array();
-		$rSettings = Query("select * from settings");
+		$rSettings = Query("select * from {$dbpref}settings");
 		
 		while($setting = Fetch($rSettings))
 		{
@@ -111,7 +112,8 @@ class Settings
 	
 	public static function saveSetting($pluginname, $settingname)
 	{
-		Query("insert into settings (plugin, name, value) values (".
+		global $dbpref;
+		Query("insert into {$dbpref}settings (plugin, name, value) values (".
 			"'".justEscape($pluginname)."', ".
 			"'".justEscape($settingname)."', ".
 			"'".justEscape(self::$pluginsettings[$pluginname][$settingname])."') ".

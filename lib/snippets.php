@@ -86,20 +86,20 @@ function TimeUnits($sec)
 
 function DoPrivateMessageBar()
 {
-	global $loguserid, $loguser;
+	global $loguserid, $loguser, $dbpref;
 
 	if($loguserid)
 	{
-		$qUnread = "select count(*) from pmsgs where userto = ".$loguserid." and msgread=0 and drafting=0";
+		$qUnread = "select count(*) from {$dbpref}pmsgs where userto = ".$loguserid." and msgread=0 and drafting=0";
 		$unread= FetchResult($qUnread);
 		$content = "";
 		if($unread)
 		{
 			$pmNotice = $loguser['usebanners'] ? "id=\"pmNotice\" " : "";
-			$qLast = "select * from pmsgs where userto = ".$loguserid." and msgread=0 order by date desc limit 0,1";
+			$qLast = "select * from {$dbpref}pmsgs where userto = ".$loguserid." and msgread=0 order by date desc limit 0,1";
 			$rLast = Query($qLast);
 			$last = Fetch($rLast);
-			$qUser = "select * from users where id = ".$last['userfrom'];
+			$qUser = "select * from {$dbpref}users where id = ".$last['userfrom'];
 			$rUser = Query($qUser);
 			$user = Fetch($rUser);
 			$content .= format(
@@ -214,9 +214,10 @@ function DoPostHelp()
 
 function RecalculateKarma($uid)
 {
+	global $dbpref;
 	$karma = 100;
 	$karmaWeights = array(5, 10, 10, 15, 15);
-	$qKarma = "select powerlevel, up from uservotes left join users on id=voter where uid=".$uid." and powerlevel > -1";
+	$qKarma = "select powerlevel, up from {$dbpref}uservotes left join {$dbpref}users on id=voter where uid=".$uid." and powerlevel > -1";
 	$rKarma = Query($qKarma);
 	while($k = Fetch($rKarma))
 	{
@@ -225,7 +226,7 @@ function RecalculateKarma($uid)
 		else
 			$karma -= $karmaWeights[$k['powerlevel']];
 	}
-	Query("update users set karma=".$karma." where id=".$uid);
+	Query("update {$dbpref}users set karma=".$karma." where id=".$uid);
 	return $karma;
 }
 
@@ -244,7 +245,7 @@ function cdate($format, $date = 0)
 
 function Report($stuff, $hidden = 0, $severity = 0)
 {
-	//$here = "http://helmet.kafuka.org/nikoboard";
+	global $dbpref;
 	$full = GetFullURL();
 	$here = substr($full, 0, strrpos($full, "/"))."/";
 	
@@ -253,24 +254,24 @@ function Report($stuff, $hidden = 0, $severity = 0)
 	else
 		$req = 'NULL';
 	
-	Query("insert into reports (ip,user,time,text,hidden,severity,request) 
+	Query("insert into {$dbpref}reports (ip,user,time,text,hidden,severity,request) 
 		values ('".$_SERVER['REMOTE_ADDR']."', ".(int)$loguserid.", ".time().", '".justEscape(str_replace("#HERE#", $here, $stuff))."', ".$hidden.", ".$severity.", ".$req.")");
-	Query("delete from reports where time < ".(time() - (60*60*24*30)));
+	Query("delete from {$dbpref}reports where time < ".(time() - (60*60*24*30)));
 }
 
 //TODO: This is used for notifications. We should replace this with the coming-soon notifications system ~Dirbaio
 function SendSystemPM($to, $message, $title)
 {
-	global $systemUser;
+	global $systemUser, $dbpref;
 	
 	//Don't send system PMs if no System user was set
 	if($systemUser == 0)
 		return;
 
-	$qPM = "insert into pmsgs (userto, userfrom, date, ip, msgread) values (".$to.", ".$systemUser.", ".time().", '127.0.0.1', 0)";
+	$qPM = "insert into {$dbpref}pmsgs (userto, userfrom, date, ip, msgread) values (".$to.", ".$systemUser.", ".time().", '127.0.0.1', 0)";
 	$rPM = Query($qPM);
 	$pid = InsertId();
-	$qPM = "insert into pmsgs_text (pid, text, title) values (".$pid.", '".justEscape($message)."', '".justEscape($title)."')";
+	$qPM = "insert into {$dbpref}pmsgs_text (pid, text, title) values (".$pid.", '".justEscape($message)."', '".justEscape($title)."')";
 	$rPM = Query($qPM);
 	
 	//print "PM sent.";

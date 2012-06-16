@@ -173,15 +173,15 @@ function prepare($text)
 
 function makeForumList($fieldname, $selectedID)
 {
-	global $fid, $loguser;
+	global $fid, $loguser, $dbpref;
 	
 	$lastCatID = -1;	
 	$rFora = Query("	SELECT 
 							f.id, f.title, f.catid,
 							c.name cname
 						FROM 
-							forums f
-							LEFT JOIN categories c ON c.id=f.catid
+							{$dbpref}forums f
+							LEFT JOIN {$dbpref}categories c ON c.id=f.catid
 						ORDER BY c.corder, c.id, f.forder");
 	
 	$theList = "";

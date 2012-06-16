@@ -6,7 +6,7 @@ if($loguserid)
 	$user = $loguser;
 else
 {
-	$user = Fetch(Query("select * from users where id=1"));
+	$user = Fetch(Query("select * from {$dbpref}users where id=1"));
 	Alert("You are not logged in. The test page will be displayed using ".$user['name']."'s layout and statistics.");
 }
 

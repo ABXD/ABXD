@@ -4,8 +4,9 @@
 //$scope lets you add additional conditions to the query to make the listing of notifications more specific.
 function getNotifications($uid, $scope = "")
 {
+	global $dbpref;
 	$uid = (int)$uid;
-	$rNotifications = query("SELECT * FROM notifications WHERE uid=".$uid.($scope != "" ? " ".$scope : "")." ORDER BY time DESC"); 
+	$rNotifications = query("SELECT * FROM {$dbpref}notifications WHERE uid=".$uid.($scope != "" ? " ".$scope : "")." ORDER BY time DESC"); 
 	$notifications = array();
 	while (count($notifications) < numRows($rNotifications))
 	{
@@ -18,8 +19,9 @@ function getNotifications($uid, $scope = "")
 //$description should be able to be left blank, the board should not make room for a description if there is none needed.
 function newNotification($uid, $type, $title, $description, $link = false, $linkLocation = "")
 {
+	global $dbpref;
 	query(format(
-		"INSERT INTO notifications (uid, type, title, description, link, linklocation, time) VALUES ({0}, '{1}', '{2}', '{3}', {4}, '{5}', {6})",
+		"INSERT INTO {$dbpref}notifications (uid, type, title, description, link, linklocation, time) VALUES ({0}, '{1}', '{2}', '{3}', {4}, '{5}', {6})",
 		(int)$uid, justEscape($type), justEscape($title), justEscape($description), (int)$link, justEscape($linkLocation), time()
 	));
 	return true;
@@ -27,6 +29,7 @@ function newNotification($uid, $type, $title, $description, $link = false, $link
 
 function purgeNotification($id)
 {
-	query("DELETE FROM notifications WHERE id=".(int)$id);
+	global $dbpref;
+	query("DELETE FROM {$dbpref}notifications WHERE id=".(int)$id);
 	return true;
 }

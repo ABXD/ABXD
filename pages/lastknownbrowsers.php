@@ -14,7 +14,7 @@ AssertForbidden("viewLKB");
 
 MakeCrumbs(array(__("Admin") => actionLink("admin"), __("Last Known Browsers") => actionLink("lastknownbrowsers")), "");
 
-$numUsers = FetchResult("select count(*) from users where powerlevel < 5", 0, 0);
+$numUsers = FetchResult("select count(*) from {$dbpref}users where powerlevel < 5", 0, 0);
 
 $ppp = $loguser['postsperpage'];
 if($ppp<1) $ppp=50;
@@ -24,7 +24,7 @@ if(isset($_GET['from']))
 else
 	$from = 0;
 
-$peeps = Query("select id, name, displayname, lastip, lastknownbrowser, sex, powerlevel from users where powerlevel < 5 order by ".$sort." limit ".$from.", ".$ppp);
+$peeps = Query("select id, name, displayname, lastip, lastknownbrowser, sex, powerlevel from {$dbpref}users where powerlevel < 5 order by ".$sort." limit ".$from.", ".$ppp);
 
 $numonpage = NumRows($peeps);
 for($i = $ppp; $i < $numUsers; $i+=$ppp)
@@ -141,7 +141,7 @@ else
 function IP2C($ip)
 {
 	global $dblink;
-	$q = @$dblink->query("select cc from ip2c where ip_from <= inet_aton('".$ip."') and ip_to >= inet_aton('".$ip."')") or $r['cc'] = "";
+	$q = @$dblink->query("select cc from {$dbpref}ip2c where ip_from <= inet_aton('".$ip."') and ip_to >= inet_aton('".$ip."')") or $r['cc'] = "";
 	if($q) $r = @$q->fetch_array();
 	if($r['cc'])
 		return " <img src=\"img/flags/".strtolower($r['cc']).".png\" alt=\"".$r['cc']."\" title=\"".$r['cc']."\" />";

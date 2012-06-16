@@ -21,7 +21,7 @@ if(!isset($_GET['id']))
 $pid = (int)$_GET['id'];
 AssertForbidden("editPost", $pid);
 
-$qPost = "select posts.*, posts_text.text from posts left join posts_text on posts_text.pid = posts.id and posts_text.revision = posts.currentrevision where id=".$pid;
+$qPost = "select {$dbpref}posts.*, {$dbpref}posts_text.text from {$dbpref}posts left join {$dbpref}posts_text on {$dbpref}posts_text.pid = {$dbpref}posts.id and {$dbpref}posts_text.revision = {$dbpref}posts.currentrevision where id=".$pid;
 $rPost = Query($qPost);
 if(NumRows($rPost))
 {
@@ -30,7 +30,7 @@ if(NumRows($rPost))
 } else
 	Kill(__("Unknown post ID."));
 
-$qThread = "select * from threads where id=".$tid;
+$qThread = "select * from {$dbpref}threads where id=".$tid;
 $rThread = Query($qThread);
 if(NumRows($rThread))
 	$thread = Fetch($rThread);
@@ -38,7 +38,7 @@ else
 	Kill(__("Unknown thread ID."));
 AssertForbidden("viewThread", $tid);
 
-$qFora = "select * from forums where id=".$thread['forum'];
+$qFora = "select * from {$dbpref}forums where id=".$thread['forum'];
 $rFora = Query($qFora);
 if(NumRows($rFora))
 	$forum = Fetch($rFora);
@@ -61,7 +61,7 @@ if((int)$_GET['delete'] == 1)
 	if ($_GET['key'] != $key) Kill(__("No."));
 	if(!CanMod($loguserid,$fid))
 		Kill(__("You're not allowed to delete posts."));
-	$qPosts = "update posts set deleted=1 where id=".$pid." limit 1";
+	$qPosts = "update {$dbpref}posts set deleted=1 where id=".$pid." limit 1";
 	$rPosts = Query($qPosts);
 	
 	die(header("Location: ".actionLink("thread", $tid)));
@@ -70,7 +70,7 @@ if((int)$_GET['delete'] == 1)
 	if ($_GET['key'] != $key) Kill(__("No."));
 	if(!CanMod($loguserid,$fid))
 		Kill(__("You're not allowed to undelete posts."));
-	$qPosts = "update posts set deleted=0 where id=".$pid." limit 1";
+	$qPosts = "update {$dbpref}posts set deleted=0 where id=".$pid." limit 1";
 	$rPosts = Query($qPosts);
 	
 	die(header("Location: ".actionLink("thread", $tid)));
@@ -127,21 +127,21 @@ if($_POST['action'] == __("Edit"))
 		if($_POST['nosm']) $options |= 2;
 		if($_POST['nobr']) $options |= 4;
 
-		$qRev = "select max(revision) from posts_text where pid=".$pid;
+		$qRev = "select max(revision) from {$dbpref}posts_text where pid=".$pid;
 		$rRev = Query($qRev);
 		$rev = Fetch($rRev);
 		$rev = $rev[0]; //note: no longer a fetched row.
 		$rev++;
-		$qPostsText = "insert into posts_text (pid,text,revision,user,date) values (".$pid.", '".$post."', ".$rev.", ".$loguserid.", ".time().")";
+		$qPostsText = "insert into {$dbpref}posts_text (pid,text,revision,user,date) values (".$pid.", '".$post."', ".$rev.", ".$loguserid.", ".time().")";
 		$rPostsText = Query($qPostsText);
 
-		$qPosts = "update posts set options='".$options."', mood=".(int)$_POST['mood'].", currentrevision = currentrevision + 1 where id=".$pid." limit 1";
+		$qPosts = "update {$dbpref}posts set options='".$options."', mood=".(int)$_POST['mood'].", currentrevision = currentrevision + 1 where id=".$pid." limit 1";
 		$rPosts = Query($qPosts);
 
 		//Update thread lastpostdate if we edited the last post
 		if($wasLastPost)
 		{
-			Query("DELETE FROM threadsread WHERE thread={$thread['id']}");
+			Query("DELETE FROM {$dbpref}threadsread WHERE thread={$thread['id']}");
 		}
 
 		if($forum['minpower'] < 1)
@@ -161,7 +161,7 @@ if($_POST['text'])
 
 if($_POST['action'] == __("Preview"))
 {
-	$qUser = "select * from users where id=".$post['user'];
+	$qUser = "select * from {$dbpref}users where id=".$post['user'];
 	$rUser = Query($qUser);
 	if(NumRows($rUser))
 		$user = Fetch($rUser);
@@ -173,7 +173,7 @@ if($_POST['action'] == __("Preview"))
 	{
 		$layoutblocked = $user['globalblock'];
 		if ($post['user'] != $loguserid)
-			$layoutblocked = $layoutblocked || FetchResult("SELECT COUNT(*) FROM blockedlayouts WHERE user=".$post['user']." AND blockee=".$loguserid);
+			$layoutblocked = $layoutblocked || FetchResult("SELECT COUNT(*) FROM {$dbpref}blockedlayouts WHERE user=".$post['user']." AND blockee=".$loguserid);
 		$previewPost['layoutblocked'] = $layoutblocked;
 		
 		$previewPost['text'] = $prefill;
@@ -209,7 +209,7 @@ if(!isset($_POST['mood']))
 if($_POST['mood'])
 	$moodSelects[(int)$_POST['mood']] = "selected=\"selected\" ";
 $moodOptions = Format("<option {0}value=\"0\">".__("[Default avatar]")."</option>\n", $moodSelects[0]);
-$rMoods = Query("select mid, name from moodavatars where uid=".$post['user']." order by mid asc");
+$rMoods = Query("select mid, name from {$dbpref}moodavatars where uid=".$post['user']." order by mid asc");
 while($mood = Fetch($rMoods))
 	$moodOptions .= Format("<option {0}value=\"{1}\">{2}</option>\n", $moodSelects[$mood['mid']], $mood['mid'], htmlspecialchars($mood['name']));
 
@@ -272,9 +272,9 @@ Write(
 
 $qPosts = "select ";
 $qPosts .=
-	"posts.id, posts.date, posts.num, posts.deleted, posts.options, posts.mood, posts.ip, posts_text.text, posts_text.text, posts_text.revision, users.id as uid, users.name, users.displayname, users.rankset, users.powerlevel, users.sex, users.posts";
+	"{$dbpref}posts.id, {$dbpref}posts.date, {$dbpref}posts.num, {$dbpref}posts.deleted, {$dbpref}posts.options, {$dbpref}posts.mood, {$dbpref}posts.ip, {$dbpref}posts_text.text, {$dbpref}posts_text.text, {$dbpref}posts_text.revision, {$dbpref}users.id as uid, {$dbpref}users.name, {$dbpref}users.displayname, {$dbpref}users.rankset, {$dbpref}users.powerlevel, {$dbpref}users.sex, {$dbpref}users.posts";
 $qPosts .= 
-	" from posts left join posts_text on posts_text.pid = posts.id and posts_text.revision = posts.currentrevision left join users on users.id = posts.user";
+	" from {$dbpref}posts left join {$dbpref}posts_text on {$dbpref}posts_text.pid = {$dbpref}posts.id and {$dbpref}posts_text.revision = {$dbpref}posts.currentrevision left join {$dbpref}users on {$dbpref}users.id = {$dbpref}posts.user";
 $qPosts .= " where thread=".$tid." and deleted=0 order by date desc limit 0, 20";
 
 $rPosts = Query($qPosts);

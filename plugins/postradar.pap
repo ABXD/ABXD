@@ -12,14 +12,14 @@ registerPlugin("Post radar");
 
 function PostRadar_Write($tag = "")
 {
-	global $loguserid, $loguser;
+	global $loguserid, $loguser, $dbpref;
 	if($tag != "userBar" || $loguserid == 0)
 		return;
 
 	// TODO: Change it so it will not require query ($dblink->list_tables() IS query)
-	Query("CREATE TABLE IF NOT EXISTS `postradar` (`user` int(11) NOT NULL, `userid` int(11) NOT NULL);");
+	Query("CREATE TABLE IF NOT EXISTS `{$dbpref}postradar` (`user` int(11) NOT NULL, `userid` int(11) NOT NULL);");
 
-	$qEntries = "SELECT id, name, displayname, sex, powerlevel, posts FROM postradar LEFT JOIN users ON postradar.user = users.id WHERE userid=".$loguserid." order by posts DESC";
+	$qEntries = "SELECT id, name, displayname, sex, powerlevel, posts FROM {$dbpref}postradar LEFT JOIN {$dbpref}users ON {$dbpref}postradar.user = {$dbpref}users.id WHERE userid=".$loguserid." order by posts DESC";
 	$rEntries = Query($qEntries);
 	if(NumRows($rEntries))
 	{

@@ -21,7 +21,7 @@ if(!isset($_GET['id']))
 
 $tid = (int)$_GET['id'];
 
-$qThread = "select * from threads where id=".$tid;
+$qThread = "select * from {$dbpref}threads where id=".$tid;
 $rThread = Query($qThread);
 if(NumRows($rThread))
 	$thread = Fetch($rThread);
@@ -34,7 +34,7 @@ if(!$canMod && $thread['user'] != $loguserid)
 	Kill(__("You are not allowed to edit threads."));
 
 $OnlineUsersFid = $thread['forum'];
-$qFora = "select minpower from forums where id=".$thread['forum'];
+$qFora = "select minpower from {$dbpref}forums where id=".$thread['forum'];
 $rFora = Query($qFora);
 if(NumRows($rFora))
 	$forum = Fetch($rFora);
@@ -53,7 +53,7 @@ if($canMod)
 {
 	if($_GET['action']=="close")
 	{
-		$qThread = "update threads set closed=1 where id=".$tid;
+		$qThread = "update {$dbpref}threads set closed=1 where id=".$tid;
 		$rThread = Query($qThread);
 		Report("[b]".$loguser['name']."[/] closed thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 	
@@ -61,7 +61,7 @@ if($canMod)
 	}
 	elseif($_GET['action']=="open")
 	{
-		$qThread = "update threads set closed=0 where id=".$tid;
+		$qThread = "update {$dbpref}threads set closed=0 where id=".$tid;
 		$rThread = Query($qThread);
 		Report("[b]".$loguser['name']."[/] opened thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 			
@@ -69,7 +69,7 @@ if($canMod)
 	}
 	elseif($_GET['action']=="stick")
 	{
-		$qThread = "update threads set sticky=1 where id=".$tid;
+		$qThread = "update {$dbpref}threads set sticky=1 where id=".$tid;
 		$rThread = Query($qThread);
 		Report("[b]".$loguser['name']."[/] stickied thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 			
@@ -77,7 +77,7 @@ if($canMod)
 	}
 	elseif($_GET['action']=="unstick")
 	{
-		$qThread = "update threads set sticky=0 where id=".$tid;
+		$qThread = "update {$dbpref}threads set sticky=0 where id=".$tid;
 		$rThread = Query($qThread);
 		Report("[b]".$loguser['name']."[/] unstuck thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 			
@@ -88,20 +88,20 @@ if($canMod)
 		$moveto = (int)$_POST['moveTo'];
 		
 		//Tweak forum counters
-		$qForum = "update forums set numthreads=numthreads-1, numposts=numposts-".($thread['replies']+1)." where id=".$thread['forum'];
+		$qForum = "update {$dbpref}forums set numthreads=numthreads-1, numposts=numposts-".($thread['replies']+1)." where id=".$thread['forum'];
 		$rForum = Query($qForum);
-		$qForum = "update forums set numthreads=numthreads+1, numposts=numposts+".($thread['replies']+1)." where id=".$moveto;
+		$qForum = "update {$dbpref}forums set numthreads=numthreads+1, numposts=numposts+".($thread['replies']+1)." where id=".$moveto;
 		$rForum = Query($qForum);
 
 
-		$qThread = "update threads set forum=".(int)$_POST['moveTo']." where id=".$tid;
+		$qThread = "update {$dbpref}threads set forum=".(int)$_POST['moveTo']." where id=".$tid;
 		$rThread = Query($qThread);
 		
 		// Tweak forum counters #2
-		Query("	UPDATE forums LEFT JOIN threads
-				ON forums.id=threads.forum AND threads.lastpostdate=(SELECT MAX(nt.lastpostdate) FROM threads nt WHERE nt.forum=forums.id)
-				SET forums.lastpostdate=IFNULL(threads.lastpostdate,0), forums.lastpostuser=IFNULL(threads.lastposter,0), forums.lastpostid=IFNULL(threads.lastpostid,0)
-				WHERE forums.id=".$thread['forum']." OR forums.id=".$moveto);
+		Query("	UPDATE {$dbpref}forums LEFT JOIN {$dbpref}threads
+				ON {$dbpref}forums.id={$dbpref}threads.forum AND {$dbpref}threads.lastpostdate=(SELECT MAX(nt.lastpostdate) FROM {$dbpref}threads nt WHERE nt.forum={$dbpref}forums.id)
+				SET {$dbpref}forums.lastpostdate=IFNULL({$dbpref}threads.lastpostdate,0), {$dbpref}forums.lastpostuser=IFNULL({$dbpref}threads.lastposter,0), {$dbpref}forums.lastpostid=IFNULL({$dbpref}threads.lastpostid,0)
+				WHERE {$dbpref}forums.id=".$thread['forum']." OR {$dbpref}forums.id=".$moveto);
 		
 		Report("[b]".$loguser['name']."[/] moved thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 			
@@ -109,50 +109,50 @@ if($canMod)
 	}
 	elseif($_GET['action']=="delete")
 	{
-		$qPosts = "select id,user from posts where thread=".$tid;
+		$qPosts = "select id,user from {$dbpref}posts where thread=".$tid;
 		$rPosts = Query($qPosts);
 		//Round up posts in this thread
 		while($post = Fetch($rPosts))
 		{
 			//Delete this post
-			$qPost = "delete from posts where id=".$post['id'];
-			$qPostText = "delete from posts_text where pid=".$post['id'];
+			$qPost = "delete from {$dbpref}posts where id=".$post['id'];
+			$qPostText = "delete from {$dbpref}posts_text where pid=".$post['id'];
 			$rPost = Query($qPost);
 			$rPostText = Query($qPostText);
 
 			//Find and decrease user's postcount
-			$qUser = "select id from users where id=".$post['user'];
+			$qUser = "select id from {$dbpref}users where id=".$post['user'];
 			$rUser = Query($qUser);
-			$qUser = "update users set posts = posts - 1 where id=".$post['user'];
+			$qUser = "update {$dbpref}users set posts = posts - 1 where id=".$post['user'];
 
 			$rUser = Query($qUser);
 
 			//Decrease forum postcount
-			$qForum = "update forums set numposts = numposts - 1 where id=".$thread['forum'];
+			$qForum = "update {$dbpref}forums set numposts = numposts - 1 where id=".$thread['forum'];
 			$rForum = Query($qForum);
 		}
 		//Delete the thread
-		$qThread = "delete from threads where id=".$tid;
+		$qThread = "delete from {$dbpref}threads where id=".$tid;
 		$rThread = Query($qThread);
 
 		//Decrease forum threadcount
-		$qForum = "update forums set numthreads = numthreads - 1 where id=".$thread['forum'];
+		$qForum = "update {$dbpref}forums set numthreads = numthreads - 1 where id=".$thread['forum'];
 		$rForum = Query($qForum);
 		
 		// Update the forum's lastpost stuff
-		Query("	UPDATE forums LEFT JOIN threads
-				ON forums.id=threads.forum AND threads.lastpostdate=(SELECT MAX(nt.lastpostdate) FROM threads nt WHERE nt.forum=forums.id)
-				SET forums.lastpostdate=IFNULL(threads.lastpostdate,0), forums.lastpostuser=IFNULL(threads.lastposter,0), forums.lastpostid=IFNULL(threads.lastpostid,0)
-				WHERE forums.id=".$thread['forum']);
+		Query("	UPDATE {$dbpref}forums LEFT JOIN {$dbpref}threads
+				ON {$dbpref}forums.id={$dbpref}threads.forum AND {$dbpref}threads.lastpostdate=(SELECT MAX(nt.lastpostdate) FROM {$dbpref}threads nt WHERE nt.forum={$dbpref}forums.id)
+				SET {$dbpref}forums.lastpostdate=IFNULL({$dbpref}threads.lastpostdate,0), {$dbpref}forums.lastpostuser=IFNULL({$dbpref}threads.lastposter,0), {$dbpref}forums.lastpostid=IFNULL({$dbpref}threads.lastpostid,0)
+				WHERE {$dbpref}forums.id=".$thread['forum']);
 
 		if($thread['poll'])
 		{
 			//Delete poll things
-			$qPoll = "delete from poll where id=".$thread['poll'];
+			$qPoll = "delete from {$dbpref}poll where id=".$thread['poll'];
 			$rPoll = Query($qPoll);
-			$qPollVotes = "delete from pollvotes where poll=".$thread['poll'];
+			$qPollVotes = "delete from {$dbpref}pollvotes where poll=".$thread['poll'];
 			$rPollVotes = Query($qPollVotes);
-			$qPollChoices = "delete from poll_choices where poll=".$thread['poll'];
+			$qPollChoices = "delete from {$dbpref}poll_choices where poll=".$thread['poll'];
 			$rPollChoices = Query($qPollChoices);
 		}
 
@@ -162,24 +162,24 @@ if($canMod)
 	}
 	elseif($_GET['action'] == "trash")
 	{
-		$qForum = "select id from forums where description like '%[trash]%' limit 1";
+		$qForum = "select id from {$dbpref}forums where description like '%[trash]%' limit 1";
 		$trashid = FetchResult($qForum);
 		if($trashid > 0)
 		{
-			$qThread = "update threads set forum=".$trashid.", closed=1 where id=".$tid." limit 1";
+			$qThread = "update {$dbpref}threads set forum=".$trashid.", closed=1 where id=".$tid." limit 1";
 			$rThread = Query($qThread);
 
 			//Tweak forum counters
-			$qForum = "update forums set numthreads=numthreads-1, numposts=numposts-".($thread['replies']+1)." where id=".$thread['forum'];
+			$qForum = "update {$dbpref}forums set numthreads=numthreads-1, numposts=numposts-".($thread['replies']+1)." where id=".$thread['forum'];
 			$rForum = Query($qForum);
-			$qForum = "update forums set numthreads=numthreads+1, numposts=numposts+".($thread['replies']+1)." where id=".$trashid;
+			$qForum = "update {$dbpref}forums set numthreads=numthreads+1, numposts=numposts+".($thread['replies']+1)." where id=".$trashid;
 			$rForum = Query($qForum);
 			
 			// Tweak forum counters #2
-			Query("	UPDATE forums LEFT JOIN threads
-					ON forums.id=threads.forum AND threads.lastpostdate=(SELECT MAX(nt.lastpostdate) FROM threads nt WHERE nt.forum=forums.id)
-					SET forums.lastpostdate=IFNULL(threads.lastpostdate,0), forums.lastpostuser=IFNULL(threads.lastposter,0), forums.lastpostid=IFNULL(threads.lastpostid,0)
-					WHERE forums.id=".$thread['forum']." OR forums.id=".$trashid);
+			Query("	UPDATE {$dbpref}forums LEFT JOIN {$dbpref}threads
+					ON {$dbpref}forums.id={$dbpref}threads.forum AND {$dbpref}threads.lastpostdate=(SELECT MAX(nt.lastpostdate) FROM {$dbpref}threads nt WHERE nt.forum={$dbpref}forums.id)
+					SET {$dbpref}forums.lastpostdate=IFNULL({$dbpref}threads.lastpostdate,0), {$dbpref}forums.lastpostuser=IFNULL({$dbpref}threads.lastposter,0), {$dbpref}forums.lastpostid=IFNULL({$dbpref}threads.lastpostid,0)
+					WHERE {$dbpref}forums.id=".$thread['forum']." OR {$dbpref}forums.id=".$trashid);
 
 			Report("[b]".$loguser['name']."[/] thrashed thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
 
@@ -206,7 +206,7 @@ if($canMod)
 					$iconurl = justEscape($_POST['iconurl']);
 			}
 
-			$qThreads = "update threads set title='".justEscape($_POST['title'])."', icon='".$iconurl."', closed=".$isClosed.", sticky=".$isSticky." where id=".$tid." limit 1";
+			$qThreads = "update {$dbpref}threads set title='".justEscape($_POST['title'])."', icon='".$iconurl."', closed=".$isClosed.", sticky=".$isSticky." where id=".$tid." limit 1";
 			$rThreads = Query($qThreads);
 
 			Report("[b]".$loguser['name']."[/] edited thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
@@ -224,7 +224,7 @@ else
 	{
 		if($_POST['title'])
 		{
-			$qThreads = "update threads set title='".justEscape($_POST['title'])."' where id=".$tid." limit 1";
+			$qThreads = "update {$dbpref}threads set title='".justEscape($_POST['title'])."' where id=".$tid." limit 1";
 			$rThreads = Query($qThreads);
 
 			Report("[b]".$loguser['name']."[/] renamed thread [b]".$thread['title']."[/] -> [g]#HERE#?tid=".$tid, $isHidden);
@@ -253,7 +253,7 @@ else //Has custom icon
 
 if(!isset($_POST['iconid'])) $_POST['iconid'] = 0;
 
-$qFora = "select title, id from forums order by catid, id";
+$qFora = "select title, id from {$dbpref}forums order by catid, id";
 $rFora = Query($qFora);
 while($forum = Fetch($rFora))
 {

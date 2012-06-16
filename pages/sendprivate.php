@@ -14,12 +14,12 @@ if(!$loguserid) //Not logged in?
 $pid = (int)$_GET['pid'];
 if($pid)
 {
-	$qPM = "select * from pmsgs left join pmsgs_text on pid = pmsgs.id where userto = ".$loguserid." and pmsgs.id = ".$pid;
+	$qPM = "select * from {$dbpref}pmsgs left join pmsgs_text on pid = pmsgs.id where userto = ".$loguserid." and pmsgs.id = ".$pid;
 	$rPM = Query($qPM);
 	if(NumRows($rPM))
 	{
 		$sauce = Fetch($rPM);
-		$qUser = "select * from users where id = ".(int)$sauce['userfrom'];
+		$qUser = "select * from {$dbpref}users where id = ".(int)$sauce['userfrom'];
 		$rUser = Query($qUser);
 		if(NumRows($rUser))
 			$user = Fetch($rUser);
@@ -44,7 +44,7 @@ if($pid)
 $uid = (int)$_GET['uid'];
 if($uid)
 {
-	$qUser = "select * from users where id = ".$uid;
+	$qUser = "select * from {$dbpref}users where id = ".$uid;
 	$rUser = Query($qUser);
 	if(NumRows($rUser))
 	{
@@ -78,7 +78,7 @@ if($_POST['to'])
 		$to = justEscape(trim(htmlentities($to)));
 		if($to == "")
 			continue;
-		$qUser = "select id from users where name='".$to."' or displayname='".$to."'";
+		$qUser = "select id from {$dbpref}users where name='".$to."' or displayname='".$to."'";
 		$rUser = Query($qUser);
 		if(NumRows($rUser))
 		{
@@ -122,23 +122,19 @@ if($_POST['action'] == __("Send") || $_POST['action'] == __("Save as Draft"))
 		{
 			$wantDraft = (int)($_POST['action'] == __("Save as Draft"));
 
-			//$post = justEscape($post);
 			$post = $_POST['text'];
 			$post = preg_replace("'/me '","[b]* ".$loguser['name']."[/b] ", $post); //to prevent identity confusion
 			if($wantDraft)
 				$post = "<!-- ###MULTIREP:".$_POST['to']." ### -->".$post;
 			$post = justEscape($post);
-
-			//$pid = FetchResult("SELECT id+1 FROM pmsgs WHERE (SELECT COUNT(*) FROM pmsgs p2 WHERE p2.id=pmsgs.id+1)=0 ORDER BY id ASC LIMIT 1");
-			//if($pid < 1) $pid = 1;
 			
 			if($_POST['action'] == __("Save as Draft"))
 			{
-				$qPM = "insert into pmsgs (userto, userfrom, date, ip, msgread, drafting) values (".$firstTo.", ".$loguserid.", ".time().", '".$_SERVER['REMOTE_ADDR']."', 0, ".$wantDraft.")";
+				$qPM = "insert into {$dbpref}pmsgs (userto, userfrom, date, ip, msgread, drafting) values (".$firstTo.", ".$loguserid.", ".time().", '".$_SERVER['REMOTE_ADDR']."', 0, ".$wantDraft.")";
 				$rPM = Query($qPM);
 				$pid = InsertId();
 
-				$qPMT = "insert into pmsgs_text (pid,title,text) values (".$pid.", '".justEscape($_POST['title'])."', '".$post."')";
+				$qPMT = "insert into {$dbpref}pmsgs_text (pid,title,text) values (".$pid.", '".justEscape($_POST['title'])."', '".$post."')";
 				$rPMT = Query($qPMT);
 
 				die(header("Location: ".actionLink("private", "", "show=2")));
@@ -148,11 +144,11 @@ if($_POST['action'] == __("Send") || $_POST['action'] == __("Save as Draft"))
 			{
 				foreach($recipIDs as $recipient)
 				{
-					$qPM = "insert into pmsgs (userto, userfrom, date, ip, msgread, drafting) values (".$recipient.", ".$loguserid.", ".time().", '".$_SERVER['REMOTE_ADDR']."', 0, ".$wantDraft.")";
+					$qPM = "insert into {$dbpref}pmsgs (userto, userfrom, date, ip, msgread, drafting) values (".$recipient.", ".$loguserid.", ".time().", '".$_SERVER['REMOTE_ADDR']."', 0, ".$wantDraft.")";
 					$rPM = Query($qPM);
 					$pid = InsertId();
 
-					$qPMT = "insert into pmsgs_text (pid,title,text) values (".$pid.", '".justEscape($_POST['title'])."', '".$post."')";
+					$qPMT = "insert into {$dbpref}pmsgs_text (pid,title,text) values (".$pid.", '".justEscape($_POST['title'])."', '".$post."')";
 					$rPMT = Query($qPMT);
 				}
 

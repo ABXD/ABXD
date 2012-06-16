@@ -1,7 +1,7 @@
 <?php
 //Improved permissions system ~Nina
 $groups = array();
-$rGroups = query("SELECT * FROM usergroups");
+$rGroups = query("SELECT * FROM {$dbpref}usergroups");
 while ($group = fetch($rGroups))
 {
 	$groups[] = $group;
@@ -11,7 +11,7 @@ while ($group = fetch($rGroups))
 //Do nothing for guests.
 if ($loguserid)
 {
-	$rPermissions = query("SELECT * FROM userpermissions WHERE uid=".$loguserid);
+	$rPermissions = query("SELECT * FROM {$dbpref}userpermissions WHERE uid=".$loguserid);
 	$permissions = fetch($rPermissions);
 	$permissions['permissions'] = unserialize($permissions['permissions']);
 	if (is_array($groups[$loguser['group']]['permissions']))

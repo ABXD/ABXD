@@ -9,7 +9,7 @@ function BattleSystem_Goggles()
 	global $goggles, $loguserid, $postText;
 	if(!isset($goggles))
 	{
-		$gogR = Query("select item6 from users_rpg where id = ".$loguserid);
+		$gogR = Query("select {$dbpref}item6 from users_rpg where id = ".$loguserid);
 		if(NumRows($gogR))
 		{
 			$gog = Fetch($gogR);

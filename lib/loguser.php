@@ -17,10 +17,10 @@ if(str_replace($bots,"x",$_SERVER['HTTP_USER_AGENT']) != $_SERVER['HTTP_USER_AGE
 include("browsers.php");
 
 //Check the amount of users right now for the records
-$qMisc = "select * from misc";
+$qMisc = "select * from {$dbpref}misc";
 $rMisc = Query($qMisc);
 $misc = Fetch($rMisc);
-$qOnlineUsers = "select id, powerlevel, sex, name from users where lastactivity > ".(time()-300)." or lastposttime > ".(time()-300)." order by name";
+$qOnlineUsers = "select id, powerlevel, sex, name from {$dbpref}users where lastactivity > ".(time()-300)." or lastposttime > ".(time()-300)." order by name";
 $rOnlineUsers = Query($qOnlineUsers);
 $qRecords = ""; //Thanks for inspiring me to check this out, Blackhole ;)
 $onlineUsers = "";
@@ -35,9 +35,9 @@ if($onlineUserCt > $misc['maxusers'])
 	$qRecords = "maxusers = ".$onlineUserCt.", maxusersdate = ".time().", maxuserstext = '".justEscape($onlineUsers)."'";
 }
 //Check the amount of posts for the record
-$qNewToday = "select count(*) from posts where date > ".(time() - 86400);
+$qNewToday = "select count(*) from {$dbpref}posts where date > ".(time() - 86400);
 $newToday = FetchResult($qNewToday);
-$qNewLastHour = "select count(*) from posts where date > ".(time() - 3600);
+$qNewLastHour = "select count(*) from {$dbpref}posts where date > ".(time() - 3600);
 $newLastHour = FetchResult($qNewLastHour);
 if($newToday > $misc['maxpostsday'])
 {
@@ -51,24 +51,24 @@ if($newLastHour > $misc['maxpostshour'])
 }
 if($qRecords)
 {
-	$qRecords = "update misc set ".$qRecords;
+	$qRecords = "update {$dbpref}misc set ".$qRecords;
 	$rRecords = Query($qRecords);
 }
 
 //Delete oldies visitor from the guest list. We may re-add him/her later.
-$qGuests = "delete from guests where ip='".$_SERVER['REMOTE_ADDR']."' or date < ".(time()-300);
+$qGuests = "delete from {$dbpref}guests where ip='".$_SERVER['REMOTE_ADDR']."' or date < ".(time()-300);
 $rGuests = Query($qGuests);
 
 //Lift dated Tempbans
-$qTempban = "update users set powerlevel = tempbanpl, tempbantime = 0 where tempbantime != 0 and tempbantime < ".time();
+$qTempban = "update {$dbpref}users set powerlevel = tempbanpl, tempbantime = 0 where tempbantime != 0 and tempbantime < ".time();
 $rTempban = Query($qTempban);
 
 //Lift dated IP Bans
-$qIPBan = "delete from ipbans where date != 0 and date < ".time();
+$qIPBan = "delete from {$dbpref}ipbans where date != 0 and date < ".time();
 $rIPBan = Query($qIPBan);
 
 //Do IP Ban check
-$qIPBan = "select * from ipbans where instr('".$_SERVER['REMOTE_ADDR']."', ip)=1";
+$qIPBan = "select * from {$dbpref}ipbans where instr('".$_SERVER['REMOTE_ADDR']."', ip)=1";
 $rIPBan = Query($qIPBan);
 if(NumRows($rIPBan))
 {
@@ -77,7 +77,7 @@ if(NumRows($rIPBan))
 	exit();
 }
 
-if(FetchResult("select count(*) from proxybans where instr('".$_SERVER['REMOTE_ADDR']."', ip)=1"))
+if(FetchResult("select count(*) from {$dbpref}proxybans where instr('".$_SERVER['REMOTE_ADDR']."', ip)=1"))
 	die("No.");
 
 
@@ -90,7 +90,7 @@ $wantGuest = TRUE;
 if($loguserid) //Are we logged in?
 {
 	//$qLogUser = "select * from users where id=".(int)$loguserid." and password='".justEscape($loguserpw)."'";
-	$qLogUser = "select * from users where id=".(int)$loguserid;
+	$qLogUser = "select * from {$dbpref}users where id=".(int)$loguserid;
 	$rLogUser = Query($qLogUser);
 	if(NumRows($rLogUser)) //We have at least one result.
 	{
@@ -100,7 +100,7 @@ if($loguserid) //Are we logged in?
 		$ourbull = hash('sha256', $loguser['id'].$loguser['password'].$salt.$loguser['pss'], FALSE);
 		if($loguserbull == $ourbull)
 		{
-			$rLastView = "update users set lastactivity=".time().", lastip='".$_SERVER['REMOTE_ADDR']."', lasturl='".justEscape(getRequestedURL())."', lastknownbrowser='".justEscape($lastKnownBrowser)."' where id=".$loguserid;
+			$rLastView = "update {$dbpref}users set lastactivity=".time().", lastip='".$_SERVER['REMOTE_ADDR']."', lasturl='".justEscape(getRequestedURL())."', lastknownbrowser='".justEscape($lastKnownBrowser)."' where id=".$loguserid;
 			if(!$ajaxPage)
 				$qLastView = Query($rLastView);
 
@@ -115,7 +115,7 @@ if($loguserid) //Are we logged in?
 
 if($wantGuest)
 {
-	$qGuest = "insert into guests (date, ip, lasturl, useragent, bot) values (".time().", '".$_SERVER['REMOTE_ADDR']."', '".justEscape(getRequestedURL())."', '".justEscape($_SERVER['HTTP_USER_AGENT'])."', ".$isBot.")";
+	$qGuest = "insert into {$dbpref}guests (date, ip, lasturl, useragent, bot) values (".time().", '".$_SERVER['REMOTE_ADDR']."', '".justEscape(getRequestedURL())."', '".justEscape($_SERVER['HTTP_USER_AGENT'])."', ".$isBot.")";
  	if(!$ajaxPage)
  		$rGuest = Query($qGuest);
 	

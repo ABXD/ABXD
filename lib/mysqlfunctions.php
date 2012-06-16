@@ -10,39 +10,15 @@ $var1024 = "varchar(1024)".$notNull;
 $AI = "int(11) NOT NULL AUTO_INCREMENT";
 $keyID = "primary key (`id`)";
 
-//SQL importer based on KusabaX installer
 function Import($sqlFile)
 {
-	$handle = fopen($sqlFile, "r");
-	$data = fread($handle, filesize($sqlFile));
-	fclose($handle);
-
-	$sqlData = explode("\n", $data);
-	//Filter out the comments and empty lines...
-	foreach ($sqlData as $key => $sql)
-		if (strstr($sql, "--") || strlen($sql) == 0)
-			unset($sqlData[$key]);
-	$data = implode("",$sqlData);
-	$sqlData = explode(";",$data);
-	foreach($sqlData as $sql)
-	{
-		if(strlen(trim($sql)) === 0)
-			continue;
-		if(strstr($sql, "CREATE TABLE `"))
-		{
-			$pos1 = strpos($sql, '`');
-			$pos2 = strpos($sql, '`', $pos1 + 1);
-			$tableName = substr($sql, $pos1+1, ($pos2-$pos1)-1);
-			print "<li>".$tableName."</li>";
-		}
-		$query = str_replace("SEMICOLON", ";", $sql);
-		Query($query);
-	}
+	global $dblink, $dbpref;
+	$dblink->multi_query(str_replace('{$dbpref}', $dbpref, file_get_contents($sqlFile)));
 }
 
 function Upgrade()
 {
-	global $dbname;
+	global $dbname, $dbpref;
 	
 	//Load the board tables.
 	include("installSchema.php");
@@ -53,13 +29,13 @@ function Upgrade()
 	foreach($tables as $table => $tableSchema)
 	{
 		print "<li>";
-		print $table."&hellip;";
-		$tableStatus = Query("show table status from ".$dbname." like '".$table."'");
+		print $dbpref.$table."&hellip;";
+		$tableStatus = Query("show table status from ".$dbname." like '".$dbpref.$table."'");
 		$numRows = NumRows($tableStatus);
 		if($numRows == 0)
 		{
 			print " creating&hellip;";
-			$create = "create table `".$table."` (\n";
+			$create = "create table `{$dbpref}".$table."` (\n";
 			$comma = "";
 			foreach($tableSchema['fields'] as $field => $type)
 			{
@@ -77,7 +53,7 @@ function Upgrade()
 			$primaryKey = "";
 			$changes = 0;
 			$foundFields = array();
-			$scan = Query("show columns from `".$table."`");
+			$scan = Query("show columns from `{$dbpref}".$table."`");
 			while($field = $scan->fetch_assoc())
 			{
 				$fieldName = $field['Field'];
@@ -103,7 +79,7 @@ function Upgrade()
 							print_r($field);
 							print "{ ".$type." }";
 						}
-						Query("ALTER TABLE `".$table."` CHANGE `".$fieldName."` `".$fieldName."` ".$wantedType);
+						Query("ALTER TABLE `{$dbpref}".$table."` CHANGE `".$fieldName."` `".$fieldName."` ".$wantedType);
 						$changes++;
 					}
 				}
@@ -113,7 +89,7 @@ function Upgrade()
 				if(!in_array($fieldName, $foundFields))
 				{
 					print " \"".$fieldName."\" missing&hellip;";
-					Query("ALTER TABLE `".$table."` ADD `".$fieldName."` ".$type);
+					Query("ALTER TABLE `{$dbpref}".$table."` ADD `".$fieldName."` ".$type);
 					$changes++;
 				}
 			}

@@ -24,14 +24,16 @@ function Upgrade()
 	include("installSchema.php");
 
 	//Allow plugins to add their own tables!
-	$rPlugins = Query("select * from {enabledplugins}");
-
-	while($plugin = Fetch($rPlugins))
+	if (NumRows(Query("show table status from $dbname like '{enabledplugins}'")))
 	{
-		$plugin = $plugin["plugin"];
-		$path = "plugins/$plugin/installSchema.php";
-		if(file_exists($path))
-			include($path);
+		$rPlugins = Query("select * from {enabledplugins}");
+		while($plugin = Fetch($rPlugins))
+		{
+			$plugin = $plugin["plugin"];
+			$path = "plugins/$plugin/installSchema.php";
+			if(file_exists($path))
+				include($path);
+		}
 	}
 
 	foreach($tables as $table => $tableSchema)

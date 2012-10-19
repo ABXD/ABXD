@@ -145,6 +145,8 @@ $tables = array
 			"maxpostshour" => $genericInt,
 			"maxpostshourdate" => $genericInt,
 			"milestone" => $text,
+			"porabox" => $text,
+			"poratitle" => "varchar(100)".$notNull,
 		),
 	),
 	"moodavatars" => array

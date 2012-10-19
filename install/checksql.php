@@ -1,35 +1,31 @@
 <?php
-$sqlServ = $_POST['sqlServerAddress'];
-if (!$sqlServ) die("No SQL server address was specified. Note that the default \"localhost\" is a plceholder.");
-$sqlUser = $_POST['sqlUserName'];
-$sqlPass = $_POST['sqlPassword'];
-$sqlData = $_POST['sqlDbName'];
+error_reporting(~E_NOTICE);
+
+if (file_exists('lib/database.php') || file_exists('../lib/database.php'))
+	die("Board is already installed.");
+
+$sqlServ = $_POST['dbhost'];
+$sqlUser = $_POST['dbuser'];
+$sqlPass = $_POST['dbpass'];
+$sqlData = $_POST['dbname'];
 
 $dblink = mysqli_init();
 // 2 seconds timeout, will make errors noticed more quickly
 $dblink->options(MYSQLI_OPT_CONNECT_TIMEOUT, 2);
 if (!@$dblink->real_connect($sqlServ, $sqlUser, $sqlPass, null))
+	echo "Connect error ({$dblink->connect_errno}): {$dblink->connect_error}";
+elseif (isset($_POST['create']))
 {
-	die("Connect error ({$dblink->connect_errno}): {$dblink->connect_error}");
-}
-
-if (isset($_GET['attemptCreate']))
-{
+	if(!preg_match("/[A-Za-z][A-Za-z0-9_]*/", $sqlData))
+		die("Invalid database name entered.");
 	if ($dblink->query("CREATE DATABASE $sqlData"))
-	{
-		die("Successfully created the database. You should be good to go.");
-	}
+		echo "Database was created successfully!<!--ABXD-->";
 	else
-	{
-		die("Error: {$dblink->error}");
-	}
+		echo "Failed to create database...";
 }
-
-if ($dblink->select_db($sqlData))
-{
-	print "Connected successfully. Your settings are valid.";
-}
+elseif(!preg_match("/[A-Za-z][A-Za-z0-9_]*/", $sqlData))
+		die("Invalid database name entered.");
+elseif (!$dblink->select_db($sqlData))
+	echo "The database was not found. <a href='javascript:create()'>Would you like to create one?</a>";
 else
-{
-	die("The database was not found. <button onclick=\"checkSqlConnection(true);\">Attempt to create it</button>");
-}
+	echo "<!--ABXD-->";

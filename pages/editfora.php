@@ -45,6 +45,7 @@ switch($_POST['action'])
 		//Get new forum data
 		$id = (int)$_POST['id'];
 		$title = $_POST['title'];
+		if($title == "") dieAjax(__("Title can't be empty."));
 		$description = $_POST['description'];
 		$category = (int)$_POST['category'];
 		$forder = (int)$_POST['forder'];
@@ -66,6 +67,7 @@ switch($_POST['action'])
 		//Get new cat data
 		$id = (int)$_POST['id'];
 		$name = $_POST['name'];
+		if($name == "") dieAjax(__("Name can't be empty."));
 		$corder = (int)$_POST['corder'];
 
 		//Send it to the DB
@@ -81,6 +83,7 @@ switch($_POST['action'])
 
 		//Get new forum data
 		$title = $_POST['title'];
+		if($title == "") dieAjax(__("Title can't be empty."));
 		$description = $_POST['description'];
 		$category = (int)$_POST['category'];
 		$forder = (int)$_POST['forder'];
@@ -107,11 +110,9 @@ switch($_POST['action'])
 		//Get new cat data
 		$id = (int)$_POST['id'];
 		$name = $_POST['name'];
+		if($name == "") dieAjax(__("Name can't be empty."));
 		$corder = (int)$_POST['corder'];
 
-		//Send it to the DB
-
-		//Add the actual forum
 		Query("INSERT INTO {categories} (`name`, `corder`) VALUES ({0}, {1})", $name, $corder);
 
 		dieAjax("Ok");
@@ -656,7 +657,7 @@ function WriteForumTableContents()
 				print '
 		<tr class="cell'.cell().'" style="cursor: hand;">
 			<td style="padding-left: 24px;" class="f">
-				".__("No forums in this category.")."
+				'.__("No forums in this category.").'
 			</td>
 		</tr>';
 		}

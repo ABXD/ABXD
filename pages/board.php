@@ -31,9 +31,15 @@ $stats = Format(__("{0} and {1} total"), Plural($statData["numThreads"], __("thr
 $stats .= "<br />".format(__("{0} today, {1} last hour"), Plural($statData["newToday"], __("new post")), $statData["newLastHour"]);
 
 $percent = $statData["numUsers"] ? ceil((100 / $statData["numUsers"]) * $statData["numActive"]) : 0;
-$lastUser = getDataPrefix(Fetch(Query("select u.(_userfields) from {users} u order by u.regdate desc limit 1")), "u_");
-$last = format(__("{0}, {1} active ({2}%)"), Plural($statData["numUsers"], __("registered user")), $statData["numActive"], $percent)."<br />".format(__("Newest: {0}"), UserLink($lastUser));
-
+$lastUser = Query("select u.(_userfields) from {users} u order by u.regdate desc limit 1");
+if(numRows($lastUser))
+{
+	$lastUser = getDataPrefix(Fetch($lastUser), "u_");
+	$last = format(__("{0}, {1} active ({2}%)"), Plural($statData["numUsers"], __("registered user")), $statData["numActive"], $percent)."<br />".format(__("Newest: {0}"), UserLink($lastUser));
+}
+else
+	$last = __("No registered users")."<br />&nbsp;";
+	
 $pl = $loguser['powerlevel'];
 if($pl < 0) $pl = 0;
 

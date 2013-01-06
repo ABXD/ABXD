@@ -45,7 +45,7 @@
 				</tr>
 			</table>
 		</div>
-	<div style=\"text-align: right;\" class="nOnlineUsers">
+	<div style="text-align: right;" class="nOnlineUsers">
 		<?php print $layout_onlineusers; ?>
 	</div>
 	<form action="<?php print actionLink('login'); ?>" method="post" id="logout">

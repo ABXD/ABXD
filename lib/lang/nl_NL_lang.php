@@ -3041,7 +3041,7 @@ $languagePack = array(
 'het forum',
 
 'Are you sure you want to log out?' =>
-'Weet je zeker dat je wil uitloggen?',
+'Weet je zeker dat je uit wilt loggen?',
 
 'revision {0}' =>
 'revisie {0}',

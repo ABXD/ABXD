@@ -6,7 +6,7 @@ $languagePack = array(
 'MySQL verzoek',
 
 '<!-- English translation by The ABXD Team -->' =>
-'<!-- Dutch translation by Kiyoshi, finished by Kawa -->',
+'<!-- Dutch translation by Kiyoshi, finished by Kawa. More translations added by Sietse. -->',
 
 
 // index.php
@@ -22,7 +22,7 @@ $languagePack = array(
 'Bewerk profiel',
 
 'Private messages' =>
-'Privéberichten',
+'Priv&eacute;berichten',
 
 'Mood avatars' =>
 'Bui-avatars',
@@ -82,22 +82,22 @@ $languagePack = array(
 'Nieuwe thread',
 
 'You must be logged in to post.' =>
-'',
+'Je moet ingelogd zijn om een bericht te plaatsen.',
 
 'Forum ID unspecified.' =>
 'Forum-ID niet aangegeven.',
 
 'You\'re banned.' =>
-'',
+'Je bent verbannen.',
 
 'Unknown forum ID.' =>
 'Onbekende forum-ID.',
 
 'This forum is locked.' =>
-'',
+'Dit forum is op slot.',
 
 'You are not allowed to post threads in this forum.' =>
-'',
+'Je hebt geen toestemming om threads te plaatsen in dit forum.',
 
 'Poll' =>
 'Poll',
@@ -112,19 +112,19 @@ $languagePack = array(
 'Je post is leeg.',
 
 'Enter a thread title and try again.' =>
-'',
+'Vul een titel in en probeer opnieuw.',
 
 'Your thread is unnamed.' =>
-'',
+'Je hebt geen naam gegeven aan de thread.',
 
 'You need to enter at least two options to make a poll.' =>
-'',
+'Je moet minstens twee opties aangeven om een poll te maken.',
 
 'Invalid poll.' =>
-'',
+'Ongeldige poll.',
 
 'You need to enter a poll question to make a poll.' =>
-'',
+'Je moet een poll vraag invullen om een poll te maken.',
 
 'You\'re going too damn fast! Slow down a little.' =>
 'Niet zo verdomd snel! Ga wat langzamer.',
@@ -133,28 +133,28 @@ $languagePack = array(
 'Huuu, paard!',
 
 'Option {2}' =>
-'',
+'Optie {2}',
 
 'Color' =>
-'',
+'Kleur',
 
 'Multivote' =>
-'',
+'Gebruikers kunnen meerdere keuzes aanklikken.',
 
 'Poll question' =>
-'',
+'Poll vraag',
 
 'Number of options' =>
-'',
+'Hoeveelheid opties',
 
 'Set' =>
 'Set',
 
 'Delete poll' =>
-'',
+'Verwijder poll',
 
 'Add poll' =>
-'',
+'Voeg poll toe',
 
 'Title' =>
 'Titel',
@@ -195,10 +195,10 @@ $languagePack = array(
 'Gebruikerslijst',
 
 'Page' =>
-'',
+'Pagina',
 
 'Nothing matched your search.' =>
-'',
+'Geen resultaten gevonden.',
 
 'Picture' =>
 'Afbeelding',
@@ -225,7 +225,7 @@ $languagePack = array(
 'Sorteer op',
 
 'Post count' =>
-'',
+'Aantal posts',
 
 'ID' =>
 'ID',
@@ -261,16 +261,16 @@ $languagePack = array(
 'Macht',
 
 'Banned' =>
-'',
+'Verbannen',
 
 'Normal' =>
 'Normaal',
 
 'Local Mod' =>
-'',
+'Lokale moderator',
 
 'Full Mod' =>
-'',
+'Volledige moderator',
 
 'Admin' =>
 'Admin',
@@ -279,63 +279,63 @@ $languagePack = array(
 'Root',
 
 'System' =>
-'',
+'Systeem',
 
 'Search' =>
 'Zoeken',
 
 'Loading memberlist...' =>
-'',
+'Laden van gebruikerslijst...',
 
 
 // pages/editfora.php
 'Edit forums' =>
-'',
+'Bewerk fora',
 
 'You\'re not allowed to access the forum editor.' =>
-'',
+'Je hebt geen toestemming om de fora te bewerken',
 
 'Edit forum list' =>
 'Bewerk forum lijst',
 
 'No.' =>
-'Neen.',
+'Nee.',
 
 'Forum has threads. Move those first.' =>
-'',
+'Forum heeft threads, verplaats deze eerst.',
 
 'No such category.' =>
-'',
+'Deze categorie bestaat niet',
 
 'Unknown action: {0}' =>
-'',
+'Ongeldige actie: {0}',
 
 'No categories' =>
-'',
+'Geen categorie&euml;n',
 
 'Forum not found.' =>
-'',
+'Forum niet gevonden.',
 
 'Update' =>
 '',
 
 'Edit Forum' =>
-'',
+'Bewerk forum',
 
 'Delete' =>
 'verwijder',
 
 'New Forum' =>
-'',
+'Nieuw forum',
 
 'Description goes here. <strong>HTML allowed.</strong>' =>
-'',
+'Beschrijving komt hier. <strong>HTML toegestaan</strong>',
 
 'Add' =>
 'Toevoegen',
 
 'Description' =>
-'',
+'Beschrijving',
 
 'Category' =>
 'Categorie',
@@ -359,7 +359,7 @@ $languagePack = array(
 '',
 
 'Delete forum' =>
-'',
+'Verwijder forum',
 
 'Instead of deleting a forum, you might want to consider archiving it: Change its name or description to say so, and raise the minimum powerlevel to reply and create threads so it\'s effectively closed.' =>
 '',
@@ -368,28 +368,28 @@ $languagePack = array(
 '',
 
 'Edit Category' =>
-'',
+'Bewerk categorie',
 
 'New Category' =>
-'',
+'Nieuwe categorie',
 
 'Delete category' =>
-'',
+'Verwijder categorie',
 
 'Be careful when deleting categories. Make sure there are no forums in the category before deleting it.' =>
 '',
 
 'Hint: Click a forum to select it.' =>
-'',
+'Hint: Klik op een forum om hem te selecteren.',
 
 'Add Forum' =>
-'',
+'Voeg forum toe',
 
 'Add Category' =>
-'',
+'Voeg categorie toe',
 
 'No forums in this category.' =>
-'',
+'Geen fora in deze categorie',
 
 'Regular' =>
 '',
@@ -432,19 +432,19 @@ $languagePack = array(
 '',
 
 'Settings were successfully saved!' =>
-'',
+'Instellingen zijn opgeslagen!',
 
 'Settings were NOT saved because there were invalid values. Please correct them and try again.' =>
-'',
+'Instellingen zijn NIET opgeslagen omdat sommige gegevens niet kloppen. Verbeter ze en probeer het opnieuw.',
 
 'Settings' =>
 'Instellingen',
 
 'Save and Exit' =>
-'',
+'Opslaan en weggaan',
 
 'Save' =>
-'',
+'Opslaan',
 
 
 // pages/forum.php
@@ -494,13 +494,13 @@ $languagePack = array(
 'Leeg forum',
 
 'Would you like to {0}?' =>
-'',
+'Wil je {0}?',
 
 'post something' =>
-'',
+'iets plaatsen',
 
 '{0} so you can post something.' =>
-'',
+'om iets te plaatsen.',
 
 'Forum Jump:' =>
 'Fora:',
@@ -511,7 +511,7 @@ $languagePack = array(
 'Nieuw PB',
 
 'You must be logged in to send private messages.' =>
-'Je moet ingelogt zijn om privéberichten te sturen.',
+'Je moet ingelogt zijn om priv&eacute;berichten te sturen.',
 
 'Unknown user.' =>
 'Onbekende gebruiker.',
@@ -561,22 +561,22 @@ $languagePack = array(
 'Onbekende gebruikers-ID.',
 
 'Layout blocked.' =>
-'',
+'Layout geblokkeerd',
 
 'Notice' =>
 'Mededeling',
 
 'Layout unblocked.' =>
-'',
+'Layout gedeblokkeerd',
 
 'Unblock layout' =>
-'',
+'Deblokkeer layout',
 
 'Block layout' =>
 'Layout blokkeren',
 
 'Private' =>
-'Privé',
+'Priv&eacute;',
 
 'None given' =>
 'Geen opgegeven',
@@ -591,7 +591,7 @@ $languagePack = array(
 'Deze gebruiker is tijdelijk verbannen tot {0} (GMT). Dat is nog {1}.',
 
 'To next rank' =>
-'',
+'Naar de volgende rang',
 
 'Total posts' =>
 'Totaal aantal posts',
@@ -615,7 +615,7 @@ $languagePack = array(
 'Email-adres',
 
 'Homepage' =>
-'',
+'Startpagina',
 
 'Contact information' =>
 'Contactinformatie',
@@ -636,7 +636,7 @@ $languagePack = array(
 'Presentatie',
 
 'Real name' =>
-'Ware naam',
+'Echte naam',
 
 'Location' =>
 'Locatie',
@@ -657,7 +657,7 @@ $languagePack = array(
 'Commentaar over {0}',
 
 'Edit my profile' =>
-'',
+'Bewerk mijn profiel',
 
 'Edit user' =>
 'Bewerk gebruikersprofiel',
@@ -671,19 +671,19 @@ $languagePack = array(
 
 // pages/destroyfuckingeverything.php
 'You\'re not a root user. There is nothing for you here.' =>
-'',
+'Je hebt geen toestemming hiervoor.',
 
 'Are you sure?' =>
-'',
+'Weet je het zeker?',
 
 'Oh boy.' =>
 'Tsjonge.',
 
 'You just destroyed the board.' =>
-'',
+'Je hebt zojuist het board vernietigd.',
 
 'Congratulations.' =>
-'',
+'Gefeliciteerd.',
 
 
 // pages/ranks.php
@@ -703,7 +703,7 @@ $languagePack = array(
 'Weer in rang aan het stijgen',
 
 'To get' =>
-'',
+'Te krijgen',
 
 
 // pages/lastposts.php
@@ -811,7 +811,7 @@ $languagePack = array(
 'Onbekend plaatje.',
 
 'Please note that anything you choose here will <em>overwrite</em> your previous avatar. Keep a backup in case you want to switch back later &mdash; we can\'t and won\'t help you restore your previous avatar. However, we can help make a backup &mdash; you can save the image to the left.' =>
-'',
+'Let op dat je huidige avatar weg zal gaan. Maak een backup als je later weer terug wilt gaan naar je oude avatar, we kunnen en zullen je niet helpen met het terugkrijgen van je oude avatar. Wel, kunnen we je helpen met het maken van een backup &mdash; Links kun je je avatar opslaan.',
 
 'Because you are not logged in, you cannot select any avatars. Feel free to browse, though.' =>
 'Omdat je niet aangemeld bent, kun je geen avatars selecteren. Maar blader gerust verder.',
@@ -857,13 +857,13 @@ $languagePack = array(
 'Aangegeven',
 
 'Counting user\'s posts&hellip;' =>
-'',
+'Tellen van gebruiker\'s berichten&hellip;',
 
 'Counting thread replies&hellip;' =>
-'',
+'Tellen van thread reacties&hellip;',
 
 'Counting forum threads and posts&hellip;' =>
-'',
+'Tellen van forum threads en berichten&hellip;',
 
 'All counters reset.' =>
 'Alle tellers opnieuw ingesteld.',
@@ -871,7 +871,7 @@ $languagePack = array(
 
 // pages/showprivate.php
 'You must be logged in to view your private messages.' =>
-'Je moet ingelogd zijn om je privéberichten te bekijken.',
+'Je moet ingelogd zijn om je priv&eacute;berichten te bekijken.',
 
 'No PM specified.' =>
 'Geen PB gespecificeerd.',
@@ -883,7 +883,7 @@ $languagePack = array(
 'Onbekend PB',
 
 'Send reply' =>
-'',
+'Stuur reactie',
 
 'This PM is still being drafted.' =>
 'Dit bericht is nog maar een kladversie.',
@@ -914,7 +914,7 @@ $languagePack = array(
 
 // pages/admin.php
 'Administration' =>
-'',
+'Administratie',
 
 'Information' =>
 'Informatie',
@@ -935,10 +935,10 @@ $languagePack = array(
 'Beheer lokale moderator toewijzingen',
 
 'Manage plugins' =>
-'',
+'Beheer plugins',
 
 'Edit smilies' =>
-'',
+'Bewerk smilies',
 
 'Optimize tables' =>
 'Optimaliseer tabellen',
@@ -978,13 +978,13 @@ $languagePack = array(
 'Verzend reset e-mail',
 
 'To prevent abuse, this function can only be used once an hour.' =>
-'Om misbruik te voorkomen, kan deze functie slechts één keer per uur worden gebruikt.',
+'Om misbruik te voorkomen, kan deze functie slechts &eacute;&eacute;n keer per uur worden gebruikt.',
 
 'Slow down!' =>
 'Niet zo snel!',
 
 'Password reset for {0}' =>
-'',
+'Wachtwoord opnieuw instellen voor {0}',
 
 'A password reset was requested for your user account on {0}.' =>
 'Een wachtwoord reset was aangevraagd voor je gebruikersaccount op {0}.',
@@ -996,7 +996,7 @@ $languagePack = array(
 'Om je wachtwoord te resetten, ga naar de volgende URL:',
 
 'This link can be used once.' =>
-'Deze link kan slechts één maal worden gebruikt.',
+'Deze link kan slechts &eacute;&eacute;n maal worden gebruikt.',
 
 'Check your email in a moment and follow the link found therein.' =>
 'Check je e-mail in een ogenblik en volg de link die daarin staat.',
@@ -1045,10 +1045,10 @@ $languagePack = array(
 '{0} verwijderd.',
 
 'private message' =>
-'privébericht',
+'priv&eacute;bericht',
 
 'Private message deleted.' =>
-'Privébericht verwijderd.',
+'Priv&eacute;bericht verwijderd.',
 
 'Show received' =>
 'Toom ontvangen',
@@ -1074,7 +1074,7 @@ $languagePack = array(
 
 // pages/editthread.php
 'Edit thread' =>
-'',
+'Bewerk thread',
 
 'You must be logged in to edit threads.' =>
 'Je moet aangemeld zijn om threads te kunnen bewerken.',
@@ -1130,19 +1130,19 @@ $languagePack = array(
 'Hierna aanmelden',
 
 'Specifying an email address is not exactly a hard requirement, but it will allow you to reset your password should you forget it. By default, your email is not shown.' =>
-'Een e-mail-adres opgeven is in principe niet verplicht, maar het zorgt er wel voor dat je je wachtwoord kunt resetten als je die bent vergeten. Standaard wordt je e-mail-adres net weergegeven.',
+'Een e-mail-adres opgeven is in principe niet verplicht, maar het zorgt er wel voor dat je je wachtwoord kunt resetten als je die bent vergeten. Standaard wordt je e-mail-adres niet weergegeven.',
 
 'This user name is already taken. Please choose another.' =>
 'Deze gebruikersnaam wordt al gebruikt. Kies een andere.',
 
 'The user name must not be empty. Please choose one.' =>
-'De gebruikersnaam mag niet leeg zijn. Kies er één.',
+'De gebruikersnaam mag niet leeg zijn. Kies er &eacute;&eacute;n.',
 
 'The user name cannot contain semicolons.' =>
 'De gebruikersnaam mag geen puntkomma bevatten.',
 
 'You really should {0}read the FAQ{1}&hellip;' =>
-'',
+'Je moet echt de {0}FAQ lezen{1}&hellip;',
 
 'That\'s not the right word. Are you sure you really {0}read the FAQ{1}?' =>
 'Dat is niet het juiste woord. Weet je zeker dat je {0}de FAQ{1} hebt gelezen?',
@@ -1154,7 +1154,7 @@ $languagePack = array(
 'De opgegeven wachtwoorden komen niet overeen.',
 
 'You got the CAPTCHA wrong.' =>
-'Je hebt de CAPTCHA verkeerd.',
+'Je hebt de CAPTCHA verkeerd ingevuld.',
 
 
 // pages/newreply.php
@@ -1253,7 +1253,7 @@ $languagePack = array(
 'Display-naam',
 
 'Leave this empty to use your login name.' =>
-'',
+'Laat dit leeg om je gebruikersnaam te gebruiken.',
 
 'Rankset' =>
 'Rangset',
@@ -1298,7 +1298,7 @@ $languagePack = array(
 'Blokkeer alle layouts',
 
 'Use nice notification banners' =>
-'Gebruik mooie kennisgevingsbalken',
+'Gebruik mooie notificatie balken',
 
 '(example: {0})' =>
 '(voorbeeld: {0})',
@@ -1355,7 +1355,7 @@ $languagePack = array(
 'Je bent tijdelijk verbannen tot {0} GMT. Als je niet weet waarom dit is gebeurd, vraag het dan gerust aan degene die het waarschijnlijk heft gedaan. Rustig, als het even kan.',
 
 'You have been temporarily banned.' =>
-'',
+'Je bent tijdelijk verbannen.',
 
 'User has been banned for {0}.' =>
 'Gebruiker is verbannen voor {0}.',
@@ -1367,7 +1367,7 @@ $languagePack = array(
 'Ga terug en corrigeer dat',
 
 'That avatar is definitely too big. The avatar field is meant for an avatar, not a wallpaper.' =>
-'',
+'Deze avatar is veelste groot. Het is bedoelt als avatar, niet als bureaubladachtergrond.',
 
 'Invalid extension used for {0}. Allowed: {1}' =>
 'Ongeldige extensie gebruikt voor',
@@ -1388,16 +1388,16 @@ $languagePack = array(
 'De display-naam die je hebt ingevoerd mag geen puntkommas bevatten.',
 
 'The display name you entered cannot contain control characters.' =>
-'',
+'De gekozen display-name mag geen control characters gebruiken.',
 
 'The login name you entered, "{0}", is already taken.' =>
-'',
+'De gebruikersnaam die je gekozen hebt, "{0}", is al in gebruik door iemand anders.',
 
 'The login name you entered cannot contain semicolons.' =>
-'',
+'De gebruikersnaam mag geen puntkomma bevatten.',
 
 'The login name you entered cannot contain control characters.' =>
-'',
+'De gekozen gebruikersnaam mag geen control characters gebruiken.',
 
 'If you don\'t know why this happened, feel free to ask the one most likely to have done this. Calmly, if possible.' =>
 'Als je niet weet waarom dit is gebeurd, vraag het dan gerust aan degene die het waarschijnlijk heft gedaan. Rustig, als het even kan.',
@@ -1409,7 +1409,7 @@ $languagePack = array(
 'Probeer dat wat je hebt gedaan waardoor je bent verbannen niet nog eens te doen.',
 
 'You have been unbanned.' =>
-'',
+'Je bent niet meer verbannen.',
 
 'Try not to take it personally.' =>
 'Probeer het niet persoonlijk op te vatten.',
@@ -1421,7 +1421,7 @@ $languagePack = array(
 'Je profiel is nu onaantastbaar voor iedereen behalve jij. Je kunt root status aan ieder ander geven, en je kunt de RUWE ONGEFILTERDE KRRRACHT van sql.php benutten. Misbruik dit niet.',
 
 'You are now a root user.' =>
-'',
+'Je bent nu root-gebruiker.',
 
 'You have been demoted.' =>
 'Je bent gedegradeerd.',
@@ -1491,7 +1491,7 @@ $languagePack = array(
 'Het spijt me, Dave.',
 
 'Edit Post' =>
-'',
+'Bewerk bericht.',
 
 
 // pages/online.php
@@ -1505,7 +1505,7 @@ $languagePack = array(
 'Nooit',
 
 'No users' =>
-'',
+'Geen gebruikers',
 
 'No guests' =>
 'Geen gasten',
@@ -1548,10 +1548,10 @@ $languagePack = array(
 '',
 
 'Time' =>
-'',
+'Tijd',
 
 'Event' =>
-'',
+'Evenement',
 
 
 // pages/editavatars.php
@@ -1571,7 +1571,7 @@ $languagePack = array(
 'Avatar geverwijdert',
 
 'Invalid file type, must be one of:' =>
-'Ongeldig bestandstype, moet één van de volgende zijn:',
+'Ongeldig bestandstype, moet &eacute;&eacute;n van de volgende zijn:',
 
 'Could not update your avatar for the following reason(s):' =>
 'Kon je avatar niet updaten vanwege de volgende reden(en):',
@@ -1614,22 +1614,22 @@ $languagePack = array(
 '',
 
 'Highest Numbers' =>
-'',
+'Hoogste getallen',
 
 'Highest number of posts in 24 hours' =>
-'Grootste hoeveelheid posts in 24 uur',
+'Meeste posts in 24 uur',
 
 '<strong>{0}</strong>, on {1} GMT' =>
 '<strong>{0}</strong>. op {1} GMT',
 
 'Highest number of posts in one hour' =>
-'Grootste hoeveelheid posts in één uur',
+'Meeste posts in &eacute;&eacute;n uur',
 
 '<strong>{2}</strong>, on {3} GMT' =>
 '<strong>{2}</strong>, op {3} GMT',
 
 'Highest number of users in five minutes' =>
-'Grootste hoeveelheid gebruikers in vijf minuten',
+'Meeste gebruikers in vijf minuten',
 
 '<strong>{4}</strong>, on {5} GMT' =>
 '<strong>{4}</strong>, op {5} GMT',
@@ -1711,7 +1711,7 @@ $languagePack = array(
 'Maak vast',
 
 'Are you sure you want to just up and delete this whole thread?' =>
-'',
+'Weet je zeker dat je deze hele thread wilt verwijderen?',
 
 'Trash' =>
 'Gooi weg',
@@ -1812,10 +1812,10 @@ $languagePack = array(
 'Grootte',
 
 'Private Files' =>
-'Privébestanden',
+'Priv&eacute;bestanden',
 
 'Your personal folder is empty.' =>
-'Je privémap is leeg.',
+'Je priv&eacute;map is leeg.',
 
 'Public Files' =>
 'Openbare bestanden',
@@ -1844,7 +1844,7 @@ $languagePack = array(
 
 // plugins/groups/topMenu.php
 'Groups' =>
-'',
+'Groepen',
 
 
 // plugins/gitpull/page_gitpull.php
@@ -2334,29 +2334,29 @@ $languagePack = array(
 
 // plugins/categoryuploader/page_uploaderlist.php
 'The category is empty.' =>
-'',
+'De categorie is leeg.',
 
 'You have no private files.' =>
-'',
+'Je hebt geen priv&eacute; bestanden.',
 
 'Files' =>
-'',
+'Bestanden',
 
 'Move checked to' =>
-'',
+'Verplaats geselecteerde naar',
 
 
 // plugins/categoryuploader/page_uploader.php
 'No categories found.' =>
-'',
+'Geen categori&euml;n gevonden.',
 
 'Categories' =>
-'',
+'Categorie&euml;n',
 
 
 // plugins/multilinguage/profileTable.php
 'Language' =>
-'',
+'Taal',
 
 
 // get.php
@@ -2420,7 +2420,7 @@ $languagePack = array(
 'Je hebt {0}{1}. {2}Laatste bericht{1} van {3} op {4}.',
 
 'new {0}private message' =>
-'nieuw {0}privébericht',
+'nieuw {0}priv&eacute;bericht',
 
 'You {0} have new comments in your {1}profile{2}.' =>
 'Je {0} hebt nieuw commentaar in je {1}profiel{2}.',
@@ -2477,7 +2477,7 @@ $languagePack = array(
 'onbenoemd citaat',
 
 '"Posted by &hellip;"' =>
-'',
+'"Geplaats door &hellip;"',
 
 '"Post by &hellip;" with link by post ID' =>
 '',
@@ -2497,7 +2497,7 @@ $languagePack = array(
 'op {0}',
 
 'user' =>
-'gebruikers',
+'gebruiker',
 
 'guest' =>
 'gast',
@@ -2520,7 +2520,7 @@ $languagePack = array(
 'commentaar te verwijderen',
 
 'edit the forum categories' =>
-'de forumcategorieën te bewerken',
+'de forumcategorie&euml;n te bewerken',
 
 'edit the forum list' =>
 'de forumlijst te bewerken',
@@ -2583,10 +2583,10 @@ $languagePack = array(
 'de zoekfunctie te gebruiken',
 
 'send private messages' =>
-'privéberichten te versturen',
+'priv&eacute;berichten te versturen',
 
 'view other users\' private messages' =>
-'andermans privéberichten te zien',
+'andermans priv&eacute;berichten te zien',
 
 'upload files' =>
 'bestanden te uploaden',
@@ -2613,7 +2613,7 @@ $languagePack = array(
 'te zien wie er online is',
 
 'view private messages' =>
-'privéberichten te lezen',
+'priv&eacute;berichten te lezen',
 
 'view user profiles' =>
 'profielen te bekijken',
@@ -2654,10 +2654,10 @@ $languagePack = array(
 'Geschreven op {0}',
 
 ', deleted' =>
-'',
+', verwijderd',
 
 ' by ' =>
-'',
+' door ',
 
 'Undelete' =>
 'Haal terug',
@@ -2675,7 +2675,7 @@ $languagePack = array(
 'Post verwijdert',
 
 'Sent on {0}' =>
-'',
+'Gestuurd op {0}',
 
 'in' =>
 'in',
@@ -2909,10 +2909,10 @@ $languagePack = array(
 'Uploader grootte limiet (openbaar)',
 
 'Uploader private cap' =>
-'Uploader grootte limiet (privé)',
+'Uploader grootte limiet (priv&eacute;)',
 
 'Uploader max file size' =>
-'Uploader maximale grootte bestand',
+'Uploader maximale bestandsgrootte',
 
 'You cannot go past the php.ini setting, which is {30}. Exceeding this value or entering zero will reset the limit to {30}.' =>
 'Je kunt niet hoger dan de php.ini instelling gaan, hetgeen {30} is. Deze waarde overschrijden of nul invoeren, zal de limiet op {30} zetten.',
@@ -3041,7 +3041,7 @@ $languagePack = array(
 'het forum',
 
 'Are you sure you want to log out?' =>
-'Weet je zeker dat je wil uitloggen?',
+'Weet je zeker dat je uit wilt loggen?',
 
 'revision {0}' =>
 'revisie {0}',

@@ -70,13 +70,12 @@ loadFieldLists();
 include("loguser.php");
 include("permissions.php");
 include("ranksets.php");
-include("bbcode_parser.php");
-include("bbcode_text.php");
-include("bbcode_callbacks.php");
-include("bbcode_main.php");
 include("post.php");
 include("log.php");
 include("onlineusers.php");
+
+include("htmlfilter.php");
+include("smilies.php");
 
 $theme = $loguser['theme'];
 include("write.php");

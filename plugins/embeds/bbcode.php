@@ -1,48 +1,53 @@
 <?php
 
-$bbcodeCallbacks["youtube"] = "bbcodeYoutube";
-$bbcodeCallbacks["swf"] = "bbcodeFlash";
-$bbcodeCallbacks["video"] = "bbcodeVideo";
-$bbcodeCallbacks["tindeck"] = "bbcodeTindeck";
-$bbcodeCallbacks["svg"] = "bbcodeSvg";
-$tagParseStatus["swf"] = 2;
-$tagParseStatus["youtube"] = 2;
-$tagParseStatus["video"] = 2;
-$tagParseStatus["tindeck"] = 2;
-$tagParseStatus["svg"] = 2;
-
-
+$bbcode['youtube'] = array(
+	'callback' => 'bbcodeYoutube',
+	'pre'      => TRUE,
+);
+$bbcode['swf'] = array(
+	'callback' => 'bbcodeFlash',
+	'pre'      => TRUE,
+);
+$bbcode['video'] = array(
+	'callback' => 'bbcodeVideo',
+	'pre'      => TRUE,
+);
+$bbcode['tindeck'] = array(
+	'callback' => 'bbcodeTindeck',
+	'void'     => 'bbcodeNullIfArg',
+	'pre'      => TRUE,
+);
 
 function getYoutubeIdFromUrl($url) {
-    $pattern =
-        '%^# Match any youtube URL
-        (?:https?://)?  # Optional scheme. Either http or https
-        (?:www\.)?      # Optional www subdomain
-        (?:             # Group host alternatives
-          youtu\.be/    # Either youtu.be,
-        | youtube\.com  # or youtube.com
-          (?:           # Group path alternatives
-            /embed/     # Either /embed/
-          | /v/         # or /v/
-          | /watch\?v=  # or /watch\?v=
-          )             # End path alternatives.
-        )               # End host alternatives.
-        ([\w-]{10,12})  # Allow 10-12 for 11 char youtube id.
-        \b%x'
-        ;
-    $result = preg_match($pattern, $url, $matches);
-    if (false !== $result) {
-        return $matches[1];
-    }
-    return false;
+	$pattern =
+		'%^# Match any youtube URL
+		(?:https?://)?  # Optional scheme. Either http or https
+		(?:www\.)?      # Optional www subdomain
+		(?:             # Group host alternatives
+		youtu\.be/    # Either youtu.be,
+		| youtube\.com  # or youtube.com
+		(?:           # Group path alternatives
+			/embed/     # Either /embed/
+		| /v/         # or /v/
+		| /watch\?v=  # or /watch\?v=
+		)             # End path alternatives.
+		)               # End host alternatives.
+		([\w-]{10,12})  # Allow 10-12 for 11 char youtube id.
+		\b%x'
+		;
+	$result = preg_match($pattern, $url, $matches);
+	if (false !== $result) {
+		return $matches[1];
+	}
+	return false;
 }
 
-function bbcodeYoutube($contents, $arg)
+function bbcodeYoutube($dom, $contents, $arg)
 {
 	$contents = trim($contents);
+
 	$id = getYoutubeIdFromUrl($contents);
-	if($id)
-		$contents = $id;
+	if($id) $contents = $id;
 
 	if(!preg_match("/^[\-0-9_a-zA-Z]+$/", $contents))
 		return "[Invalid youtube video ID]";
@@ -52,42 +57,49 @@ function bbcodeYoutube($contents, $arg)
 	if($arg == "loop")
 		$args .= "&amp;loop=1";
 
-	return '<iframe width="560" height="315" src="//www.youtube-nocookie.com/embed/' . $contents . '" frameborder="0" allowfullscreen></iframe>';
+	$frame = $dom->createElement('iframe');
+	$frame->setAttribute('width', 560);
+	$frame->setAttribute('height', 315);
+	$frame->setAttribute('src', "//www.youtube-nocookie.com/embed/$contents");
+	$frame->setAttribute('frameborder', 0);
+	$frame->setAttribute('allowfullscreen', "");
+	return $frame;
 }
 
-function bbcodeVideo($contents, $arg)
+function bbcodeVideo($dom, $contents)
 {
-	return "<video src=\"$contents\" width=\"425\" height=\"344\"  controls=\"controls\">Video not supported &mdash; <a href=\"$contents\">download</a></video>";
+	$video = $dom->createElement('video');
+	$video->setAttribute('src', $contents);
+	$video->setAttribute('width', 425);
+	$video->setAttribute('height', 344);
+	$video->setAttribute('controls', "");
+	$video->appendChild($dom->createTextNode('Video not supported — '));
+	$a = $dom->createElement('a');
+	$a->setAttribute('href', $contents);
+	$a->appendChild($dom->createTextNode('download'));
+	$video->appendChild($a);
+	return $video;
 }
 
-function bbcodeTindeck($contents, $arg)
+function bbcodeTindeck($dom, $contents, $arg)
 {
-	return "<a href=\"http://tindeck.com/listen/$contents\"><img src=\"http://tindeck.com/image/$contents/stats.png\" alt=\"Tindeck\" /></a>";
+	if ($arg !== NULL) $contents = $arg;
+
+	$a = $dom->createElement('a');
+	$a->setAttribute('href', "http://tindeck.com/listen/$contents");
+
+	$img = $dom->createElement('img');
+	$img->setAttribute('src', "http://tindeck.com/image/$contents/stats.png");
+	$img->setAttribute('alt', 'Tindeck');
+
+	$a->appendChild($img);
+
+	return $a;
 }
 
-function bbcodeSvg($contents, $arg)
+function bbcodeFlash($dom, $contents, $arg)
 {
-	$svgin="'<?xml version=\"1.0\"?>"
-		  ."<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" "
-	  ."\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
-	  ."<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"\\1\" height=\"\\2\" onload=\"InitSMIL(evt)\">'";
-	$svgout="'</svg>'";
-
-	$svglist1 = array("\\\"","\\\\","\\'");
-	$svglist2 = array("\"","\\","\'");
-
-	//I don't even understand what this code is even doing.
-	//I wouldn't be surprised if it doesnt work ~Dirbaio
-
-	return '\''."<embed src=\"data:image/svg+xml;base64,"
-  .'\''.".base64_encode($svgin.".'str_replace($svglist1,$svglist2,\'\\3\')'.".$svgout).".'"'
-  ."\\\" type=\\\"image/svg+xml\\\" width=".'\''.$width.'\' height=\''.$height.'\''." />\"";
-
-}
-
-function bbcodeFlash($contents, $arg)
-{
-	global $flashloops;
+	static $flashloops;
 	$flashloops++;
 
 	$width = 400;
@@ -100,15 +112,44 @@ function bbcodeFlash($contents, $arg)
 		$height = $args[1];
 	}
 
-	return "
-	<div class=\"swf\" style=\"width: ".($width + 4)."px;\">
-		<div class=\"swfmain\" id=\"swf{$flashloops}main\" style=\"width: {$width}px; height: {$height}px;\">
-		</div>
-		<div class=\"swfcontrol\">
-			<button type=\"button\" style=\"height:25px\" class=\"startFlash\" id=\"swfa$flashloops\">&#x25BA;</button>
-			<button type=\"button\" style=\"height:25px\" class=\"stopFlash\" id=\"swfb$flashloops\">&#x25A0;</button>
-			<span style=\"display:none;\" id=\"swf{$flashloops}url\">".htmlspecialchars($contents)."</span>
-		</div>
-	</div>";
+	// DOM is very verbose. But at least it's secure.
+	$swf = $dom->createElement('div');
+	$swf->setAttribute('class', 'swf');
+	$swf->setAttribute('style', 'width:' . ($width + 4) . 'px');
+
+	$swfmain = $dom->createElement('div');
+	$swfmain->setAttribute('class', 'swfmain');
+	$swfmain->setAttribute('id', "swf${flashloops}main");
+	$swfmain->setAttribute('style', "width: ${width}px; height: ${height}px");
+	$swf->appendChild($swfmain);
+
+	$swfcontrol = $dom->createElement('div');
+	$swfcontrol->setAttribute('class', 'swfcontrol');
+
+	$play = $dom->createElement('button');
+	$play->setAttribute('type', 'button');
+	$play->setAttribute('style', 'height: 25px');
+	$play->setAttribute('class', 'startFlash');
+	$play->setAttribute('id', "swfa$flashloops");
+	$play->appendChild($dom->createTextNode('►'));
+	$swfcontrol->appendChild($play);
+
+	$stop = $dom->createElement('button');
+	$stop->setAttribute('type', 'button');
+	$stop->setAttribute('style', 'height: 25px');
+	$stop->setAttribute('class', 'stopFlash');
+	$stop->setAttribute('id', "swfb$flashloops");
+	$stop->appendChild($dom->createTextNode('■'));
+	$swfcontrol->appendChild($stop);
+
+	$span = $dom->createElement('span');
+	$span->setAttribute('style', 'display; none');
+	$span->setAttribute('id', "swf${flashloops}url");
+	$span->appendChild($dom->createTextNode($contents));
+	$swfcontrol->appendChild($span);
+
+	$swf->appendChild($swfcontrol);
+
+	return $swf;
 }
 ?>

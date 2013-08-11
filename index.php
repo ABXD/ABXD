@@ -7,6 +7,7 @@ if(isset($_GET["ajax"]))
 	$ajaxPage = true;
 
 // Load the board paths from its file. Otherwise, load defaults.
+// Note: This one should stay to avoid problems later.
 if (file_exists(dirname(__FILE__) . '/config/paths.php'))
 	require(dirname(__FILE__) . '/config/paths.php');
 else

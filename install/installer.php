@@ -17,8 +17,7 @@ function cdate($format, $date = 0)
 	return gmdate($format, strtotime($timeOffset, $date));
 }
 
-	echo $libPath . '<br>' . $installationPath;
-
+include ("config/paths.php"); // This one should stay like this or install will fail!
 include($libPath . "/mysqlfunctions.php");
 include($libPath . "/version.php");
 include($libPath . "/debug.php");
@@ -84,9 +83,6 @@ function install()
 
 	if(!file_exists($installationPath . "/config/database.php"))
 		writeConfigDatabase();
-
-	if(!file_exists($installationPath . "/config/paths.php"))
-		writeBoardPaths();
 }
 
 
@@ -189,22 +185,4 @@ function writeConfigSalt()
 
 	fwrite($sltf, "<?php \$salt = \"".$salt."\" ?>");
 	fclose($sltf);
-}
-
-function writeBoardPaths()
-{
-	global $installationPath, $libPath;
-
-	$paths = @fopen($installationPath . "/config/paths.php", "w+")
-		or installationError(
-			"Could not open \"config/paths.php\" for writing. <br>
-			This has been checked for earlier, so if you see this error now,
-			something very strange is going on.");
-
-	fwrite($paths, "<?php\n");
-	fwrite($paths, "//  AcmlmBoard XD support - Path settings\n\n");
-	fwrite($paths, '$installationPath = \'' . $installationPath . "';\n");
-	fwrite($paths, '$libPath = \'' . $libPath . "';\n");
-	fwrite($paths, "\n?>");
-	fclose($paths);
 }

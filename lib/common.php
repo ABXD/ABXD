@@ -4,6 +4,9 @@
 // I can't believe there are PRODUCTION servers that have E_NOTICE turned on. What are they THINKING? -- Kawa
 error_reporting(E_ALL ^ E_NOTICE | E_STRICT);
 
+// This one should stay like this or the board will redirect to the installer all the time.
+include ("config/paths.php");
+
 if(!is_file($installationPath . "/config/database.php"))
 	die(header("Location: install.php"));
 

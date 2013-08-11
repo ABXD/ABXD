@@ -4,6 +4,10 @@
 	$installationPath = dirname(__FILE__);
 	$libPath = dirname(__FILE__) . "/lib";
 
+	// Create the paths file here to avoid include errors while installing.
+	if(!file_exists($installationPath . "/config/paths.php"))
+		writeBoardPaths();
+
 	include ($installationPath . "/install/installer.php");
 
 	$sqlConfigured = file_exists($installationPath . "/config/database.php");
@@ -17,6 +21,22 @@
 		else if(getInstalledVersion() != -1)
 			$upgrade = true;
 	}
+
+	function writeBoardPaths()
+	{
+		global $installationPath, $libPath;
+
+		$paths = @fopen($installationPath . "/config/paths.php", "w+")
+			or die(
+				"Could not open \"config/paths.php\" for writing.");
+
+		fwrite($paths, "<?php\n");
+		fwrite($paths, "//  AcmlmBoard XD support - Path settings\n\n");
+		fwrite($paths, '$installationPath = \'' . $installationPath . "';\n");
+		fwrite($paths, '$libPath = \'' . $libPath . "';\n");
+		fwrite($paths, "\n?>");
+		fclose($paths);
+}
 
 ?>
 

@@ -5,7 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="<?php print resourceLink("css/common.css");?>" />
 	<link rel="stylesheet" type="text/css" href="<?php print resourceLink("js/spectrum.css");?>" />
 	<link rel="stylesheet" href="<?php print resourceLink("css/font-awesome.min.css");?>">
-	
+
 	<script type="text/javascript" src="<?php print resourceLink("js/jquery.js");?>"></script>
 	<script type="text/javascript" src="<?php print resourceLink("js/tricks.js");?>"></script>
 	<script type="text/javascript" src="<?php print resourceLink("js/jquery.tablednd_0_5.js");?>"></script>
@@ -24,6 +24,6 @@
 	<link rel="stylesheet" type="text/css" id="theme_css" href="<?php print resourceLink($layout_themefile); ?>" />
 
 	<?php
-		$bucket = "pageHeader"; include("./lib/pluginloader.php");
+		$bucket = "pageHeader"; include($libPath . "/pluginloader.php");
 	?>
 

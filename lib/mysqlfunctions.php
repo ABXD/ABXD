@@ -15,13 +15,13 @@ function Import($sqlFile)
 	global $dblink, $dbpref;
 	$res = $dblink->multi_query(str_replace('{$dbpref}', $dbpref, file_get_contents($sqlFile)));
 
-	$i = 0; 
+	$i = 0;
 	if ($res) {
 		do {
-			$i++; 
-		} while ($dblink->more_results() && $dblink->next_result()); 
+			$i++;
+		} while ($dblink->more_results() && $dblink->next_result());
 	}
-	if ($dblink->errno) { 
+	if ($dblink->errno) {
 		echo "MySQL Error when importing file $sqlFile at statement $i: \n";
 		echo $dblink->error, "\n";
 		die();
@@ -30,10 +30,10 @@ function Import($sqlFile)
 
 function Upgrade()
 {
-	global $dbname, $dbpref;
+	global $dbname, $dbpref, $installationPath;
 
 	//Load the board tables.
-	include("installSchema.php");
+	include($installationPath . "/installSchema.php");
 
 	//Allow plugins to add their own tables!
 	if (NumRows(Query("show table status from $dbname like '{enabledplugins}'")))
@@ -42,7 +42,7 @@ function Upgrade()
 		while($plugin = Fetch($rPlugins))
 		{
 			$plugin = $plugin["plugin"];
-			$path = "plugins/$plugin/installSchema.php";
+			$path = $installationPath . "/plugins/$plugin/installSchema.php";
 			if(file_exists($path))
 				include($path);
 		}
@@ -128,7 +128,7 @@ function Upgrade()
 			while ($idx = Fetch($idxs))
 			{
 				$name = $idx['Key_name'];
-				
+
 				if ($name == 'PRIMARY')
 					$curindexes[$name]['type'] = 'primary';
 				else if ($idx['Non_unique'] == 0)
@@ -137,7 +137,7 @@ function Upgrade()
 					$curindexes[$name]['type'] = 'fulltext';
 				else
 					$curindexes[$name]['type'] = '';
-					
+
 				$curindexes[$name]['fields'] = ($curindexes[$name]['fields'] ? $curindexes[$name]['fields'].',' : '').'`'.$idx['Column_name'].'`';
 			}
 			if (!compareIndexes($curindexes, $newindexes))
@@ -151,7 +151,7 @@ function Upgrade()
 						unset($newindexes[$name]);
 						continue;
 					}
-					
+
 					print " - removing index {$name} ({$idx['type']}, {$idx['fields']})<br>";
 					if ($idx['type'] == 'primary')
 						Query("ALTER TABLE `{".$table."}` DROP PRIMARY KEY");
@@ -169,7 +169,7 @@ function Upgrade()
 						$add = 'FULLTEXT `'.$name.'`';
 					else
 						$add = 'INDEX `'.$name.'`';
-						
+
 					Query("ALTER TABLE `{".$table."}` ADD ".$add." (".$idx['fields'].")");
 				}
 			}
@@ -183,18 +183,18 @@ function Upgrade()
 function compareIndexes($a, $b)
 {
 	if (count($a) != count($b)) return false;
-	
+
 	foreach ($b as $k=>$v)
 	{
 		if (!array_key_exists($k, $a)) return false;
 	}
-	
+
 	foreach ($a as $k=>$v)
 	{
 		if (!array_key_exists($k, $b)) return false;
 		if ($v['type'] != $b[$k]['type'] ) return false;
 		if ($v['fields'] != $b[$k]['fields']) return false;
 	}
-	
+
 	return true;
 }

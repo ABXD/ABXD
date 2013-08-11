@@ -1,17 +1,23 @@
 <?php
-	include ("install/installer.php");
-	
-	$sqlConfigured = file_exists("config/database.php");
+
+	// Make the board paths for installer and board use.
+	$installationPath = dirname(__FILE__);
+	$libPath = dirname(__FILE__) . "/lib";
+
+	include ($installationPath . "/install/installer.php");
+
+	$sqlConfigured = file_exists($installationPath . "/config/database.php");
 	$upgrade = false;
-	
+
 	if($sqlConfigured)
 	{
-		include("config/database.php");
+		include($installationPath . "/config/database.php");
 		if(!sqlConnect())
 			$sqlConfigured = false;
 		else if(getInstalledVersion() != -1)
-			$upgrade = true;	
+			$upgrade = true;
 	}
+
 ?>
 
 <!DOCTYPE html>

@@ -9,13 +9,13 @@ $logText = array
 	'loginfail2' => '{user} attempted to log in as user "{text}"',
 	'lostpass' => '{user} requested a password reset for {user2}',
 	'lostpass2' => '{user} successfully reset his password.',
-	
+
 	// post related actions
 	'newreply' => 'New reply by {user} in {thread} ({forum}): {post}',
 	'editpost' => '{user} edited {user2 s} post in {thread} ({forum}): {post}',
 	'deletepost' => '{user} deleted {user2 s} post in {thread} ({forum}): {post}',
 	'undeletepost' => '{user} undeleted {user2 s} post in {thread} ({forum}): {post}',
-	
+
 	// thread related actions
 	'newthread' => 'New thread by {user}: {thread}',
 	'editthread' => '{user} edited {user2 s} thread {thread} ({forum})',
@@ -26,8 +26,8 @@ $logText = array
 	'openthread' => '{user} opened {user2 s} thread {thread} ({forum})',
 	'trashthread' => '{user} trashed {user2 s} thread {thread} from forum {forum}',
 	'deletethread' => '{user} deleted {user2 s} thread {thread} from forum {forum}',
-	
-	
+
+
 	// admin actions
 	'edituser' => '{user} edited {user2 s} profile',
 	'usercomment' => '{user} commented on {user2 s} profile',
@@ -43,35 +43,36 @@ $logText = array
 // take out the {user} part and put it in a separate column on log.php?
 
 // TODO move the fields/callbacks from pages/log.php here and make everything use the same plugin bucket?
-$bucket = 'log_texts'; include('lib/pluginloader.php');
+$bucket = 'log_texts'; include($libPath . '/pluginloader.php');
 
 function logAction($type, $params)
 {
-	global $loguserid;
-	
+	global $loguserid, $libPath;
+
 	if(!isset($params["user"]))
 		$params["user"] = $loguserid;
-	
+
 	$fields = array();
 	$values = array();
-	
+
 	foreach ($params as $field => $val)
 	{
 		$fields[] = $field;
 		$values[] = $val;
 	}
-	
+
 	Query("INSERT INTO {log} (date,type,ip,".implode(',',$fields).")
 		VALUES ({0},{1},{2},{3c})",
 		time(), $type, $_SERVER['REMOTE_ADDR'], $values);
-	
-	$bucket = 'logaction'; include('lib/pluginloader.php');
+
+	$bucket = 'logaction'; include($libPath . '/pluginloader.php');
 }
 
 
 
 function doLogList($cond)
 {
+	global $libPath;
 
 	$log_fields = array
 	(
@@ -84,7 +85,7 @@ function doLogList($cond)
 		'pm' => array('table' => 'pmsgs', 'key' => 'id', 'fields' => 'id'),
 	);
 
-	$bucket = 'log_fields'; include('lib/pluginloader.php');
+	$bucket = 'log_fields'; include($libPath . '/pluginloader.php');
 
 
 	$joinfields = '';
@@ -95,10 +96,10 @@ function doLogList($cond)
 		$joinstatements .= "LEFT JOIN {{$data['table']}} AS {$field} ON l.{$field}!='0' AND {$field}.{$data['key']}=l.{$field} \n";
 	}
 
-	$logR = Query("	SELECT 
+	$logR = Query("	SELECT
 						l.*
 						{$joinfields}
-					FROM 
+					FROM
 						{log} l
 						{$joinstatements}
 					WHERE $cond
@@ -158,7 +159,7 @@ function formatEvent($item)
 function addLogInput($m)
 {
 	global $theItem;
-	
+
 	$func = 'logFormat_'.$m[1];
 	$option = $m[3];
 	return $func($theItem, $option);
@@ -192,12 +193,12 @@ function formatUser($userdata, $data, $option)
 			return $possessive ? "his" : "him";
 	}
 	else $lastuser = $id;
-		
+
 	if($id == 0)
 		$res = "A guest from ".htmlspecialchars($data["ip"]);
 	else
 		$res = userLink($userdata);
-		
+
 	if($possessive)
 		$res .= "'s";
 	return $res;

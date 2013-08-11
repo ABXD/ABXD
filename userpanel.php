@@ -12,7 +12,7 @@ if($loguserid)
 	if(isAllowed("editMoods"))
 		$userMenu->add(new PipeMenuLinkEntry(__("Mood avatars"), "editavatars", "", "", "picture"));
 
-	$bucket = "bottomMenu"; include("./lib/pluginloader.php");
+	$bucket = "bottomMenu"; include($libPath . "/pluginloader.php");
 
 	if(!isset($_POST['id']) && isset($_GET['id']))
 		$_POST['id'] = (int)$_GET['id'];

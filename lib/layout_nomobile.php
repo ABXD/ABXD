@@ -3,8 +3,8 @@
 // parent=0: index listing
 function makeForumListing($parent, $page=0)
 {
-	global $loguserid, $loguser;
-	
+	global $loguserid, $loguser, $libPath;
+
 	$pl = $loguser['powerlevel'];
 	if ($pl < 0) $pl = 0;
 
@@ -21,11 +21,11 @@ function makeForumListing($parent, $page=0)
 							".($loguserid ? "LEFT JOIN {ignoredforums} i ON i.fid=f.id AND i.uid={0}" : "")."
 							LEFT JOIN {users} lu ON lu.id=f.lastpostuser
 						WHERE ".forumAccessControlSQL().' AND '.($parent==0 ? 'f.catid>0 ' : 'f.catid={1}').(($pl < 1) ? " AND f.hidden=0" : '')."
-						ORDER BY c.corder, c.id, f.forder, f.id", 
+						ORDER BY c.corder, c.id, f.forder, f.id",
 						$loguserid, -$parent, $page);
 	if (!NumRows($rFora))
 		return;
-					
+
 	$rSubfora = Query("	SELECT f.*,
 							".($loguserid ? "(NOT ISNULL(i.fid))" : "0")." ignored,
 							(SELECT COUNT(*) FROM {threads} t".($loguserid ? " LEFT JOIN {threadsread} tr ON tr.thread=t.id AND tr.id={0}" : "")."
@@ -33,7 +33,7 @@ function makeForumListing($parent, $page=0)
 						FROM {forums} f
 							".($loguserid ? "LEFT JOIN {ignoredforums} i ON i.fid=f.id AND i.uid={0}" : "")."
 						WHERE ".forumAccessControlSQL().' AND '.($parent==0 ? 'f.catid<0' : 'f.catid!={1}').(($pl < 1) ? " AND f.hidden=0" : '')."
-						ORDER BY f.forder, f.id", 
+						ORDER BY f.forder, f.id",
 						$loguserid, -$parent);
 	$subfora = array();
 	while ($sf = Fetch($rSubfora))
@@ -48,7 +48,7 @@ function makeForumListing($parent, $page=0)
 	while($forum = Fetch($rFora))
 	{
 		$skipThisOne = false;
-		$bucket = "forumListMangler"; include("./lib/pluginloader.php");
+		$bucket = "forumListMangler"; include($libPath . "/pluginloader.php");
 		if($skipThisOne)
 			continue;
 
@@ -68,7 +68,7 @@ function makeForumListing($parent, $page=0)
 			</tr>
 		</tbody>
 		<tbody id=\"cat_{1}\"{2}>
-", ($parent==0)?$forum['cname']:'Subforums', $forum['catid'], 
+", ($parent==0)?$forum['cname']:'Subforums', $forum['catid'],
 	$_COOKIE['catstate'][$forum['catid']] ? ' style="display:none;"':'',
 	$_COOKIE['catstate'][$forum['catid']] ? '':' style="display:none;"');
 
@@ -93,22 +93,22 @@ function makeForumListing($parent, $page=0)
 
 		if($localMods)
 			$localMods = "<br /><small>".__("Moderated by:")." ".substr($localMods,0,-2)."</small>";
-		
+
 		if (isset($subfora[$forum['id']]))
 		{
 			foreach ($subfora[$forum['id']] as $subforum)
 			{
 				$link = actionLinkTag($subforum['title'], 'forum', $subforum['id']);
-			
+
 				if ($subforum['ignored'])
 					$link = '<span class="ignored">'.$link.'</span>';
 				else if ($subforum['numnew'] > 0)
 					$link = '<img src="'.resourceLink('img/status/new.png').'" alt="New"/> '.$link;
-				
+
 				$subforaList .= $link.', ';
 			}
 		}
-		
+
 		if($subforaList)
 			$subforaList = "<br /><small>".__("Subforums:")." ".substr($subforaList,0,-2)."</small>";
 
@@ -123,7 +123,7 @@ function makeForumListing($parent, $page=0)
 		}
 		else
 			$lastLink = "----";
-	
+
 		$postcountmsg = '';
 		if ($forum['ignoreposts'])
 			$postcountmsg = '<br><small>(posts in this forum aren\'t counted in users\' postcounts)</small>';

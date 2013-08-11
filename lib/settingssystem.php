@@ -60,16 +60,16 @@ class Settings
 
 	public static function getSettingsFile($pluginname)
 	{
-		global $plugins;
+		global $plugins, $libPath, $installationPath;
 
 		$settings = array();
 
 		//Get the setting list.
 		if($pluginname == "main")
-			include("settingsfile.php");
+			include($libPath . "/settingsfile.php");
 		else
 		{
-			@include("./plugins/".$plugins[$pluginname]['dir']."/settingsfile.php");
+			@include($installationPath . "/plugins/".$plugins[$pluginname]['dir']."/settingsfile.php");
 		}
 		return $settings;
 	}

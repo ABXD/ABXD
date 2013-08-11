@@ -51,7 +51,9 @@ function loadBlockLayouts()
 
 function getSyndrome($activity)
 {
-	include("syndromes.php");
+	global $libPath;
+
+	include($libPath . "/syndromes.php");
 	$soFar = "";
 	foreach($syndromes as $minAct => $syndrome)
 		if($activity >= $minAct)
@@ -100,7 +102,7 @@ $layouCache = array();
 
 function makePostText($post)
 {
-	global $loguser, $loguserid, $theme, $hacks, $isBot, $postText, $sideBarStuff, $sideBarData, $salt, $layoutCache, $blocklayouts, $mobileLayout;
+	global $loguser, $loguserid, $theme, $hacks, $isBot, $postText, $sideBarStuff, $sideBarData, $salt, $layoutCache, $blocklayouts, $mobileLayout, $libPath;
 
 	LoadBlockLayouts();
 	$poster = getDataPrefix($post, "u_");
@@ -119,7 +121,7 @@ function makePostText($post)
 		"date" => formatdate($post['date']),
 		"rank" => GetRank($poster["rankset"], $poster["posts"]),
 	);
-	$bucket = "amperTags"; include("./lib/pluginloader.php");
+	$bucket = "amperTags"; include($libPath . "/pluginloader.php");
 
 	$postText = $post['text'];
 	$postText = ApplyTags($postText, $tags);
@@ -176,7 +178,7 @@ if(!$mobileLayout)
 //		* metatext: if non-empty, this text is displayed in the metabar instead of 'Sample post' (POST_SAMPLE only)
 function makePost($post, $type, $params=array())
 {
-	global $loguser, $loguserid, $theme, $hacks, $isBot, $blocklayouts, $postText, $sideBarStuff, $sideBarData, $salt, $dataDir, $dataUrl;
+	global $loguser, $loguserid, $theme, $hacks, $isBot, $blocklayouts, $postText, $sideBarStuff, $sideBarData, $salt, $dataDir, $dataUrl, $libPath;
 
 	$sideBarStuff = "";
 	$poster = getDataPrefix($post, "u_");
@@ -277,7 +279,7 @@ function makePost($post, $type, $params=array())
 				if ($loguser['powerlevel'] > 0)
 					$links->add(new PipeMenuTextEntry($post['ip']));
 
-				$bucket = "topbar"; include("./lib/pluginloader.php");
+				$bucket = "topbar"; include($libPath . "/pluginloader.php");
 			}
 		}
 
@@ -355,7 +357,7 @@ function makePost($post, $type, $params=array())
 
 	$sideBarStuff .= "<br />\n".__("Since:")." ".cdate($loguser['dateformat'], $poster['regdate'])."<br />";
 
-	$bucket = "sidebar"; include("./lib/pluginloader.php");
+	$bucket = "sidebar"; include($libPath . "/pluginloader.php");
 
 	if(Settings::get("showExtraSidebar"))
 	{

@@ -1,6 +1,6 @@
 <?php
 
-include_once('plugins/custombb/defines.php');
+include_once($installationPath . '/plugins/custombb/defines.php');
 
 if(file_exists(BB_FILE)){
 	$bbcodes=unserialize(file_get_contents(BB_FILE));

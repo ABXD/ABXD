@@ -6,8 +6,8 @@ if($loguserid == 0)
 if(isset($_POST['action']) && $_POST['action'] == "Install")
 {
 	//Changed this to not to use the uploader since it's now a plugin. ~Dirbaio
-	if(!is_dir("layoutmaker"))
-		mkdir("layoutmaker/");
+	if(!is_dir($installationPath . "/layoutmaker"))
+		mkdir($installationPath . "/layoutmaker/");
 
 	$path = "layoutmaker/".$loguserid.".css";
 	file_put_contents($path, $_POST['css']);

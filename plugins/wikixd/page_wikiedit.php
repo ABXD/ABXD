@@ -52,11 +52,11 @@ makeLinks($links);
 if (isset($_POST['saveaction']))
 {
 	if ($_POST['token'] !== $token) die('No.');
-	
+
 	if ($page['new'] == 2 && !$ptitle) Kill('Enter a title and try again.');
-	
+
 	$rev = $page['revision'];
-	
+
 	$flags = $page['flags'];
 	setflag($flags, WIKI_PFLAG_NOCONTBOX, $_POST['nocontbox']);
 	if ($canmod)
@@ -64,19 +64,19 @@ if (isset($_POST['saveaction']))
 		setflag($flags, WIKI_PFLAG_SPECIAL, $_POST['special']);
 		setflag($flags, WIKI_PFLAG_DELETED, $_POST['deleted']);
 	}
-	
+
 	if ($_POST['text'] !== $page['text'])
 	{
 		$rev++;
 		Query("INSERT INTO {wiki_pages_text} (id,revision,date,user,text) VALUES ({0},{1},UNIX_TIMESTAMP(),{2},{3})",
 			$page['id'], $rev, $loguserid, $_POST['text']);
 	}
-	
-	Query("INSERT INTO {wiki_pages} (id,revision,flags) VALUES ({0},{1},{2}) ON DUPLICATE KEY UPDATE revision={1}, flags={2}", 
+
+	Query("INSERT INTO {wiki_pages} (id,revision,flags) VALUES ({0},{1},{2}) ON DUPLICATE KEY UPDATE revision={1}, flags={2}",
 		$page['id'], $rev, $flags);
-		
-	$bucket = 'wikixd_pageedit'; include("lib/pluginloader.php");
-		
+
+	$bucket = 'wikixd_pageedit'; include($libPath . "/pluginloader.php");
+
 	die(header('Location: '.actionLink('wiki', $page['id'])));
 }
 
@@ -105,14 +105,14 @@ echo '
 if (isset($_POST['previewaction']))
 {
 	$page['text'] = $_POST['text'];
-	
+
 	setflag($page['flags'], WIKI_PFLAG_NOCONTBOX, $_POST['nocontbox']);
 	if ($canmod)
 	{
 		setflag($page['flags'], WIKI_PFLAG_SPECIAL, $_POST['special']);
 		setflag($page['flags'], WIKI_PFLAG_DELETED, $_POST['deleted']);
 	}
-	
+
 	echo '
 			<h1>Preview: '.$nicetitle.'</h1>'.wikiFilter($page['text'], $page['flags'] & WIKI_PFLAG_NOCONTBOX).'
 		</td>
@@ -164,8 +164,8 @@ echo '
 				</td>
 			</tr>
 		</table>';
-		
-		
+
+
 function setflag(&$flags, $f, $b)
 {
 	if ($b) $flags |= $f;

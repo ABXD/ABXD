@@ -171,5 +171,5 @@ print "
 					</tr>
 				</table>";
 
-$bucket = "profileRight"; include("./lib/pluginloader.php");
+$bucket = "profileRight"; include($libPath . "/pluginloader.php");
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'plugins/wikixd/Diff/Renderer.php';
+require_once $installationPath . '/plugins/wikixd/Diff/Renderer.php';
 
 /**
  * "Inline" diff renderer.

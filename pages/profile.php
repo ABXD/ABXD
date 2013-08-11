@@ -232,7 +232,7 @@ if(NumRows($badgersR))
 	$profileParts['General information']['Badges'] = $badgers;
 }
 
-$bucket = "profileTable"; include("./lib/pluginloader.php");
+$bucket = "profileTable"; include($libPath . "/pluginloader.php");
 
 if(!$mobileLayout)
 	echo "
@@ -273,7 +273,7 @@ write("
 				</table>
 ");
 
-$bucket = "profileLeft"; include("./lib/pluginloader.php");
+$bucket = "profileLeft"; include($libPath . "/pluginloader.php");
 
 if(!$mobileLayout)
 {

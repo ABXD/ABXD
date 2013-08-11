@@ -120,7 +120,7 @@ if($twoColumns)
 	echo CleanUpPost(Settings::pluginGet("righttext"));
 
 	echo '</td></tr></table>';
-	$bucket = "blogxd_rightcolumn"; include("lib/pluginloader.php");
+	$bucket = "blogxd_rightcolumn"; include($libPath . "/pluginloader.php");
 	echo '</td></tr></table>';
 }
 

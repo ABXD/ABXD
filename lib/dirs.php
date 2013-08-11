@@ -1,5 +1,5 @@
 <?php
 
-$dataDir = "data/";
+$dataDir = $installationPath."/data/";
 $dataUrl = $boardroot."data/";
 

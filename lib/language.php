@@ -11,20 +11,20 @@
 
 $language = Settings::get("defaultLanguage");
 
-include_once("./lib/lang/".$language.".php");
+include_once($libPath . "/lang/".$language.".php");
 if($language != "en_US")
-	include_once("./lib/lang/".$language."_lang.php");
+	include_once($libPath . "/lang/".$language."_lang.php");
 
 function __($english, $flags = 0)
 {
-	global $languagePack, $language;
+	global $languagePack, $language, $libPath;
 	if($language != "en_US")
 	{
 		if(!isset($languagePack))
 		{
-			if(is_file("./lib/lang/".$language.".txt"))
+			if(is_file($libPath . "/lang/".$language.".txt"))
 			{
-				importLanguagePack("./lib/lang/".$language.".txt");
+				importLanguagePack($libPath . "/lang/".$language.".txt");
 				importPluginLanguagePacks($language.".txt");
 			}
 			else
@@ -70,14 +70,16 @@ function importLanguagePack($file)
 
 function importPluginLanguagePacks($file)
 {
-	$pluginsDir = @opendir("plugins");
+	global $installationPath;
+
+	$pluginsDir = @opendir($installationPath . "/plugins");
 	if($pluginsDir !== FALSE)
 	while(($plugin = readdir($pluginsDir)) !== FALSE)
 	{
 		if($plugin == "." || $plugin == "..") continue;
-		if(is_dir("./plugins/".$plugin))
+		if(is_dir($installationPath . "/plugins/".$plugin))
 		{
-			$foo = "./plugins/".$plugin."/".$file;
+			$foo = $installationPath . "/plugins/".$plugin."/".$file;
 			if(file_exists($foo))
 				importLanguagePack($foo);
 		}

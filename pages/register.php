@@ -17,7 +17,7 @@ function validateSex($sex)
 	if($sex == 0) return 0;
 	if($sex == 1) return 1;
 	if($sex == 2) return 2;
-	
+
 	return 2;
 }
 
@@ -42,7 +42,7 @@ if(isset($_POST['name']))
 	//This makes testing faster.
 	if($_SERVER['REMOTE_ADDR'] == "127.0.0.1")
 		$ipKnown = 0;
-		
+
 	if($uname == $cname)
 		$err = __("This user name is already taken. Please choose another.");
 	else if($name == "" || $cname == "")
@@ -74,9 +74,9 @@ if(isset($_POST['name']))
 
 		$sex = validateSex($_POST["sex"]);
 		$rUsers = Query("insert into {users} (name, password, pss, regdate, lastactivity, lastip, email, sex, theme) values ({0}, {1}, {2}, {3}, {3}, {4}, {5}, {6}, {7})", $_POST['name'], $sha, $newsalt, time(), $_SERVER['REMOTE_ADDR'], $_POST['email'], $sex, Settings::get("defaultTheme"));
-		
+
 		$uid = insertId();
-		
+
 		if($uid == 1)
 			Query("update {users} set powerlevel = 4 where id = 1");
 
@@ -85,7 +85,7 @@ if(isset($_POST['name']))
 		$user = Fetch(Query("select * from {users} where id={0}", $uid));
 		$user["rawpass"] = $_POST["pass"];
 
-		$bucket = "newuser"; include("lib/pluginloader.php");
+		$bucket = "newuser"; include($libPath . "/pluginloader.php");
 
 		$sessionID = Shake();
 		setcookie("logsession", $sessionID, 0, $boardroot, "", false, true);

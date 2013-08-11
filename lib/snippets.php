@@ -152,7 +152,7 @@ function DoSmileyBar($taname = "text")
 	if(count($smiliesOrdered) > $expandAt)
 		write("<button class=\"expander\" id=\"smiliesExpand\" onclick=\"expandSmilies();\">&#x25BC;</button>");
 	print "<div class=\"smilies\" id=\"commonSet\">";
-	
+
 	$i = 0;
 	foreach($smiliesOrdered as $s)
 	{
@@ -167,6 +167,8 @@ function DoSmileyBar($taname = "text")
 
 function DoPostHelp()
 {
+	global $pathLib;
+
 	write("
 	<table class=\"message margin\">
 		<tr class=\"header0\"><th>".__("Post help")."</th></tr>
@@ -186,7 +188,7 @@ function DoPostHelp()
 				[source]&hellip;[/source] &mdash; ".__("colorcoded block, assuming C#")." <br />
 				[source=&hellip;]&hellip;[/source] &mdash; ".__("colorcoded block, specific language")."<sup title=\"bnf, c, cpp, csharp, html4strict, irc, javascript, lolcode, lua, mysql, php, qbasic, vbnet, xml\">[".__("which?")."]</sup> <br />
 	");
-	$bucket = "postHelpPresentation"; include("./lib/pluginloader.php");
+	$bucket = "postHelpPresentation"; include($pathLib . "/pluginloader.php");
 	write("
 				<br />
 				<h4>".__("Links")."</h4>
@@ -196,7 +198,7 @@ function DoPostHelp()
 				>>&hellip; &mdash; ".__("link to post by ID")." <br />
 				[user=##] &mdash; ".__("link to user's profile by ID")." <br />
 	");
-	$bucket = "postHelpLinks"; include("./lib/pluginloader.php");
+	$bucket = "postHelpLinks"; include($pathLib . "/pluginloader.php");
 	write("
 				<br />
 				<h4>".__("Quotations")."</h4>
@@ -204,12 +206,12 @@ function DoPostHelp()
 				[quote=&hellip;]&hellip;[/quote] &mdash; ".__("\"Posted by &hellip;\"")." <br />
 				[quote=\"&hellip;\" id=\"&hellip;\"]&hellip;[/quote] &mdash; \"".__("\"Post by &hellip;\" with link by post ID")." <br />
 	");
-	$bucket = "postHelpQuotations"; include("./lib/pluginloader.php");
+	$bucket = "postHelpQuotations"; include($pathLib . "/pluginloader.php");
 	write("
 				<br />
 				<h4>".__("Embeds")."</h4>
 	");
-	$bucket = "postHelpEmbeds"; include("./lib/pluginloader.php");
+	$bucket = "postHelpEmbeds"; include($pathLib . "/pluginloader.php");
 	write("
 			</div>
 			<br />
@@ -317,7 +319,7 @@ function BytesToSize($size, $retstring = '%01.2f&nbsp;%s')
 
 function makeThemeArrays()
 {
-	global $themes, $themefiles;
+	global $themes, $themefiles, $installationPath;
 	$themes = array();
 	$themefiles = array();
 	$dir = @opendir("themes");
@@ -326,7 +328,7 @@ function makeThemeArrays()
 		if ($file != "." && $file != "..")
 		{
 			$themefiles[] = $file;
-			$name = explode("\n", @file_get_contents("./themes/".$file."/themeinfo.txt"));
+			$name = explode("\n", @file_get_contents($installationPath . "/themes/".$file."/themeinfo.txt"));
 			$themes[] = trim($name[0]);
 		}
 	}
@@ -393,8 +395,8 @@ function formatIP($ip)
 }
 
 function ip2long_better($ip)
-{ 
-	$v = explode('.', $ip); 
+{
+	$v = explode('.', $ip);
 	return ($v[0]*16777216)+($v[1]*65536)+($v[2]*256)+$v[3];
 }
 
@@ -404,11 +406,11 @@ function IP2C($ip)
 	global $dblink;
 	//This nonsense is because ips can be greater than 2^31, which will be interpreted as negative numbers by PHP.
 	$ipl = ip2long($ip);
-	$r = Fetch(Query("SELECT * 
+	$r = Fetch(Query("SELECT *
 				 FROM {ip2c}
-				 WHERE ip_from <= {0s} 
+				 WHERE ip_from <= {0s}
 				 ORDER BY ip_from DESC
-				 LIMIT 1", 
+				 LIMIT 1",
 				 sprintf("%u", $ipl)));
 
 	if($r && $r["ip_to"] >= ip2long_better($ip))

@@ -1,6 +1,6 @@
 <?php
 //Plugin loader -- By Nikolaj
-global $pluginbuckets, $plugins, $plugin;
+global $pluginbuckets, $plugins, $plugin, $installationPath;
 
 $oldplugin = $plugin;
 if(!isset($self))
@@ -14,7 +14,7 @@ if (isset($pluginbuckets[$bucket]))
 		if (isset($plugins[$plugin]))
 		{
 			$self = $plugins[$plugin];
-			include("./plugins/".$plugins[$plugin]['dir']."/".$bucket.".php");
+			include($installationPath."/plugins/".$plugins[$plugin]['dir']."/".$bucket.".php");
 			unset($self);
 		}
 	}

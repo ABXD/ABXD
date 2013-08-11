@@ -2,14 +2,14 @@
 
 function actionLink($action, $id="", $args="", $urlname="")
 {
-	global $boardroot, $mainPage, $urlNameCache;
+	global $boardroot, $mainPage, $urlNameCache, $libPath;
 
 	if($urlname == "_")
 		$urlname = "";
 	else if(isset($urlNameCache[$action."_".$id]) && $urlname == "")
 		$urlname = $urlNameCache[$action."_".$id];
 
-	$bucket = "linkMangler"; include('lib/pluginloader.php');
+	$bucket = "linkMangler"; include($libPath . '/pluginloader.php');
 
 	$res = $boardroot;
 	if($action != $mainPage)
@@ -71,8 +71,8 @@ if(strtoupper($_SERVER['REQUEST_METHOD']) != 'POST' && !$valid)
 	foreach($_GET as $key => $val)
 	{
 		if($key == "rewriteurlname" ||
-		   $key == "rewritten" || 
-		   $key == "page" || 
+		   $key == "rewritten" ||
+		   $key == "page" ||
 		   $key == "id") continue;
 		if($params != "") $params .= "&";
 		$params .= urlencode($key)."=".urlencode($val);

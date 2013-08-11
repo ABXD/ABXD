@@ -44,7 +44,7 @@ cell2(Format("
 				{0}
 			",	$misc['milestone']));
 
-$bucket = "adminright"; include("./lib/pluginloader.php");
+$bucket = "adminright"; include($libPath . "/pluginloader.php");
 
 write(
 "
@@ -71,7 +71,7 @@ cell2(actionLinkTag(__("Optimize tables"), "optimize"));
 cell2(actionLinkTag(__("View log"), "log"));
 cell2(actionLinkTag(__("Update table structure"), "updateschema"));
 
-$bucket = "adminleft"; include("./lib/pluginloader.php");
+$bucket = "adminleft"; include($libPath . "/pluginloader.php");
 
 write(
 "

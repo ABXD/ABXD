@@ -38,7 +38,7 @@ define('BB_LINKS',2);
 define('BB_QUOTES',3);
 define('BB_EMBED',4);
 
-define('BB_FILE','plugins/custombb/bbcode.txt');
+define('BB_FILE',$installationPath.'/plugins/custombb/bbcode.txt');
 
 function bb_help($type) {
 	static $bbcodes;

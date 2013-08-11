@@ -6,7 +6,16 @@ $ajaxPage = false;
 if(isset($_GET["ajax"]))
 	$ajaxPage = true;
 
-require('lib/common.php');
+// Load the board paths from its file. Otherwise, load defaults.
+if (file_exists(dirname(__FILE__) . '/config/paths.php'))
+	require(dirname(__FILE__) . '/config/paths.php');
+else
+{
+	$installationPath = dirname(__FILE__);
+	$libPath = dirname(__FILE__) . "/lib";
+}
+
+require($libPath . '/common.php');
 
 //TODO: Put this in a proper place.
 function getBirthdaysText()
@@ -65,14 +74,14 @@ try {
 			$plugin = $pluginpages[$page];
 			$self = $plugins[$plugin];
 
-			$page = "./plugins/".$self['dir']."/page_".$page.".php";
+			$page = $installationPath . "/plugins/".$self['dir']."/page_".$page.".php";
 			if(!file_exists($page))
 				throw new Exception(404);
 			include($page);
 			unset($self);
 		}
 		else {
-			$page = 'pages/'.$page.'.php';
+			$page = $installationPath . '/pages/'.$page.'.php';
 			if(!file_exists($page))
 				throw new Exception(404);
 			include($page);
@@ -84,7 +93,7 @@ try {
 		{
 			throw $e;
 		}
-		require('pages/404.php');
+		require($installationPath . '/pages/404.php');
 	}
 }
 catch(KillException $e)
@@ -102,17 +111,17 @@ $layout_contents = ob_get_contents();
 ob_end_clean();
 
 //Do these things only if it's not an ajax page.
-include("lib/views.php");
+include($libPath . "/views.php");
 setLastActivity();
 
 //=======================
 // Panels and footer
 
-require('navigation.php');
-require('userpanel.php');
+require($installationPath . '/navigation.php');
+require($installationPath . '/userpanel.php');
 
 ob_start();
-require('footer.php');
+require($installationPath . '/footer.php');
 $layout_footer = ob_get_contents();
 ob_end_clean();
 
@@ -122,7 +131,7 @@ ob_end_clean();
 
 ob_start();
 
-$bucket = "userBar"; include("./lib/pluginloader.php");
+$bucket = "userBar"; include($libPath . "/pluginloader.php");
 /*
 if($rssBar)
 {
@@ -134,7 +143,7 @@ if($rssBar)
 ", $rssBar, $rssWidth + 4);
 }*/
 DoPrivateMessageBar();
-$bucket = "topBar"; include("./lib/pluginloader.php");
+$bucket = "topBar"; include($libPath . "/pluginloader.php");
 $layout_bars = ob_get_contents();
 ob_end_clean();
 
@@ -221,11 +230,11 @@ if($debugQueries)
 
 if($mobileLayout)
 	$layout = "mobile";
-if(!file_exists("layouts/$layout/layout.php"))
+if(!file_exists($installationPath . "/layouts/$layout/layout.php"))
 	$layout = "abxd";
-require("layouts/$layout/layout.php"); echo (isset($times) ? $times : "");
+require($installationPath . "/layouts/$layout/layout.php"); echo (isset($times) ? $times : "");
 
-$bucket = "finish"; include('lib/pluginloader.php');
+$bucket = "finish"; include($libPath . '/pluginloader.php');
 
 ?>
 

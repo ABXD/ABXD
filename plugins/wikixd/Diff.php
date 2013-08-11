@@ -31,6 +31,7 @@ class Text_Diff {
      */
     function Text_Diff($engine, $params)
     {
+        global $installationPath;
         // Backward compatibility workaround.
         if (!is_string($engine)) {
             $params = array($engine, $params);
@@ -42,7 +43,7 @@ class Text_Diff {
         }
         $engine = basename($engine);
 
-        require_once 'plugins/wikixd/Diff/Engine/' . $engine . '.php';
+        require_once $installationPath . '/plugins/wikixd/Diff/Engine/' . $engine . '.php';
         $class = 'Text_Diff_Engine_' . $engine;
         $diff_engine = new $class();
 

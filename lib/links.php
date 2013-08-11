@@ -41,17 +41,17 @@ function setUrlName($action, $id, $urlname)
 }
 
 if($urlRewriting)
-	include("urlrewriting.php");
+	include($libPath . "/urlrewriting.php");
 else
 {
 
 	function actionLink($action, $id="", $args="", $urlname="")
 	{
-		global $boardroot, $mainPage;
+		global $boardroot, $mainPage, $libPath;
 		if($boardroot == "")
 			$boardroot = "./";
 
-		$bucket = "linkMangler"; include('lib/pluginloader.php');
+		$bucket = "linkMangler"; include($libPath . '/pluginloader.php');
 
 		$res = "";
 
@@ -132,9 +132,9 @@ $powerlevels = array(-1 => " [".__("banned")."]", 0 => "", 1 => " [".__("local m
 
 function userLink($user, $showMinipic = false, $customID = false)
 {
-	global $powerlevels;
+	global $powerlevels, $libPath;
 
-	$bucket = "userMangler"; include("./lib/pluginloader.php");
+	$bucket = "userMangler"; include($libPath . "/pluginloader.php");
 
 	$fpow = $user['powerlevel'];
 	$fsex = $user['sex'];
@@ -149,10 +149,10 @@ function userLink($user, $showMinipic = false, $customID = false)
 	}
 
 	$fname = $minipic.$fname;
-	
+
 	if(!Settings::get("showGender"))
 		$fsex = 2;
-	
+
 	if($fpow < 0) $fpow = -1;
 	$classing = " class=\"nc" . $fsex . (($fpow < 0) ? "x" : $fpow)."\"";
 
@@ -197,7 +197,7 @@ function userLink($user, $showMinipic = false, $customID = false)
 	}
 	*/
 
-	$bucket = "userLink"; include('lib/pluginloader.php');
+	$bucket = "userLink"; include($libPath . '/pluginloader.php');
 	$title = htmlspecialchars($user['name']) . " (".$user["id"].") ".$powerlevels[$user['powerlevel']];
 	$userlink = actionLinkTag("<span$classing title=\"$title\">$fname</span>", "profile", $user["id"], "", $user["name"]);
 	return $userlink;

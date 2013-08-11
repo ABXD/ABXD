@@ -128,7 +128,7 @@ else if(isset($_POST['actionpost']))
 
 	if(!$rejected)
 	{
-		$bucket = "checkPost"; include("./lib/pluginloader.php");
+		$bucket = "checkPost"; include($libPath . "/pluginloader.php");
 	}
 
 	if(!$rejected)
@@ -172,7 +172,7 @@ else if(isset($_POST['actionpost']))
 
 		logAction('newreply', array('forum' => $fid, 'thread' => $tid, 'post' => $pid));
 
-		$bucket = "newreply"; include("lib/pluginloader.php");
+		$bucket = "newreply"; include($libPath . "/pluginloader.php");
 
 		redirectAction("post", $pid);
 	}

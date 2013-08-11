@@ -181,7 +181,7 @@ else if(isset($_POST['actionpost']))
 
 	if(!$rejected)
 	{
-		$bucket = "checkPost"; include("./lib/pluginloader.php");
+		$bucket = "checkPost"; include($libPath . "/pluginloader.php");
 	}
 
 	if(!$rejected)
@@ -228,7 +228,7 @@ else if(isset($_POST['actionpost']))
 			$pod = 0;
 
 		$now = time();
-		
+
 		$rThreads = Query("insert into {threads} (forum, user, title, icon, lastpostdate, lastposter, closed, sticky, poll)
 										  values ({0},   {1},  {2},   {3},  {4},          {1},        {5},   {6},     {7})",
 										    $fid, $loguserid, $_POST['title'], $iconurl, time(), $closed, $sticky, $pod);
@@ -252,7 +252,7 @@ else if(isset($_POST['actionpost']))
 		$postingAsUser = $loguser;
 		$thread["title"] = $_POST['title'];
 		$thread["id"] = $tid;
-		$bucket = "newthread"; include("lib/pluginloader.php");
+		$bucket = "newthread"; include($libPath . "/pluginloader.php");
 
 		redirectAction("thread", $tid);
 	}

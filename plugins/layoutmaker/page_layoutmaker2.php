@@ -5,7 +5,7 @@ $base = $_GET['id'];
 if(!isset($base) || strpos($base, ".") !== FALSE)
 	Kill("Invalid base layout.");
 
-$basefile = "plugins/layoutmaker/bases/".$base.".php";
+$basefile = $installationPath . "/plugins/layoutmaker/bases/".$base.".php";
 if(is_file($basefile))
 	include($basefile);
 else

@@ -4,7 +4,7 @@ $navigation = new PipeMenu();
 if($loguser['powerlevel'] >= 3 && isAllowed("viewAdminRoom"))
 	$navigation->add(new PipeMenuLinkEntry(__("Admin"), "admin", "", "", "cogs"));
 
-$bucket = "topMenuStart"; include("./lib/pluginloader.php");
+$bucket = "topMenuStart"; include($libPath . "/pluginloader.php");
 
 $navigation->add(new PipeMenuLinkEntry(Settings::get("menuMainName"), "board", "", "", "home"));
 if(isAllowed("viewMembers"))
@@ -18,7 +18,7 @@ if(isAllowed("search"))
 
 $navigation->add(new PipeMenuLinkEntry(__("Last posts"), "lastposts", "", "", "reorder"));
 
-$bucket = "topMenu"; include("./lib/pluginloader.php");
+$bucket = "topMenu"; include($libPath . "/pluginloader.php");
 
 $layout_navigation = $navigation;
 ?>

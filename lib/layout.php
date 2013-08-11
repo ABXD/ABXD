@@ -1,36 +1,36 @@
 <?php
 
 if($mobileLayout)
-	include("layout_mobile.php");
+	include($libPath . "/layout_mobile.php");
 else
-	include("layout_nomobile.php");
+	include($libPath . "/layout_nomobile.php");
 
 function gfxnumber($num)
 {
 	return $num;
 	// 0123456789/NA-
-	
+
 	$sign = '';
 	if ($num < 0)
 	{
 		$sign = '<span class="gfxnumber" style="background-position:-104px 0px;"></span>';
 		$num = -$num;
 	}
-	
+
 	$out = '';
 	while ($num > 0)
 	{
 		$out = '<span class="gfxnumber" style="background-position:-'.(8*($num%10)).'px 0px;"></span>'.$out;
 		$num = floor($num / 10);
 	}
-	
+
 	return '<span style="white-space:nowrap;">'.$sign.$out.'</span>';
 }
 
 function makeLinks($links)
 {
-	global $layout_links;
-	$bucket = "links"; include("lib/pluginloader.php");
+	global $layout_links, $libPath;
+	$bucket = "links"; include($libPath . "/pluginloader.php");
 	$layout_links = $links;
 }
 
@@ -46,12 +46,12 @@ function makeForumCrumbs($crumbs, $forum)
 
 function makeBreadcrumbs($path)
 {
-	global $layout_crumbs;
+	global $layout_crumbs, $libPath;
 	$path->addStart(new PipeMenuLinkEntry(Settings::get("breadcrumbsMainName"), "board"));
 	$path->setClass("breadcrumbs");
-	$bucket = "breadcrumbs"; include("lib/pluginloader.php");
+	$bucket = "breadcrumbs"; include($libPath . "/pluginloader.php");
 	$layout_crumbs = $path;
-	
+
 	/*
 	if(count($path) != 0)
 	{
@@ -108,7 +108,7 @@ function makeBreadcrumbs($path)
 function mfl_forumBlock($fora, $catid, $selID, $indent)
 {
 	$ret = '';
-	
+
 	foreach ($fora[$catid] as $forum)
 	{
 		$ret .=
@@ -119,7 +119,7 @@ function mfl_forumBlock($fora, $catid, $selID, $indent)
 		if (!empty($fora[-$forum['id']]))
 			$ret .= mfl_forumBlock($fora, -$forum['id'], $selID, $indent+1);
 	}
-	
+
 	return $ret;
 }
 
@@ -129,7 +129,7 @@ function makeForumList($fieldname, $selectedID)
 
 	$pl = $loguser['powerlevel'];
 	if($pl < 0) $pl = 0;
-	
+
 	$rCats = Query("SELECT id, name FROM {categories} ORDER BY corder, id");
 	$cats = array();
 	while ($cat = Fetch($rCats))
@@ -141,7 +141,7 @@ function makeForumList($fieldname, $selectedID)
 							{forums} f
 						WHERE ".forumAccessControlSQL().(($pl < 1) ? " AND f.hidden=0" : '')."
 						ORDER BY f.forder, f.id");
-						
+
 	$fora = array();
 	while($forum = Fetch($rFora))
 		$fora[$forum['catid']][] = $forum;
@@ -151,10 +151,10 @@ function makeForumList($fieldname, $selectedID)
 	{
 		if (empty($fora[$cid]))
 			continue;
-			
+
 		$cname = $cat['name'];
-			
-		$theList .= 
+
+		$theList .=
 '			<optgroup label="'.htmlspecialchars($cname).'">
 '.mfl_forumBlock($fora, $cid, $selectedID, 0).
 '			</optgroup>
@@ -170,7 +170,7 @@ function doLastPosts($compact, $limit)
 	global $mobileLayout, $loguser;
 	if($mobileLayout)
 		$compact = true;
-		
+
 	$hours = 72;
 
 	$rPosts = Query("SELECT
@@ -183,7 +183,7 @@ function doLastPosts($compact, $limit)
 						LEFT JOIN {threads} t on t.id = p.thread
 						LEFT JOIN {forums} f on t.forum = f.id
 					WHERE ".forumAccessControlSql()." AND p.date >= {0}
-					ORDER BY date DESC LIMIT 0, {1u}", 
+					ORDER BY date DESC LIMIT 0, {1u}",
 			(time() - ($hours * 60*60)), $limit);
 
 	while($post = Fetch($rPosts))
@@ -200,12 +200,12 @@ function doLastPosts($compact, $limit)
 				<tr class=\"cell{5}\">
 					<td>
 						{3} &raquo; {4}
-						<br>{2}, {1} 
+						<br>{2}, {1}
 						<span style=\"float:right\">&raquo; {6}</span>
 					</td>
 				</tr>
-			", $post['id'], formatdate($post['date']), UserLink(getDataPrefix($post, "u_")), 
-				actionLinkTag($post["ftit"], "forum", $post["fid"], "", $post["ftit"]), makeThreadLink($thread), $c, 
+			", $post['id'], formatdate($post['date']), UserLink(getDataPrefix($post, "u_")),
+				actionLinkTag($post["ftit"], "forum", $post["fid"], "", $post["ftit"]), makeThreadLink($thread), $c,
 				actionLinkTag($post['id'], "post", $post['id']));
 		}
 		else
@@ -229,7 +229,7 @@ function doLastPosts($compact, $limit)
 						&raquo; {6}
 					</td>
 				</tr>
-			", $post['id'], formatdate($post['date']), UserLink(getDataPrefix($post, "u_")), 
+			", $post['id'], formatdate($post['date']), UserLink(getDataPrefix($post, "u_")),
 				actionLinkTag($post["ftit"], "forum", $post["fid"], "", $post["ftit"]), makeThreadLink($thread), $c,
 				actionLinkTag($post['id'], "post", $post['id']));
 		}
@@ -277,7 +277,7 @@ function doLastPosts($compact, $limit)
 function doPostForm($form)
 {
 	global $mobileLayout;
-	
+
 	if($mobileLayout)
 		echo $form;
 	else

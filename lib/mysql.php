@@ -17,15 +17,15 @@ function sqlConnect()
 		$dberror = "Database does not exist";
 		return false;
 	}
-	
+
 	if (!$dblink->set_charset("utf8"))
 	{
         $dberror = "Error setting UTF8 charset";
 		return false;
 	}
-	
+
 	unset($dbpass);
-	
+
 	return true;
 }
 
@@ -53,7 +53,7 @@ function Query_MangleTables($match)
 	$tablename = $match[1];
 	if($tableLists[$tablename])
 		return $tableLists[$tablename];
-	
+
 	return $dbpref.$tablename;
 }
 
@@ -71,7 +71,7 @@ function Query_AddUserInput($match)
 	$var = $args[$match+1];
 
 	if ($var === NULL) return 'NULL';
-			
+
 	if ($format == 'c')
 	{
 		$final = '';
@@ -81,7 +81,7 @@ function Query_AddUserInput($match)
 
 	if($format == "i") return (string)((int)$var);
 	if($format == "u") return (string)max((int)$var, 0);
-	if($format == "l") 
+	if($format == "l")
 	{
 		//This is used for storing integers using the full 32bit range.
 		//TODO: add code to emulate the 32bit overflow on 64bit.
@@ -135,7 +135,7 @@ function rawQuery($query)
 	if(!$res)
 	{
 		$theError = $dblink->error;
-		
+
 		if($logSqlErrors)
 		{
 			$thequery = sqlEscape($query);
@@ -244,10 +244,10 @@ $tableLists = array(
 
 function loadFieldLists()
 {
-	global $fieldLists, $tableLists;
+	global $fieldLists, $tableLists, $libPath;
 
 	//Allow plugins to add their own!
-	$bucket = "fieldLists"; include('lib/pluginloader.php');
+	$bucket = "fieldLists"; include($libPath . '/pluginloader.php');
 }
 
 ?>

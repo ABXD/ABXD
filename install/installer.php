@@ -17,22 +17,25 @@ function cdate($format, $date = 0)
 	return gmdate($format, strtotime($timeOffset, $date));
 }
 
-include("lib/mysqlfunctions.php");
-include("lib/version.php");
-include("lib/debug.php");
-include("lib/mysql.php");
+	echo $libPath . '<br>' . $installationPath;
+
+include($libPath . "/mysqlfunctions.php");
+include($libPath . "/version.php");
+include($libPath . "/debug.php");
+include($libPath . "/mysql.php");
 
 function install()
 {
 	global $dblink, $dbserv, $dbuser, $dbpass, $dbname, $dbpref, $dberror, $abxd_version;
-	
+	global $installationPath, $libPath;
+
 	doSanityChecks();
-	
-	if(file_exists("config/database.php"))
+
+	if(file_exists($installationPath . "/config/database.php"))
 	{
 		//TODO: Check for errors when parsing this file (It may be corrupted or wrong or whatever.
 		//If it fails, fail gracefully and instruct the user to fix or delete database.php
-		include("config/database.php");
+		include($installationPath . "/config/database.php");
 	}
 	else
 	{
@@ -42,12 +45,12 @@ function install()
 		$dbname = $_POST['dbname'];
 		$dbpref = $_POST['dbpref'];
 	}
-	
+
 	if(!sqlConnect())
 		installationError("Could not connect to the database. Error was: ".$dberror);
-	
+
 	$currVersion = getInstalledVersion();
-	
+
 	if($currVersion == $abxd_version)
 		installationError("The board is already installed and updated (Database version $currVersion). You don't need to run the installer!\n");
 
@@ -59,7 +62,7 @@ function install()
 	else
 		echo "Upgrading database from version $currVersion to $abxd_version...\n";
 	upgrade();
-	
+
 	$misc = Query("select * from {misc}");
 	if(NumRows($misc) == 0)
 		Query("INSERT INTO `{misc}` (`views`, `hotcount`, `milestone`, `maxuserstext`) VALUES (0, 30, 'Nothing yet.', 'Nobody yet.');");
@@ -69,18 +72,21 @@ function install()
 
 	if(!is_dir("config"))
 		mkdir("config");
-	
+
 	if($currVersion == -1)
 	{
 		//Stuff to do on new installation (Not upgrade)
-		Import("install/smilies.sql");
-		Import("install/installDefaults.sql");
-		if(!file_exists("config/salt.php"))
+		Import($installationPath . "/install/smilies.sql");
+		Import($installationPath . "/install/installDefaults.sql");
+		if(!file_exists($installationPath . "/config/salt.php"))
 			writeConfigSalt();
 	}
-	
-	if(!file_exists("config/database.php"))
+
+	if(!file_exists($installationPath . "/config/database.php"))
 		writeConfigDatabase();
+
+	if(!file_exists($installationPath . "/config/paths.php"))
+		writeBoardPaths();
 }
 
 
@@ -113,7 +119,7 @@ function doSanityChecks()
 		echo "Your server doesn't meet the minimum requeriments for ABXD:\n";
 		foreach($errors as $error)
 			echo " - ", $error, "\n";
-		
+
 		echo "\nCan't install ABXD. Sorry!\n";
 		die();
 	}
@@ -128,12 +134,12 @@ function getInstalledVersion()
 		return -1;
 
 	$row = query("SELECT * FROM {misc}");
-	
+
 	//If no row in misc table, not installed.
 	if(numRows($row) == 0)
 		return -1;
 
-	//Otherwise return version.		
+	//Otherwise return version.
 	$row = fetch($row);
 	return $row["version"];
 }
@@ -147,8 +153,9 @@ function installationError($message)
 
 function writeConfigDatabase()
 {
-	global $dbserv, $dbuser, $dbpass, $dbname, $dbpref;
-	$dbcfg = @fopen("config/database.php", "w+") 
+	global $dbserv, $dbuser, $dbpass, $dbname, $dbpref, $installationPath;
+
+	$dbcfg = @fopen($installationPath . "/config/database.php", "w+")
 		or installationError(
 			"Could not open the database configuration file (config/database.php) for writing.<br>
 			 Make sure that PHP has access to this file.");
@@ -166,19 +173,38 @@ function writeConfigDatabase()
 
 function writeConfigSalt()
 {
+	global $installationPath;
+
 	$cset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRQSTUVWXYZ0123456789";
 	$salt = "";
 	$chct = strlen($cset) - 1;
 	while (strlen($salt) < 16)
 		$salt .= $cset[mt_rand(0, $chct)];
-		
-	$sltf = @fopen("config/salt.php", "w+")
+
+	$sltf = @fopen($installationPath . "/config/salt.php", "w+")
 		or installationError(
 			"Could not open \"config/salt.php\" for writing. <br>
-			This has been checked for earlier, so if you see this error now, 
+			This has been checked for earlier, so if you see this error now,
 			something very strange is going on.");
-			
+
 	fwrite($sltf, "<?php \$salt = \"".$salt."\" ?>");
 	fclose($sltf);
 }
 
+function writeBoardPaths()
+{
+	global $installationPath, $libPath;
+
+	$paths = @fopen($installationPath . "/config/paths.php", "w+")
+		or installationError(
+			"Could not open \"config/paths.php\" for writing. <br>
+			This has been checked for earlier, so if you see this error now,
+			something very strange is going on.");
+
+	fwrite($paths, "<?php\n");
+	fwrite($paths, "//  AcmlmBoard XD support - Path settings\n\n");
+	fwrite($paths, '$installationPath = \'' . $installationPath . "';\n");
+	fwrite($paths, '$libPath = \'' . $libPath . "';\n");
+	fwrite($paths, "\n?>");
+	fclose($paths);
+}

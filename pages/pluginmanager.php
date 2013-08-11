@@ -34,7 +34,7 @@ if($_GET["action"] == "disable")
 
 
 $cell = 0;
-$pluginsDir = @opendir("plugins");
+$pluginsDir = @opendir($installationPath . "/plugins");
 
 $enabledplugins = array();
 $disabledplugins = array();
@@ -45,7 +45,7 @@ if($pluginsDir !== FALSE)
 	while(($plugin = readdir($pluginsDir)) !== FALSE)
 	{
 		if($plugin == "." || $plugin == "..") continue;
-		if(is_dir("./plugins/".$plugin))
+		if(is_dir($installationPath . "/plugins/".$plugin))
 		{
 			try
 			{

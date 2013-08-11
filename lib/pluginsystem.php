@@ -34,19 +34,19 @@ class BadPluginException extends Exception { }
 
 function getPluginData($plugin, $load = true)
 {
-	global $pluginpages, $pluginbuckets, $misc, $abxd_version;
+	global $pluginpages, $pluginbuckets, $misc, $abxd_version, $installationPath;
 
-	if(!is_dir("./plugins/".$plugin))
+	if(!is_dir($installationPath . "/plugins/".$plugin))
 		throw new BadPluginException("Plugin folder is gone");
 
 	$plugindata = array();
 	$plugindata['dir'] = $plugin;
-	if(!file_exists("./plugins/".$plugin."/plugin.settings"))
+	if(!file_exists($installationPath . "/plugins/".$plugin."/plugin.settings"))
 		throw new BadPluginException(_("Plugin folder doesn't contain plugin.settings"));
 
 	$minver = 220; //we introduced these plugins in 2.2.0 so assume this.
 
-	$settingsFile = file_get_contents("./plugins/".$plugin."/plugin.settings");
+	$settingsFile = file_get_contents($installationPath . "/plugins/".$plugin."/plugin.settings");
 	$settings = explode("\n", $settingsFile);
 	foreach($settings as $setting)
 	{
@@ -71,7 +71,7 @@ function getPluginData($plugin, $load = true)
 	$plugindata["buckets"] = array();
 	$plugindata["pages"] = array();
 
-	$dir = "./plugins/".$plugindata['dir'];
+	$dir = $installationPath . "/plugins/".$plugindata['dir'];
 	$pdir = @opendir($dir);
 	while($f = readdir($pdir))
 	{

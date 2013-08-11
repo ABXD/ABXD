@@ -292,7 +292,7 @@ $layout = array(
 );
 
 //Allow plugins to add their own fields
-$bucket = "edituser"; include("lib/pluginloader.php");
+$bucket = "edituser"; include($libPath . "/pluginloader.php");
 
 //Make some more checks.
 if($user['posts'] < Settings::get("customTitleThreshold") && $user['powerlevel'] < 1 && !$editUserMode)
@@ -1138,14 +1138,14 @@ function Karma()
 		else
 			$("#passwordhide").html("");
 	};
-	
+
 	$(function() {
 		$("#currpassword").keyup(passwordChanged);
 		passwordChanged();
 	});
-	
+
 </script>
 <style type="text/css" id="passwordhide">
-	
+
 </style>
 

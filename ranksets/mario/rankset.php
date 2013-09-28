@@ -25,7 +25,7 @@ $ranksetData["mario"] = array(
 	array("num" => 350, "image" => 'mole.png', "text" => 'Mole'),
 	array("num" => 375, "image" => 'buzzybeetle.png', "text" => 'Buzzy Beetle'),
 	array("num" => 400, "image" => 'nipperplant.png', "text" => 'Nipper Plant'),
-	array("num" => 425, "image" => 'bloober.png', "text" => 'Bloober'),
+	array("num" => 425, "image" => 'bloober.png', "text" => 'Blooper'),
 	array("num" => 450, "image" => 'busterbeetle.png', "text" => 'Buster Beetle'),
 	array("num" => 475, "image" => 'beezo.png', "text" => 'Beezo'),
 	array("num" => 500, "image" => 'bulletbill.png', "text" => 'Bullet Bill'),

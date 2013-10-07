@@ -10,14 +10,15 @@ if(isDntEnabled() && Settings::pluginGet("dnt"))
 	echo "<!-- Disabling Google Analytics because you have Do Not Track set! We're awesome like that. -->";
 else
 {
-	$loginstatus = $loguserid?"Yes":"No";
+	$loginstatus = json_encode($loguserid?"Yes":"No");
+	$tracking_id = json_encode(trim(Settings::pluginGet("trackingid")));
 
 	echo <<<EOS
 	<script type="text/javascript">
 
 	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', '<?php print trim(Settings::pluginGet("trackingid"));?>']);
-	  _gaq.push(['_setCustomVar', 1, 'Logged in', '$loginstatus', 2]);
+	  _gaq.push(['_setAccount', $tracking_id]);
+	  _gaq.push(['_setCustomVar', 1, 'Logged in', $loginstatus, 2]);
 	  _gaq.push(['_trackPageview']);
 	   
 	  (function() {

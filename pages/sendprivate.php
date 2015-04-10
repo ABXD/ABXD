@@ -61,6 +61,33 @@ if($uid)
 if($loguser['powerlevel'] < 0)
 	Kill("You're banned.");
 */
+require 'config/database.php';
+$userMySQLconn = new mysqli($dbserv, $dbuser, $dbpass, $dbname);
+$userMySQL = "SELECT name FROM " . $dbpref . "users";
+$userMySQL2 = "SELECT displayname " . $dbpref . "users";
+$userMySQLresult = $userMySQLconn->query($userMySQL);
+$userMySQLresult2 = $userMySQLconn->query($userMySQL2);
+echo "<script type=\"text/javascript\">";
+echo "$(function() {";
+echo "var availableTags = [";
+while($row = $userMySQLresult->fetch_assoc()) {
+if ($row['name']==$loguser['name']) {} else {
+        echo "\"" . $row['name'] . "\",";
+}
+}
+while($row = $userMySQLresult2->fetch_assoc()) {
+if ($row['displayname']=="" || $row['displayname']==$loguser['displayname']) {
+} else {
+echo "\"" . $row['displayname'] . "\",";
+}
+}
+echo "\"\"";
+echo "];";
+echo "$( \"#tags\" ).autocomplete({";
+echo "source: availableTags";
+echo "});";
+echo "});";
+echo "</script>";
 
 $recipIDs = array();
 if($_POST['to'])
@@ -202,8 +229,8 @@ $form = "
 					".__("To")."
 				</td>
 				<td>
-					<input type=\"text\" name=\"to\" style=\"width: 98%;\" maxlength=\"1024\" value=\"".htmlspecialchars($_POST['to'])."\" />
-				</td>
+					<div class=\"ui-widget\"><input type=\"text\" name=\"to\" id=\"tags\" style=\"width: 98%;\" maxlength=\"1024\" value=\"".htmlspecialchars($_POST['to'])."\" /></div>
+			</td>
 			</tr>
 			<tr class=\"cell1\">
 				<td>

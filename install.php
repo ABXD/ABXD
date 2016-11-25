@@ -49,7 +49,6 @@
 								<li>Large codebase cleanups &mdash; the board should now work better than ever!</li>
 								<li>A new, flexible permissions system that lets you define user groups or per-user permissions, such as forum access.</li>
 								<li>Easier theme installation for administrators</li>
-								<li>[ devs add stuff here ]</li>
 							</ul>
 						<p>
 							Thanks for using ABXD!<br />

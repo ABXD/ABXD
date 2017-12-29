@@ -265,6 +265,12 @@ $account = array(
 				"caption" => __("Globally block layout"),
 				"type" => "checkbox",
 			),
+			"forbiddens" => array(
+				"caption" => __("Deny permissions"),
+				"type" => "text",
+				"width" => "50%",
+				"length" => 60,
+			),
 		),
 	),
 );
@@ -383,7 +389,7 @@ if($_POST['action'] == __("Tempban") && $user['tempbantime'] == 0)
 		SendSystemPM($userid, format(__("You have been temporarily banned until {0} GMT. If you don't know why this happened, feel free to ask the one most likely to have done this. Calmly, if possible."), gmdate("M jS Y, G:[b][/b]i:[b][/b]s", $timeStamp)), __("You have been temporarily banned."));
 
 		Query("update {users} set tempbanpl = {0}, tempbantime = {1}, powerlevel = -1 where id = {2}", $user['powerlevel'], $timeStamp, $userid);
-		redirect(format(__("User has been banned for {0}."), TimeUnits($timeStamp - time())), actionLink("profile", $userid), __("that user's profile"));
+		redirect(actionLink("profile", $userid));
 	}
 }
 
@@ -1148,4 +1154,3 @@ function Karma()
 <style type="text/css" id="passwordhide">
 	
 </style>
-

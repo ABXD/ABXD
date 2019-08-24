@@ -19,6 +19,15 @@ If you are interested more stable software, you may want to download
 on the HTTP server (PHP has to be installed), visit the location of
 ABXD in your server and follow the installer. It couldn't be easier.
 
+PHP dependencies required:
+* gd
+* password_hash
+* bcrypt
+* dom
+* mysql
+
+PHP version 5.5 and 5.6 work perfectly. 7.0 and 7.1 have been tested, but may complain about a couple of things, otherwise working perfectly. MySQL has been tested up to 5.6.
+
 ## Bugs
 
 Create an issue here on GitHub for any bugs not related to security. If you

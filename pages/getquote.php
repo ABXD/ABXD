@@ -27,7 +27,7 @@ if ($quote['deleted'])
 	$quote['text'] = __("Post is deleted");
 
 $reply = "[quote=\"".$quote['poster']."\" id=\"".$quote['id']."\"]".$quote['text']."[/quote]";
-$reply = str_replace("/me", "[b]* ".htmlspecialchars($quote['poster'])."[/b]", $reply);
+$reply = str_replace("/me ", "[b]* ".htmlspecialchars($quote['poster'])."[/b]", $reply);
 
 echo $reply;
 

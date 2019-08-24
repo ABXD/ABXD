@@ -41,6 +41,11 @@ $settings = array(
 		"default" => "1",
 		"name" => "Enable AJAX"
 	),
+	"maintenancemode" => array (
+		"type" => "boolean",
+		"default" => "0",
+		"name" => "Enable maintenance mode"
+	),
 	"guestLayouts" => array (
 		"type" => "boolean",
 		"default" => "0",

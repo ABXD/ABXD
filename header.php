@@ -22,7 +22,10 @@
 			echo '<script type="text/javascript" src="'.resourceLink("layouts/$layout/script.js").'"></script>';
 	?>
 	<link rel="stylesheet" type="text/css" id="theme_css" href="<?php print resourceLink($layout_themefile); ?>" />
-
+	<?php
+		if(Settings::get("maintenancemode") == 1 && $loguser['powerlevel'] < 1)
+			die("The forums are currently undergoing maintenance. Please check back at a later date.");
+	?>
 	<?php
 		$bucket = "pageHeader"; include("./lib/pluginloader.php");
 	?>

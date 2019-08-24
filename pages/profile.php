@@ -174,6 +174,7 @@ else
 	$foo[__("Last post")] = __("Never");
 
 $foo[__("Last view")] = format("{0} ({1} ago)", formatdate($user['lastactivity']), TimeUnits(time() - $user['lastactivity']));
+$foo[__("Last URL")] = $user['lasturl'];
 $foo[__("Browser")] = $user['lastknownbrowser'];
 if($loguser['powerlevel'] > 0)
 	$foo[__("Last known IP")] = formatIP($user['lastip']);
@@ -202,6 +203,7 @@ else
 	$themeauthor = "";
 }
 $foo[__("Theme")] = $themename;
+$foo[__("Theme author")] = $themeauthor;
 $foo[__("Items per page")] = Plural($user['postsperpage'], __("post")) . ", " . Plural($user['threadsperpage'], __("thread"));
 $profileParts[__("Presentation")] = $foo;
 
@@ -347,6 +349,14 @@ if(IsAllowed("blockLayouts") && $loguserid)
 		$links -> add(new PipeMenuLinkEntry(__("Unblock layout"), "profile", $id, "block=0&token={$loguser['token']}", "ban-circle"));
 	else if($id != $loguserid)
 		$links -> add(new PipeMenuLinkEntry(__("Block layout"), "profile", $id, "block=1&token={$loguser['token']}", "ban-circle"));
+}
+
+if($loguser['powerlevel'] > 1 && $user['powerlevel'] == 0) {
+		$links -> add(new PipeMenuLinkEntry(__("Ban!"), "ban", $id, "", "ban-circle"));
+}
+
+if($loguser['powerlevel'] > 1 && $user['powerlevel'] == -1) {
+		$links -> add(new PipeMenuLinkEntry(__("Unban"), "ban", $id, "", "ban-circle"));
 }
 
 makeLinks($links);

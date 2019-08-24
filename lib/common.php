@@ -4,6 +4,16 @@
 // I can't believe there are PRODUCTION servers that have E_NOTICE turned on. What are they THINKING? -- Kawa
 error_reporting(E_ALL ^ E_NOTICE | E_STRICT);
 
+if ($debugMode)
+{
+ini_set("display_errors", 1);
+error_reporting(E_ALL);
+}
+
+// ByetHost, begone (their server setup is horribly fucked up) - laffuchino
+if (isset($_GET['i']) && $_GET['i'] > 0)
+	die("This web host is not supported.");
+
 if(!is_file("config/database.php"))
 	die(header("Location: install.php"));
 
@@ -75,12 +85,13 @@ loadFieldLists();
 include("loguser.php");
 include("permissions.php");
 include("ranksets.php");
+include("bbcode_parser.php");
+include("bbcode_text.php");
+include("bbcode_callbacks.php");
+include("bbcode_main.php");
 include("post.php");
 include("log.php");
 include("onlineusers.php");
-
-include("htmlfilter.php");
-include("smilies.php");
 
 $theme = $loguser['theme'];
 

@@ -296,6 +296,12 @@ if($loguserid && $loguser['powerlevel'] >= $forum['minpowerreply'] && (!$thread[
 	}
 	$moodOptions = "<option ".$moodSelects[0]."value=\"0\">".__("[Default avatar]")."</option>\n";
 	$rMoods = Query("select mid, name from {moodavatars} where uid={0} order by mid asc", $loguserid);
+
+	if (!isset($nopl)) $nopl = 0;
+	if (!isset($prefill)) $prefill = '';
+	if (!isset($nosm)) $nosm = 0;
+	if (!canMod($loguserid, $fid)) $mod = "";
+
 	while($mood = Fetch($rMoods))
 		$moodOptions .= format(
 "

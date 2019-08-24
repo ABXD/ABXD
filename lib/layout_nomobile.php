@@ -61,7 +61,7 @@ function makeForumListing($parent, $page=0)
 		<tbody>
 			<tr class=\"header1\">
 				<th style=\"width:32px;\"></th>
-				<th>{0} <a href=\"#\" id=\"cat_{1}_lolz\"{3}>[expand]</a></th>
+				<th>{0} <a href=\"#\" id=\"cat_{1}_lolz\"{3}></a></th>
 				<th style=\"width:75px;\">".__("Threads")."</th>
 				<th style=\"width:50px;\">".__("Posts")."</th>
 				<th style=\"min-width:150px; width:15%;\">".__("Last post")."</th>
@@ -69,8 +69,9 @@ function makeForumListing($parent, $page=0)
 		</tbody>
 		<tbody id=\"cat_{1}\"{2}>
 ", ($parent==0)?$forum['cname']:'Subforums', $forum['catid'], 
-	$_COOKIE['catstate'][$forum['catid']] ? ' style="display:none;"':'',
-	$_COOKIE['catstate'][$forum['catid']] ? '':' style="display:none;"');
+	//$_COOKIE['catstate'][$forum['catid']] ? ' style="display:none;"':'',
+	//$_COOKIE['catstate'][$forum['catid']] ? '':' style="display:none;"'
+);
 
 			$lastCatID = $forum['catid'];
 			$firstCat = false;
@@ -125,7 +126,7 @@ function makeForumListing($parent, $page=0)
 			$lastLink = "----";
 	
 		$postcountmsg = '';
-		if ($forum['ignoreposts'])
+		if (isset($forum['ignoreposts']))
 			$postcountmsg = '<br><small>(posts in this forum aren\'t counted in users\' postcounts)</small>';
 
 

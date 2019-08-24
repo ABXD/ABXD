@@ -39,7 +39,7 @@ function setUrlName($action, $id, $urlname)
 	$urlNameCache[$action."_".$id] = $urlname;
 }
 
-if($urlRewriting)
+if(isset($urlRewriting))
 	include("urlrewriting.php");
 else
 {

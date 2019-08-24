@@ -27,8 +27,8 @@ if($id == $loguserid)
 $canVote = $loguserid && ($loguser['powerlevel'] > 0 || ((time()-$loguser['regdate'])/86400) > 9)
 			 && IsAllowed("vote") && $loguserid != $id;
 
-if($loguserid && ($_GET['token'] == $loguser['token'] || $_POST['token'] == $loguser['token']))
-{
+if ($loguserid && isset($_POST['token']))
+	{
 	if(isset($_GET['block']))
 	{
 		AssertForbidden("blockLayouts");
@@ -82,7 +82,7 @@ $averageThreads = sprintf("%1.02f", $threads / $daysKnown);
 
 $minipic = getMinipicTag($user);
 
-if($user['rankset'])
+if(isset($user['rankset']))
 {
 	$currentRank = GetRank($user["rankset"], $user["posts"]);
 	$toNextRank = GetToNextRank($user["rankset"], $user["posts"]);
@@ -92,16 +92,16 @@ if($user['rankset'])
 if($user['title'])
 	$title = str_replace("<br />", " &bull; ", strip_tags(CleanUpPost($user['title'], "", true), "<b><strong><i><em><span><s><del><img><a><br><br /><small>"));
 
-if($user['homepageurl'])
+if(isset($user['homepageurl']))
 {
 	$nofollow = "";
 	if(Settings::get("nofollow"))
 		$nofollow = "rel=\"nofollow\"";
 
-	if($user['homepagename'])
+	if(isset($user['homepagename']))
 		$homepage = "<a $nofollow target=\"_blank\" href=\"".htmlspecialchars($user['homepageurl'])."\">".htmlspecialchars($user['homepagename'])."</a> - ".htmlspecialchars($user['homepageurl']);
 	else
-		$homepage = "<a $nofollow target=\"_blank\" href=\"".htmlspecialchars($user['homepageurl'])."\">".htmlspecialchars($user['url'])."</a>";
+		$homepage = "<a $nofollow target=\"_blank\" href=\"".htmlspecialchars($user['homepageurl'])."\">".htmlspecialchars($user['homepageurl'])."</a>";
 }
 
 $emailField = __("Private");
@@ -310,7 +310,11 @@ if(!$mobileLayout)
 }
 
 $previewPost['text'] = Settings::get("profilePreviewText");
-
+$previewPost['options'] = 0;
+$previewPost['closed'] = 1;
+$previewPost['deleted'] = 0;
+$previewPost['mood'] = 0;
+$previewPost['date'] = time();
 $previewPost['num'] = "_";
 $previewPost['id'] = "_";
 

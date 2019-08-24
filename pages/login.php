@@ -31,7 +31,7 @@ $crumbs = new PipeMenu();
 $crumbs->add(new PipeMenuLinkEntry(__("Log in"), "login"));
 makeBreadcrumbs($crumbs);
 
-if($_POST['action'] == "logout")
+if(isset($_POST['action']) && $_POST['action'] == "logout")
 {
 	setcookie("logsession", "", 2147483647, $boardroot, "", false, true);
 	Query("UPDATE {users} SET loggedin = 0 WHERE id={0}", $loguserid);

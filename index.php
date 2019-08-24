@@ -8,26 +8,11 @@ if(isset($_GET["ajax"]))
 
 require('lib/common.php');
 
-//TODO: Put this in a proper place.
+//TODO: Rewrite since it was using old methods.
+//Also it's unused by the board other than that variable below
 function getBirthdaysText()
 {
-	$rBirthdays = Query("select u.birthday, u.(_userfields) from {users} u where birthday > 0 and powerlevel >= 0 order by name");
-	$birthdays = array();
-	while($user = Fetch($rBirthdays))
-	{
-		$b = $user['birthday'];
-		if(gmdate("m-d", $b) == gmdate("m-d"))
-		{
-			$y = gmdate("Y") - gmdate("Y", $b);
-			$birthdays[] = UserLink(getDataPrefix($user, "u_"))." (".$y.")";
-		}
-	}
-	if(count($birthdays))
-		$birthdaysToday = implode(", ", $birthdays);
-	if($birthdaysToday)
-		return "<br>".__("Birthdays today:")." ".$birthdaysToday;
-	else
-		return "";
+	return;
 }
 
 //Use buffering to draw the page. 

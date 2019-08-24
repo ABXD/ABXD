@@ -4,23 +4,24 @@ The new and secure AcmlmBoard-like board.
 
 ## Warning
 
-Please note that you are using a version of ABXD obtained from the Git
-repository. This version of ABXD may have serious vulnerabilites and
-might not work at all.
-
-If you are interested more stable software, you may want to download
-[the latest stable release](https://github.com/ABXD/ABXD/releases). It's known to work almost everywhere.
+Development has all but mostly halted on the project, and even in
+its current state you shouldn't expect it to
+run without encountering several problems.
 
 ## Installation
 
-[Download ABXD](https://github.com/Dirbaio/ABXD/zipball/master), put it
-on the HTTP server (PHP has to be installed), visit the location of
-ABXD in your server and follow the installer. It couldn't be easier.
+Simply navigate to the document root where
+you intend to run ABXD and install.
+
+Prerequisites (as of 23/8/2019):
+* PHP (5.5-7.2)
+* MariaDB 10.x (MySQL 5.7 works with changes)
+* Extensions: xml, gd, json
 
 ## Bugs
 
 Create an issue here on GitHub for any bugs not related to security. If you
-know of any security bugs, plaese contact [Dirbaio](https://github.com/Dirbaio) instead.
+know of any security bugs, please contact [Dirbaio](https://github.com/Dirbaio) instead.
 
 ## Contributions
 

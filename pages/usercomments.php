@@ -40,9 +40,9 @@ makeBreadcrumbs($crumbs);
 $canDeleteComments = ($id == $loguserid || $loguser['powerlevel'] > 2) && IsAllowed("deleteComments") && $loguser['powerlevel'] >= 0;
 $canComment = $loguser['powerlevel'] >= 0;
 
-if($loguserid && ($_GET['token'] == $loguser['token'] || $_POST['token'] == $loguser['token']))
+if ($loguserid)
 {
-	if($canDeleteComments && $_GET['action'] == "delete")
+	if($canDeleteComments && isset($_GET['action']) && $_GET['action'] == "delete")
 	{
 		AssertForbidden("deleteComments");
 		Query("delete from {usercomments} where uid={0} and id={1}", $id, (int)$_GET['cid']);
@@ -72,10 +72,9 @@ $total = FetchResult("SELECT
 						count(*)
 					FROM {usercomments}
 					WHERE uid={0}", $id);
+$from = (int)$_GET['from'];
 
-$from = (int)$_GET["from"];
-if(!isset($_GET["from"]))
-	$from = 0;
+
 $realFrom = $total-$from-$cpp;
 $realLen = $cpp;
 if($realFrom < 0)
@@ -101,7 +100,8 @@ if(NumRows($rComments))
 	{
 		if($canDeleteComments)
 			$deleteLink = "<small style=\"float: right; margin: 0px 4px;\">".
-				actionLinkTag("&#x2718;", $mobileLayout?"usercomments":"profile", $id, "action=delete&cid=".$comment['id']."&token={$loguser['token']}")."</small>";
+				actionLinkTag("&#x2718;", $mobileLayout?"usercomments":"profile", $id, "action=delete&cid=".$comment['id']."")."</small>";
+		$cellClass = 0;
 		$cellClass = ($cellClass+1) % 2;
 		$thisComment = format(
 "
@@ -147,7 +147,6 @@ if($loguserid )
 										<input type=\"hidden\" name=\"id\" value=\"$id\" />
 										<input type=\"text\" name=\"text\" style=\"width: 80%;\" maxlength=\"255\" />
 										<input type=\"submit\" name=\"actionpost\" value=\"".__("Post")."\" />
-										<input type=\"hidden\" name=\"token\" value=\"{$loguser['token']}\" />
 									</form>
 								</div>";
 //	if($lastCID == $loguserid)

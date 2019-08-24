@@ -46,11 +46,14 @@ function install()
 		$dbpref = $_POST['dbpref'];
 	}
 	
+	if (isset($_POST['convert']))
+	{
 	$convert = $_POST["convert"]=="true";
 	$convertFrom = $_POST["convertFrom"];
 	$convertDbName = $_POST["convertDbName"];
 	$convertDbPrefix = $_POST["convertDbPrefix"];
-	
+	}
+
 	if(!sqlConnect())
 		installationError("Could not connect to the database. Error was: ".$dberror);
 	
@@ -62,8 +65,8 @@ function install()
 	if($currVersion != -1 && $convert)
 		die("ERROR: You asked to convert a forum database, but an ABXD installation was already found in the installation DB. Converting is only possible when doing a new installation.");
 	
-	echo "Setting utf8_unicode_ci collation to the database...\n";
-	query("ALTER DATABASE $dbname COLLATE utf8_unicode_ci");
+	echo "Setting 4-byte UTF-8 collation to the database...\n";
+	query("ALTER DATABASE $dbname COLLATE utf8mb4_unicode_520_ci");
 
 	if($currVersion == -1)
 		echo "Installing database version $abxd_version...\n";

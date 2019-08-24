@@ -7,7 +7,7 @@ if(!isset($_GET['id']))
 
 $fid = (int)$_GET['id'];
 
-if($loguserid && $_GET['action'] == "markasread")
+if($loguserid && isset($_GET['action']) && $_GET['action'] == "markasread")
 {
 	Query("REPLACE INTO {threadsread} (id,thread,date) SELECT {0}, {threads}.id, {1} FROM {threads} WHERE {threads}.forum={2}",
 		$loguserid, time(), $fid);

@@ -66,9 +66,13 @@ function CanMod($userid, $fid)
 
 function AssertForbidden($to, $specifically = 0)
 {
-	global $loguser, $forbidden;
+	global $loguser, $loguserid, $forbidden;
+
+	if (!isset($loguser['forbiddens']) || !$loguserid) $loguser['forbiddens'] = "";
+
 	if(!isset($forbidden))
 		$forbidden = explode(" ", $loguser['forbiddens']);
+
 	$caught = 0;
 	if(in_array($to, $forbidden))
 		$caught = 1;
@@ -142,7 +146,10 @@ function AssertForbidden($to, $specifically = 0)
 
 function IsAllowed($to, $specifically = 0)
 {
-	global $loguser, $forbidden;
+	global $loguser, $loguserid, $forbidden;
+
+	if(!$loguserid) return FALSE;
+
 	if(!isset($forbidden))
 		$forbidden = explode(" ", $loguser['forbiddens']);
 	if(in_array($to, $forbidden))

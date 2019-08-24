@@ -547,10 +547,10 @@ if($_POST['action'] == __("Edit profile"))
 						{
 							@unlink($dataDir."avatars/$userid");
 							$sets[] = $field." = ''";
-							continue;
+							continue 2;
 						}
 						if($_FILES[$field]['name'] == "" || $_FILES[$field]['error'] == UPLOAD_ERR_NO_FILE)
-							continue;
+							continue 2;
 						$res = HandlePicture($field, 0, $item['errorname'], $user['powerlevel'] > 0 || $loguser['powerlevel'] > 0);
 						if($res === true)
 							$sets[] = $field." = '#INTERNAL#'";
@@ -566,10 +566,10 @@ if($_POST['action'] == __("Edit profile"))
 						{
 							@unlink($dataDir."minipic/$userid");
 							$sets[] = $field." = ''";
-							continue;
+							continue 2;
 						}
 						if($_FILES[$field]['name'] == "" || $_FILES[$field]['error'] == UPLOAD_ERR_NO_FILE)
-							continue;
+							continue 2;
 						$res = HandlePicture($field, 1, $item['errorname']);
 						if($res === true)
 							$sets[] = $field." = '#INTERNAL#'";
@@ -1055,6 +1055,7 @@ function BuildPage($page, $id)
 	$output = "<table class=\"outline margin width50 eptable\" id=\"".$id."\"".$display.">\n";
 	foreach($page as $pageID => $section)
 	{
+		$section['class'] = 0;
 		$secClass = $section["class"];
 		$output .= "<tr class=\"header0 $secClass\"><th colspan=\"2\">".$section['name']."</th></tr>\n";
 		foreach($section['items'] as $field => $item)

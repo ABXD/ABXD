@@ -178,13 +178,14 @@ else if(isset($_POST['actionpost']))
 	}
 }
 
+if (isset($_POST['text']))
 $prefill = htmlspecialchars($_POST['text']);
 
-if($_GET['link'])
+if(isset($_GET['link']))
 {
 	$prefill = ">>".(int)$_GET['link']."\r\n\r\n";
 }
-else if($_GET['quote'])
+else if(isset($_GET['quote']))
 {
 	$rQuote = Query("	select
 					p.id, p.deleted, pt.text,
@@ -221,7 +222,7 @@ function getCheck($name)
 	else return "";
 }
 
-if($_POST['mood'])
+if(isset($_POST['mood']))
 	$moodSelects[(int)$_POST['mood']] = "selected=\"selected\" ";
 $moodOptions = "<option ".$moodSelects[0]."value=\"0\">".__("[Default avatar]")."</option>\n";
 

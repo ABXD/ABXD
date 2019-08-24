@@ -22,11 +22,14 @@ function ParseThreadTags($title)
 
 		$tags .= "<span class=\"threadTag\" style=\"background-color: ".$color.";\">".$tag."</span>";
 	}
-	if($tags)
+	if(isset($tags))
 		$tags = " ".$tags;
+
+	if (!isset($tags)) $tags = " ";
 
 	$title = str_replace("<", "&lt;", $title);
 	$title = str_replace(">", "&gt;", $title);
+
 	return array(trim($title), $tags);
 }
 
@@ -170,7 +173,7 @@ function makePostLinks($post, $type, $params=array())
 
 	$links = new PipeMenu();
 
-	if($type == POST_PM || $type == POST_SAMPLE)
+	if($type == POST_PM || POST_SAMPLE)
 		return $links;
 
 	if($post['deleted'])
@@ -190,7 +193,7 @@ function makePostLinks($post, $type, $params=array())
 	{
 		$links->add(new PipeMenuLinkEntry(__("Link"), "post", $post['id'], "", "link"));
 
-		if ($canReply && !$params['noreplylinks'])
+		if ($canReply && !isset($params['noreplylinks']))
 			$links->add(new PipeMenuLinkEntry(__("Quote"), "newreply", $thread, "quote=".$post['id'], "quote-left"));
 
 		if ($canMod || ($post['user'] == $loguserid && $loguser['powerlevel'] > -1 && !$post['closed']))
@@ -232,7 +235,7 @@ function makePost($post, $type, $params=array())
 	$isBlocked = $poster['globalblock'] || $loguser['blocklayouts'] || $post['options'] & 1 || isset($blocklayouts[$poster['id']]);
 
 	$links = makePostLinks($post, $type, $params);
-	
+
 	if($post['deleted'] && $type == POST_NORMAL)
 	{
 		$meta = format(__("Posted on {0}"), formatdate($post['date']));
@@ -318,7 +321,7 @@ function makePost($post, $type, $params=array())
 		$meta = format($message, formatdate($post['date']));
 
 		//Threadlinks for listpost.php
-		if ($params['threadlink'])
+		if (isset($params['threadlink']))
 		{
 			$thread = array();
 			$thread["id"] = $post["thread"];
@@ -384,7 +387,7 @@ function makePost($post, $type, $params=array())
 
 	$sideBarStuff .= "<br />\n".__("Karma:")." ".$poster['karma'];
 
-	if(!$params['forcepostnum'] && ($type == POST_PM || $type == POST_SAMPLE))
+	if(!isset($params['forcepostnum']) && ($type == POST_PM || $type == POST_SAMPLE))
 		$sideBarStuff .= "<br />\n".__("Posts:")." ".$poster['posts'];
 	else
 		$sideBarStuff .= "<br />\n".__("Posts:")." ".$post['num']."/".$poster['posts'];

@@ -9,5 +9,5 @@ header('Status: 404 Not Found');
 $title = __("404 - Not found");
 
 Kill(__('The page you are looking for was not found.').'<br /><br />
-	<a href="/?page=board">'.__('Return to the board index').'</a>', __("404 - Not found"));
+	<a href=".'actionLink($mainPage)'.">'.__('Return to the board index').'</a>', __("404 - Not found"));
 ?>

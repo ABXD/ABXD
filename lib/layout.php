@@ -235,7 +235,7 @@ function doLastPosts($compact, $limit)
 		}
 	}
 
-	if($theList == "")
+	if(!isset($theList))
 		$theList = format(
 	"
 		<tr class=\"cell1\">

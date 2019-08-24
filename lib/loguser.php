@@ -7,7 +7,7 @@ $bots = array(
 	"Mediapartners-Google",
 	"Twiceler",
 	"facebook",
-	"bot","spider", //catch-all
+	"bot","crawl","spider", //catch-all
 );
 
 $isBot = 0;
@@ -100,7 +100,7 @@ function doHash($data)
 
 $loguser = NULL;
 
-if($_COOKIE['logsession'] && !$ipban)
+if(isset($_COOKIE['logsession']) && !$ipban)
 {
 	$session = Fetch(Query("SELECT * FROM {sessions} WHERE id={0}", doHash($_COOKIE['logsession'].$salt)));
 	if($session)

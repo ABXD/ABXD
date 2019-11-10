@@ -62,8 +62,8 @@ function install()
 	if($currVersion != -1 && $convert)
 		die("ERROR: You asked to convert a forum database, but an ABXD installation was already found in the installation DB. Converting is only possible when doing a new installation.");
 	
-	echo "Setting utf8_unicode_ci collation to the database...\n";
-	query("ALTER DATABASE $dbname COLLATE utf8_unicode_ci");
+	echo "Setting utf8mb4_unicorn_520__ci collation to the database...\n";
+	query("ALTER DATABASE $dbname COLLATE utf8mb4_unicode_520_ci");
 
 	if($currVersion == -1)
 		echo "Installing database version $abxd_version...\n";

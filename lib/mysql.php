@@ -18,9 +18,9 @@ function sqlConnect()
 		return false;
 	}
 	
-	if (!$dblink->set_charset("utf8"))
+	if (!$dblink->set_charset("utf8mb4"))
 	{
-        $dberror = "Error setting UTF8 charset";
+        $dberror = "Error setting 4-byte UTF8 charset";
 		return false;
 	}
 	
@@ -51,7 +51,7 @@ function Query_MangleTables($match)
 {
 	global $dbpref, $tableLists;
 	$tablename = $match[1];
-	if($tableLists[$tablename])
+	if(isset($tableLists[$tablename]))
 		return $tableLists[$tablename];
 	
 	return $dbpref.$tablename;

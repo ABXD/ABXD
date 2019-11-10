@@ -99,11 +99,11 @@ $tables = array
 		"fields" => array
 		(
 			"id" => $AI,
-			"ip" => "varchar(45)".$notNull,
+			"ip" => "varchar(64)".$notNull,
 			"date" => $genericInt,
-			"lasturl" => "varchar(100)".$notNull,
+			"lasturl" => "varchar(256)".$notNull,
 			"lastforum" => $genericInt,
-			"useragent" => "varchar(100)".$notNull,			
+			"useragent" => "varchar(256)".$notNull,			
 			"bot" => $bool,
 		),
 		"special" => $keyID.", key `ip` (`ip`), key `bot` (`bot`)"

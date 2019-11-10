@@ -66,7 +66,7 @@ function Upgrade()
 			}
 			if(isset($tableSchema['special']))
 				$create .= ",\n\t".$tableSchema['special'];
-			$create .= "\n) ENGINE=MyISAM;";
+			$create .= "\n) CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci ENGINE=MyISAM;";
 			//print "<pre>".$create."</pre>";
 			Query($create);
 		}
